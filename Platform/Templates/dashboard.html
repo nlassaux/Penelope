@@ -1,0 +1,12 @@
+{% extends "base_log.html" %}
+{% load url from future %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<p>Welcome, {{ user.username }}. Thanks for you login.</p>
+
+<ul>
+    <li><a href="/mycourses/">My courses</a>
+</ul>
+
+{% endblock %}

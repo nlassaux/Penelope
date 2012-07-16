@@ -1,0 +1,19 @@
+{% extends "base_log.html" %}
+{% load url from future %}
+{% block title %}Course | {{detailedcourse.name}}{% endblock %}
+
+{% block content %}
+
+<a href="/mycourses/">My courses</a>
+
+<h1>Details of a course</h1>
+
+<ul>
+    <li>Name : {{detailedcourse.name}}
+    <li>Owner : {{detailedcourse.owner}}
+    <li>Description : {{detailedcourse.description}}
+    <li>Years : {{detailedcourse.years}}
+</ul>
+
+
+{% endblock %}

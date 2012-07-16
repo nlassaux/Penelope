@@ -1,0 +1,25 @@
+{% extends "base_log.html" %}
+{% load url from future %}
+{% block title %}Edit a course{% endblock %}
+
+{% block content %}
+<a href="/mycourses/">My courses</a>
+
+<h1>Edit course</h1>
+    
+<form action="/{{editedcourse.id}}/editcourse/" method="post">
+{{ form.as_p }}
+<input type="submit" value="Submit" />
+</form>
+
+<h2>Subscribed users :</h2>
+
+{% for subscribed in test %}
+<p>{{ subscribed.user.username }}</p>
+{% endfor %}
+
+
+<p><a href="/{{editedcourse.id}}/changeowner/">Change the owner</a></p>
+<p><a href="/{{editedcourse.id}}/addstudents/">Add students to the course</a></p>
+
+{% endblock %}

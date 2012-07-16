@@ -1,0 +1,15 @@
+{% extends "base_log.html" %}
+{% load url from future %}
+{% block title %}Change owner{% endblock %}
+
+{% block content %}
+<a href="/mycourses/">My courses</a>
+
+<h1>Change the owner</h1>
+    
+<form action="/{{editedcourse.id}}/changeowner/" method="post">
+{{ form.as_p }}
+<input type="submit" value="Submit" />
+</form>
+
+{% endblock %}

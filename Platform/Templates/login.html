@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+<h1>Connexion</h1>
+
+
+<form action={{SITE_ROOT}}'/login/' method="post">
+    
+    <p><label for="username">Username : </label>
+    <input id="username" type="text" name="username" /></p>
+    
+    <p><label for="password">Password : </label>
+    <input type="text" name="password" id="password" /></p>
+    
+<input type="submit" value="Connexion" />
+</form>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base_log.html" %}
+{% load url from future %}
+{% block title %}Create a course{% endblock %}
+
+{% block content %}
+<a href="/mycourses/">My courses</a>
+
+<h1>New course</h1>
+    
+<form action="/newcourse/" method="post">
+<p><label for="name">Name : </label>{{ form.name }}</p>
+<p><label for="description">Description : </label>{{ form.description }}</p>
+<p><label for="years">Year : </label>{{ form.years }}</p>
+<p><input type="submit" value="Submit" /></p>
+</form>
+
+{% endblock %}

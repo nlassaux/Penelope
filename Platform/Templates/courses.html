@@ -1,0 +1,33 @@
+{% extends "base_log.html" %}
+{% load url from future %}
+{% block title %}List of courses{% endblock %}
+
+{% block content %}
+<a href="/mycourses/">My courses</a>
+
+<h1>List of courses</h1>
+
+<table>
+    <tr>
+    <thead>
+        <th>Name</th>
+        <th>Owner</th>
+        <th>Year</th>
+        <th>More</th>
+    <thead>
+    </tr>
+{% for Course in course_list %}
+    <tr>
+        <td>{{Course.name}}</td>
+        <td>{{Course.owner}}</td>
+        <td>{{Course.years}}</td>
+        <td><a href="/{{Course.id}}/details">Details</a></td>
+    </tr>
+{% endfor %}
+</table>
+
+{% if user.userprofile.status = 'teacher' %}
+<p><a href="/newcourse/">Add a course</a></p>
+{% endif %}
+
+{% endblock %}

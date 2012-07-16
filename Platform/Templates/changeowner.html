@@ -7,7 +7,7 @@
 
 <h1>Change the owner</h1>
     
-<form action="/{{editedcourse.id}}/changeowner/" method="post">
+<form action="/{{editedcourse.id}}/changeowner/" method="post">{% csrf_token %}
 {{ form.as_p }}
 <input type="submit" value="Submit" />
 </form>

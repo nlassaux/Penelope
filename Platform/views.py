@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.template import RequestContext
+from django.contrib import messages
 from models import *
 
 
@@ -36,7 +37,6 @@ def deconnexion(request):
 # Dashboard
 @login_required
 def home(request):
-    # Redirect to login if the user is not log.
     # Call the .html
     return render(request, 'dashboard.html')
 

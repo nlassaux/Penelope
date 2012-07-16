@@ -7,7 +7,7 @@
 
 <h1>Add students</h1>
     
-<form action="/{{editedcourse.id}}/addstudents/" method="post">
+<form action="/{{editedcourse.id}}/addstudents/" method="post">{% csrf_token %}
 {{ form.as_p }}
 <input type="submit" value="Submit" />
 </form>

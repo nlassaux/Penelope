@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response, redirect, render
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.forms.models import modelformset_factory
 from django.template import RequestContext
 from models import *
 
@@ -34,32 +34,24 @@ def deconnexion(request):
 
 
 # Dashboard
+@login_required
 def home(request):
     # Redirect to login if the user is not log.
-    if not request.user.is_authenticated():
-        return redirect('Platform.views.log')
-
     # Call the .html
     return render(request, 'dashboard.html')
 
 
 # List of courses
+@login_required
 def courses(request):
-    # Redirect to login if the user is not log.
-    if not request.user.is_authenticated():
-        return redirect('Platform.views.log')
-
     # Call the .html with informations to insert.
     c_list = Course.objects.all()
     return render(request, 'courses.html', {'course_list': c_list})
 
 
 # List of user's courses
+@login_required
 def mycourses(request):
-    # Redirect to login if the user is not log.
-    if not request.user.is_authenticated():
-        return redirect('Platform.views.log')
-
     sub_list = Course.objects.filter(owner=request.user)
     # Call the .html with informations to insert.
     course_list = request.user.userprofile.courses_list.all()
@@ -67,11 +59,8 @@ def mycourses(request):
 
 
 # Add a new course in db.
+@login_required
 def newcourse(request):
-    # Redirect to login if the user is not log.
-    if not request.user.is_authenticated():
-        return redirect('Platform.views.log')
-
     # Use the model CourseForm.
     form = CourseForm()
     # Test if its a POST request.
@@ -88,11 +77,8 @@ def newcourse(request):
     return render(request, 'newcourse.html', locals())
 
 
+@login_required
 def deletecourse(request, Course_id):
-    # Redirect to login if the user is not log.
-    if not request.user.is_authenticated():
-        return redirect('Platform.views.log')
-
     deletedcourse = Course.objects.get(id=Course_id)  # (The ID is in URL)
 
     # Only the owner can delete a course.
@@ -104,11 +90,8 @@ def deletecourse(request, Course_id):
 
 
 # Edition of courses.
+@login_required
 def editcourse(request, Course_id):
-    # Redirect to login if the user is not log.
-    if not request.user.is_authenticated():
-        return redirect('Platform.views.log')
-
     editedcourse = Course.objects.get(id=Course_id)  # (The ID is in URL)
 
     # Only the owner can edit a course.
@@ -117,7 +100,7 @@ def editcourse(request, Course_id):
 
     # Use the model CourseForm.
     form = CourseForm(instance=editedcourse)
-    test = editedcourse.userprofile_set.all()
+    subscribed = editedcourse.userprofile_set.all()
     # Test if its a POST request.
     if request.method == 'POST':
         # Assign to form all fields.
@@ -131,13 +114,9 @@ def editcourse(request, Course_id):
 
 
 # To send the course to somebody else.
+@login_required
 def changeowner(request, Course_id):
-    # Redirect to login if the user is not log.
-    if not request.user.is_authenticated():
-        return redirect('Platform.views.log')
-
     editedcourse = Course.objects.get(id=Course_id)  # (The ID is in URL)
-
     # Only the owner can edit a course.
     if request.user != editedcourse.owner:
         return redirect('Platform.views.home')
@@ -150,30 +129,37 @@ def changeowner(request, Course_id):
         form = ChangeCourseOwnerForm(request.POST, instance=editedcourse)
         if form.is_valid():
             # Save the course.
-            obj = form.save()
+            request = form.save()
             return redirect('Platform.views.mycourses')
     # Call the .html with informations to insert.
     return render(request, 'changeowner.html', locals())
 
 
 # The page to subscribe students to your course.
+@login_required
 def addstudents(request, Course_id):
-    if not request.user.is_authenticated():
-        return redirect('Platform.views.log')
-
     editedcourse = Course.objects.get(id=Course_id)  # (The ID is in URL)
-
     # Only the owner can edit a course.
     if request.user != editedcourse.owner:
         return redirect('Platform.views.home')
 
+    # Use the model ChangeCourseOwnerForm.
+    form = AddSubscribedForm(instance=editedcourse)
+    # Test if its a POST request.
+    if request.method == 'POST':
+        # Assign to form all fields of the POST request.
+        form = AddSubscribedForm(request.POST, instance=editedcourse)
+        if form.is_valid():
+            # Save the course.
+            request = form.save()
+            return redirect('Platform.views.mycourses')
+    # Call the .html with informations to insert.
+    return render(request, 'addstudents.html', locals())
+
 
 # Course's details
+@login_required
 def course_details(request, Course_id):
-    # Redirect to login if the user is not log.
-    if not request.user.is_authenticated():
-        return redirect('Platform.views.log')
-
     # Call the .html with informations to insert.
     detailedcourse = Course.objects.get(id=Course_id)
     return render(request, 'details.html', locals())

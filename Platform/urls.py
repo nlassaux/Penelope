@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^newcourse/$', 'Platform.views.newcourse'),
     url(r'^(?P<Course_id>\d+)/details/$', 'Platform.views.course_details'),
     url(r'^(?P<Course_id>\d+)/editcourse/$', 'Platform.views.editcourse'),
+    url(r'^(?P<Course_id>\d+)/addstudents/$', 'Platform.views.addstudents'),
     url(r'^(?P<Course_id>\d+)/changeowner/$', 'Platform.views.changeowner'),
     url(r'^(?P<Course_id>\d+)/deletecourse/$', 'Platform.views.deletecourse'),
 

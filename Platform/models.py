@@ -1,3 +1,4 @@
+from django.forms.widgets import PasswordInput
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from django.db import models
@@ -45,8 +46,8 @@ class UserProfile(models.Model):
 # The course model.
 class Course(models.Model):
     name = models.CharField(max_length=30, blank=False)
-    description = models.TextField(max_length=30, blank=False)
-    owner = models.ForeignKey(User, limit_choices_to={'is_staff': True},
+    description = models.TextField(max_length=100, blank=False)
+    owner = models.ForeignKey(User, limit_choices_to={'userprofile__status':'Teacher'},
                               blank=False)
     editdate = models.DateField(auto_now=True, blank=False)
     years = models.CharField(max_length=11, choices=YEARS_CHOICES, blank=False,
@@ -67,6 +68,7 @@ class CourseForm(forms.ModelForm):
         fields = ('name', 'description', 'years')
 
 
+# The definition of a form to add students to a course.
 class AddSubscribedForm(forms.ModelForm):
     class Meta:
         model = Course
@@ -78,3 +80,8 @@ class ChangeCourseOwnerForm(forms.ModelForm):
     class Meta:
         model = Course
         fields = ('owner',)
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(initial='Your Username',max_length=30, required=True)
+    password = forms.CharField(initial='Your Password',widget=forms.PasswordInput,required=True)

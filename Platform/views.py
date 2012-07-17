@@ -2,8 +2,8 @@ from django.shortcuts import render_to_response, redirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.template import RequestContext
-from django.contrib import messages
+from django.contrib.auth.forms import AuthenticationForm
+from Assignments.models import *
 from models import *
 
 
@@ -12,6 +12,8 @@ def log(request):
     # Redirect to dashboard if the user is log.
     if request.user.is_authenticated():
         return redirect('Platform.views.home')
+
+    form = LoginForm()
 
     if request.method == 'POST':
         username = request.POST['username']
@@ -23,9 +25,9 @@ def log(request):
                 login(request, user)
                 return redirect('Platform.views.home')
             else:
-                return render_to_response('login.html')
+                return render(request, 'login.html', locals())
 
-    return render_to_response('login.html')
+    return render(request, 'login.html', locals())
 
 
 # Logout
@@ -100,7 +102,6 @@ def editcourse(request, Course_id):
 
     # Use the model CourseForm.
     form = CourseForm(instance=editedcourse)
-    subscribed = editedcourse.userprofile_set.all()
     # Test if its a POST request.
     if request.method == 'POST':
         # Assign to form all fields.
@@ -162,4 +163,6 @@ def addstudents(request, Course_id):
 def course_details(request, Course_id):
     # Call the .html with informations to insert.
     detailedcourse = Course.objects.get(id=Course_id)
+    subscribed = detailedcourse.userprofile_set.all()
+    assignments = detailedcourse.assignment_set.filter(visible=True)
     return render(request, 'details.html', locals())

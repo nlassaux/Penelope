@@ -16,5 +16,18 @@
     <li>Last edit : {{detailedcourse.editdate}}
 </ul>
 
+<h2>Assignments :</h2>
+{% for assignment in assignments %}
+	<p>{{ assignment.name }}</p>
+{% endfor %}
+
+
+{% if user == detailedcourse.owner %}
+<h2>Subscribed users :</h2>
+	{% for subscribed in subscribed %}
+		<p>{{ subscribed.user.username }}</p>
+	{% endfor %}
+{% endif %}
+
 
 {% endblock %}

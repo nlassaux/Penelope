@@ -12,13 +12,6 @@
 <input type="submit" value="Submit" />
 </form>
 
-<h2>Subscribed users :</h2>
-
-{% for subscribed in subscribed %}
-<p>{{ subscribed.user.username }}</p>
-{% endfor %}
-
-
 <p><a href="/{{editedcourse.id}}/changeowner/">Change the owner</a></p>
 <p><a href="/{{editedcourse.id}}/addstudents/">Add students to the course</a></p>
 

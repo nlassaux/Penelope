@@ -12,3 +12,9 @@ Platform/urls.pyc
 Platform/views.pyc
 
 Platform/wsgi.pyc
+
+Assignments/__init__.pyc
+
+Assignments/admin.pyc
+
+Assignments/models.pyc

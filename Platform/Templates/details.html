@@ -18,7 +18,7 @@
 
 <h2>Assignments :</h2>
 {% for assignment in assignments %}
-	<p>{{ assignment.name }}</p>
+<p><a href='/assignments/{{ assignment.id }}/'>{{ assignment.name }}</a></p>
 {% endfor %}
 
 

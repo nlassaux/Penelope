@@ -18,3 +18,7 @@ Assignments/__init__.pyc
 Assignments/admin.pyc
 
 Assignments/models.pyc
+
+Assignments/urls.pyc
+
+Assignments/views.pyc

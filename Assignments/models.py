@@ -11,6 +11,21 @@ class Assignment (models.Model):
     enddate = models.DateField(null=True, blank=True)
     deadline = models.DateField(null=True, blank=True)
     admins = models.ManyToManyField(User, limit_choices_to=
-                        {'userprofile__status': 'Teacher'}, blank=False)
+                                    {'userprofile__status': 'Teacher'},
+                                    blank=False)
     editdate = models.DateField(auto_now=True, blank=False)
     visible = models.BooleanField(blank=True)
+
+
+class EditAssignmentForm (forms.ModelForm):
+    class Meta:
+        model = Assignment
+        fields = ('name', 'description', 'enddate',
+                  'deadline', 'admins', 'visible')
+
+
+class AddAssignmentForm (forms.ModelForm):
+    class Meta:
+        model = Assignment
+        fields = ('name', 'description', 'enddate', 'admins',
+                  'deadline', 'admins', 'visible')

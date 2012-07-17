@@ -1,0 +1,15 @@
+{% extends "base_log.html" %}
+{% load url from future %}
+{% block title %}Edit an assignment{% endblock %}
+
+{% block content %}
+<a href="/{{course.id}}/details/">The course</a>
+
+<h1>Edit assignment</h1>
+    
+<form action="/assignments/{{Course_id}}/add/" method="post">{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Submit" />
+</form>
+
+{% endblock %}

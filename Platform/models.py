@@ -47,8 +47,8 @@ class UserProfile(models.Model):
 class Course(models.Model):
     name = models.CharField(max_length=30, blank=False)
     description = models.TextField(max_length=100, blank=False)
-    owner = models.ForeignKey(User, limit_choices_to={'userprofile__status':'Teacher'},
-                              blank=False)
+    owner = models.ForeignKey(User, limit_choices_to={'userprofile__status':
+                              'Teacher'}, blank=False)
     editdate = models.DateField(auto_now=True, blank=False)
     years = models.CharField(max_length=11, choices=YEARS_CHOICES, blank=False,
                              default='%d - %d' % (date.year, date.year + 1))
@@ -83,5 +83,5 @@ class ChangeCourseOwnerForm(forms.ModelForm):
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(initial='Your Username',max_length=30, required=True)
-    password = forms.CharField(initial='Your Password',widget=forms.PasswordInput,required=True)
+    username = forms.CharField(max_length=30, required=True)
+    password = forms.CharField(widget=forms.PasswordInput, required=True)

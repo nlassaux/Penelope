@@ -1,8 +1,8 @@
-from django.shortcuts import render_to_response, redirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
+from django.shortcuts import redirect, render
 from Assignments.models import *
 from models import *
 
@@ -71,9 +71,9 @@ def newcourse(request):
         form = CourseForm(request.POST)
         if form.is_valid():
             # Save the course.
-            obj = form.save(commit=False)
-            obj.owner = request.user
-            obj = form.save()
+            save = form.save(commit=False)
+            save.owner = request.user
+            save = form.save()
             return redirect('Platform.views.mycourses')
     # Call the .html with informations to insert.
     return render(request, 'newcourse.html', locals())

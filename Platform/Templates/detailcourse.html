@@ -1,0 +1,53 @@
+{% extends "base_log.html" %}
+{% load url from future %}
+{% block title %}Course | {{detailedcourse.name}}{% endblock %}
+
+{% block content %}
+
+<h1>Details of a course</h1>
+
+<ul>
+    <li>Name : {{detailedcourse.name}}
+    <li>Owner : {{detailedcourse.owner}}
+    <li>Description : {{detailedcourse.description}}
+    <li>Years : {{detailedcourse.years}}
+    <li>Last edit : {{detailedcourse.editdate}}
+</ul>
+
+<h2>Assignments :</h2>
+
+<table>
+    <tr>
+    <thead>
+        <th>Name</th>
+        <th>Deadline</th>
+        <th>Last edit</th>
+    <thead>
+    </tr>
+{% for assignment in assignments %}
+    <tr>
+        <td><a href="/assignments/{{assignment.id}}/">{{assignment.name}}</a></td>
+        <td>{{assignment.deadline}}</td>
+        <td>{{assignment.editdate}}</td>
+    </tr>
+{% endfor %}
+</table>
+
+
+{% if user == detailedcourse.owner %}
+
+<h2>Subscribed users :</h2>
+	{% for subscribed in subscribed %}
+		<p>{{ subscribed.user.username }}</p>
+	{% endfor %}
+
+<h2>Administration :</h2>
+<p><a href="/{{detailedcourse.id}}/editcourse">Edit</a></p>
+<p><a href="/{{detailedcourse.id}}/deletecourse">Delete</a></p>
+<p><a href="/{{detailedcourse.id}}/changeowner/">Change the owner</a></p>
+<p><a href="/{{detailedcourse.id}}/addstudents/">Add students to the course</a></p>
+<p><a href="/assignments/{{detailedcourse.id}}/add/">New assignment</a></p>
+
+{% endif %}
+
+{% endblock %}

@@ -5,52 +5,25 @@
 {% block content %}
 
 
-<h1>My courses</h1>
+{% if user.userprofile.status = 'Teacher' %}
+    <h1>My courses</h1>
 
-<table>
-    <tr>
-    <thead>
-        <th>Name</th>
-        <th>Owner</th>
-        <th>Year</th>
-        <th>Actions</th>
-    <thead>
-    </tr>
-{% for Course in sub_list %}
-    <tr>
-        <td>{{Course.name}}</td>
-        <td>{{Course.owner}}</td>
-        <td>{{Course.years}}</td>
-        <td><a href="/{{Course.id}}/details">Details</a>
-            {% if Course.owner = user %}
-            <a href="/{{Course.id}}/editcourse">Edit</a>
-            <a href="/{{Course.id}}/deletecourse">Delete</a></td>
-            {% endif %}
-    </tr>
-{% endfor %}
-</table>
-<h1>Subscribed courses</h1>
-
-<table>
-    <tr>
-    <thead>
-        <th>Name</th>
-        <th>Owner</th>
-        <th>Year</th>
-        <th>More</th>
-    <thead>
-    </tr>
-{% for Course in course_list %}
-    <tr>
-        <td>{{Course.name}}</td>
-        <td>{{Course.owner}}</td>
-        <td>{{Course.years}}</td>
-        <td><a href="/{{Course.id}}/details">Details</a>
-    </tr>
-{% endfor %}
-</table>
-
-<p></p>
-<p><a href="/courses/">List of courses</a></p>
+    <table>
+        <tr>
+        <thead>
+            <th>Name</th>
+            <th>Teacher</th>
+            <th>Year</th>
+        <thead>
+        </tr>
+    {% for Course in mycourse_list %}
+        <tr>
+            <td><a href="/{{Course.id}}/details">{{Course.name}}</a></td>
+            <td>{{Course.owner}}</td>
+            <td>{{Course.years}}</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endif %}
 
 {% endblock %}

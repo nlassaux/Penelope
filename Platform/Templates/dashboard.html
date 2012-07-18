@@ -1,12 +1,30 @@
 {% extends "base_log.html" %}
 {% load url from future %}
 {% block title %}Dashboard{% endblock %}
+
 {% block content %}
+	<h2>Courses :</h2>
 
-<p>Welcome, {{ user.username }}. Thanks for you login.</p>
+	<table>
+	    <tr>
+	    <thead>
+	        <th>Name</th>
+	        <th>Teacher</th>
+	        <th>Year</th>
+	    <thead>
+	    </tr>
+	{% for Course in user.userprofile.courses_list.all %}
+	    <tr>
+	        <td><a href="/{{Course.id}}/details">{{Course.name}}</a></td>
+	        <td>{{Course.owner}}</td>
+	        <td>{{Course.years}}</td>
+	    </tr>
+	{% endfor %}
+	</table>
 
-<ul>
-    <li><a href="/mycourses/">My courses</a>
-</ul>
-
+	<h2>Links : </h2>
+	<p><a href="/courses/">List of courses</a></p>
+	{% if user.userprofile.status = 'Teacher' %}
+	<p><a href="/mycourses/">My courses</a></p>
+	{% endif %}
 {% endblock %}

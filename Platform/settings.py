@@ -115,6 +115,7 @@ WSGI_APPLICATION = 'Platform.wsgi.application'
 TEMPLATE_DIRS = (
     # Add the Assignments app's Template folder (remove if not used)
     # Apps must be before the platform to overwrite template (search in order)
+    '/Groups/Templates',
     '/Assignments/Templates',
     '/Templates',
     #'/Users/Nicolas/Virtualenvs/LaBRI/lib/python2.7/site-packages/debug_toolbar/templates',
@@ -131,6 +132,8 @@ INSTALLED_APPS = (
     'Platform',
     # Add the Assignments App, remove if not used.
     'Assignments',
+    # Add the Groups App, remove if not used.
+    'Groups',
     #'django.contrib.sites',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',

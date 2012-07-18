@@ -16,6 +16,10 @@ class Assignment (models.Model):
     editdate = models.DateField(auto_now=True, blank=False)
     visible = models.BooleanField(blank=True)
 
+    # In Admin panel : object = username.
+    def __unicode__(self):
+        return self.name
+
 
 class EditAssignmentForm (forms.ModelForm):
     class Meta:

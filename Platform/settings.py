@@ -113,10 +113,11 @@ ROOT_URLCONF = 'Platform.urls'
 WSGI_APPLICATION = 'Platform.wsgi.application'
 
 TEMPLATE_DIRS = (
-    '/Templates',
-    # Add the Assignments app's Template folder (remove if not used).
+    # Add the Assignments app's Template folder (remove if not used)
+    # Apps must be before the platform to overwrite template (search in order)
     '/Assignments/Templates',
-    '/Users/Nicolas/Virtualenvs/LaBRI/lib/python2.7/site-packages/debug_toolbar/templates',
+    '/Templates',
+    #'/Users/Nicolas/Virtualenvs/LaBRI/lib/python2.7/site-packages/debug_toolbar/templates',
 )
 
 INSTALLED_APPS = (

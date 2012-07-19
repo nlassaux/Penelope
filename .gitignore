@@ -28,3 +28,7 @@ Groups/__init__.pyc
 Groups/admin.pyc
 
 Groups/models.pyc
+
+Groups/urls.pyc
+
+Groups/views.pyc

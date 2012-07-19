@@ -1,0 +1,15 @@
+{% extends "base_log.html" %}
+{% load url from future %}
+{% block title %}Group | {{detailedgroup.name}}{% endblock %}
+
+{% block content %}
+	<a href="/assignments/{{detailedgroup.assignment.id}}/details/">Return to assignment</a>
+
+	<h1>Details of the assignment :</h1>
+
+	<ul>
+	    <li>Name : {{detailedgroup.name}}
+	    <li>Members : {% for member in detailedgroup.user.all %}{{member.username}}{% endfor %}
+	</ul>
+
+{% endblock %}

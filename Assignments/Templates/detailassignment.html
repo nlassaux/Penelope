@@ -3,21 +3,37 @@
 {% block title %}Assignment | {{detailedassignment.name}}{% endblock %}
 
 {% block content %}
-	<a href="/{{detailedassignment.course.id}}/details/">The course</a>
+	<a href="/{{detailedassignment.course.id}}/details/">Retour to the course</a>
 
 	<h1>Details of the assignment :</h1>
 
 	<ul>
 	    <li>Name : {{detailedassignment.name}}
-	    <li>Course : <a href="/{{detailedassignment.course.id}}/details/">{{detailedassignment.course}}</a>
+	    <li>Course : {{detailedassignment.course}}
 	    <li>Description : {{detailedassignment.description}}
 	    <li>Deadline : {{detailedassignment.deadline}}
 	    <li>Last edit : {{detailedassignment.editdate}}
 	    <li>Admins : {% for admin in detailedassignment.admins.all %}
-	    				{{admin.username}}
-	    			 {% endfor %}
+	    				{{admin.username}}{% endfor %}
 	</ul>
 
+	<h2>Groups :</h2>
+			<table>
+				<tr>
+					<thead>
+					<th>Name</th>
+					<th>Members</th>
+					<thead>
+				</tr>
+		{% for group in detailedassignment.group_set.all %}
+				<tr>
+			        <td><a href="/groups/{{group.id}}/details/">{{group.name}}</a></td>
+			        <td>{% for user in group.user.all %}{{user.username}}{% endfor %}</td>
+    			</tr>
+		{% empty %}
+			Pas de groupe !
+		{% endfor %}
+		</table>
 	{% if user == detailedassignment.course.owner %}
 		<h2>Administration :</h2>
 		<p><a href="/assignments/{{detailedassignment.id}}/edit/">Edit the assignment</a></p>

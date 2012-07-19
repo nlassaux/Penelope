@@ -166,7 +166,7 @@ def addstudents(request, Course_id):
 
 # Course's details
 @login_required
-def course_details(request, Course_id):
+def detailcourse(request, Course_id):
     # Call the .html with informations to insert
     detailedcourse = Course.objects.get(id=Course_id)
     subscribed = detailedcourse.userprofile_set.all()

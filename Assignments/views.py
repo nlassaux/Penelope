@@ -7,7 +7,7 @@ from Assignments.models import *
 
 # Course's details - Modified for app
 @login_required
-def course_details(request, Course_id):
+def detailcourse(request, Course_id):
     # Call the .html with informations to insert
     detailedcourse = Course.objects.get(id=Course_id)
     subscribed = detailedcourse.userprofile_set.all()
@@ -34,13 +34,13 @@ def editassignment(request, Assignment_id):
         if form.is_valid():
             # Save the assignment
             form.save()
-            return redirect('Assignments.views.assignment_details', Assignment_id=Assignment_id)
+            return redirect('Assignments.views.detailassignments', Assignment_id=Assignment_id)
     # Call the .html with informations to insert
     return render(request, 'editassignment.html', locals())
 
 
 @login_required
-def assignment_details(request, Assignment_id):
+def detailassignment(request, Assignment_id):
     detailedassignment = Assignment.objects.get(id=Assignment_id)
     return render(request, 'detailassignment.html', locals())
 

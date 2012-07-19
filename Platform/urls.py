@@ -4,6 +4,9 @@ admin.autodiscover()
 
 # Url sheme
 urlpatterns = patterns('',
+    # Include Groups app's urls (remove if not use)
+    # This also overwrite some template to adapt them
+    url(r'^', include('Groups.urls')),
     # Include Assignment app's urls (remove if not use)
     # This also overwrite some template to adapt them
     url(r'^', include('Assignments.urls')),
@@ -15,7 +18,7 @@ urlpatterns = patterns('',
     url(r'^courses/$', 'Platform.views.courses'),
     url(r'^mycourses/$', 'Platform.views.mycourses'),
     url(r'^newcourse/$', 'Platform.views.newcourse'),
-    url(r'^(?P<Course_id>\d+)/details/$', 'Platform.views.course_details'),
+    url(r'^(?P<Course_id>\d+)/details/$', 'Platform.views.detailcourse'),
     url(r'^(?P<Course_id>\d+)/editcourse/$', 'Platform.views.editcourse'),
     url(r'^(?P<Course_id>\d+)/addstudents/$', 'Platform.views.addstudents'),
     url(r'^(?P<Course_id>\d+)/changeowner/$', 'Platform.views.changeowner'),

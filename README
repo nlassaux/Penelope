@@ -28,6 +28,7 @@ Todo :
 - Change the name of 'Platform' folder.
 - Overwrite project's template files with apps' templates.
 - Verify comments .
+- New group : Grid / Matrix / Columns
 
 
 Installation :
@@ -42,6 +43,8 @@ Notes :
 =====
 
 The code have been verified to perform with future versions of django (no depreciated code).
+
+
 
 
 

@@ -29,7 +29,7 @@ STATUS_CHOICES = (
 class UserProfile(models.Model):
     user = models.OneToOneField(User, unique=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES,
-                              default='student')
+                              default='Student')
     courses_list = models.ManyToManyField('Course', blank=True)
 
     # In Admin panel : object = username.

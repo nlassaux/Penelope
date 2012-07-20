@@ -7,7 +7,7 @@ from django.db import models
 class Group(models.Model):
     name = models.CharField(max_length=30)
     assignment = models.ForeignKey(Assignment)
-    user = models.ManyToManyField(User)
+    members = models.ManyToManyField(User)
 
     # In Admin panel : object = name
     def __unicode__(self):

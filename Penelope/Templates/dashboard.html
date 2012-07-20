@@ -3,28 +3,55 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-	<h2>Courses :</h2>
+    
 
-	<table>
-	    <tr>
-	    <thead>
-	        <th>Name</th>
-	        <th>Teacher</th>
-	        <th>Year</th>
-	    <thead>
-	    </tr>
-	{% for Course in user.userprofile.courses_list.all %}
-	    <tr>
-	        <td><a href="/{{Course.id}}/details">{{Course.name}}</a></td>
-	        <td>{{Course.owner}}</td>
-	        <td>{{Course.years}}</td>
-	    </tr>
-	{% endfor %}
-	</table>
+{% if user.userprofile.status = 'student' %}
 
-	<h2>Links : </h2>
-	<p><a href="/courses/">List of courses</a></p>
-	{% if user.userprofile.status = 'Teacher' %}
-	<p><a href="/mycourses/">My courses</a></p>
-	{% endif %}
+    <h2>Courses :</h2>
+
+    <table>
+        <tr>
+        <thead>
+            <th>Name</th>
+            <th>Teacher</th>
+            <th>Year</th>
+        <thead>
+        </tr>
+        {% for Course in user.userprofile.courses_list.all %}
+        <tr>
+            <td><a href="/{{Course.id}}/details">{{Course.name}}</a></td>
+            <td>{{Course.owner}}</td>
+            <td>{{Course.years}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Links : </h2>
+    <p><a href="/courses/">List of courses</a></p>
+
+{% else %}
+    
+    <h2>My courses :</h2>
+
+    <table>
+        <tr>
+        <thead>
+            <th>Name</th>
+            <th>Year</th>
+        <thead>
+        </tr>
+        {% for Course in mycourse_list %}
+        <tr>
+            <td><a href="/{{Course.id}}/details">{{Course.name}}</a></td>
+            <td>{{Course.years}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Links : </h2>
+    <p><a href="/courses/">List of courses</a></p>
+    <p><a href="/newcourse/">Add a course</a></p>
+
+{% endif %}
+
 {% endblock %}

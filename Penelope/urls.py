@@ -16,7 +16,6 @@ urlpatterns = patterns('',
 
     # Courses' links
     url(r'^courses/$', 'Penelope.views.courseslist'),
-    url(r'^mycourses/$', 'Penelope.views.mycourses'),
     url(r'^newcourse/$', 'Penelope.views.newcourse'),
     url(r'^(?P<Course_id>\d+)/details/$', 'Penelope.views.detailcourse'),
     url(r'^(?P<Course_id>\d+)/editcourse/$', 'Penelope.views.editcourse'),

@@ -48,7 +48,7 @@ class Course(models.Model):
     name = models.CharField(max_length=30)
     description = models.TextField(max_length=100)
     owner = models.ForeignKey(User, limit_choices_to={'userprofile__status':
-                              'Teacher'})
+                              'teacher'})
     editdate = models.DateField(auto_now=True)
     years = models.CharField(max_length=11, choices=YEARS_CHOICES,
                              default='%d - %d' % (date.year, date.year + 1))

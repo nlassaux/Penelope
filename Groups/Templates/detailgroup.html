@@ -9,7 +9,7 @@
 
 	<ul>
 	    <li>Name : {{detailedgroup.name}}
-	    <li>Members : {% for member in detailedgroup.user.all %}{{member.username}}{% endfor %}
+	    <li>Members : {% for student in detailedgroup.members.all %}{{student.username}}{% endfor %}
 	</ul>
 
 {% endblock %}

@@ -18,27 +18,41 @@
     				{{admin.username}}{% endfor %}
 </ul>
 
-<h2>Groups :</h2>
-		<table>
-			<tr>
-				<thead>
-				<th>Name</th>
-				<th>Members</th>
-				<thead>
-			</tr>
-	{% for group in detailedassignment.group_set.all %}
-			<tr>
-		        <td><a href="/groups/{{group.id}}/details/">{{group.name}}</a></td>
-		        <td>{% for user in group.user.all %}{{user.username}} | {% endfor %}</td>
-			</tr>
-	{% empty %}
-		No groups ! <a href="/groups/{{detailedassignment.id}}/add/">Create groups</a>
-	{% endfor %}
-	</table>
 {% if user == detailedassignment.course.owner %}
-	<h2>Administration :</h2>
-	<p><a href="/assignments/{{detailedassignment.id}}/edit/">Edit the assignment</a></p>
-	<p><a href="/assignments/{{detailedassignment.id}}/delete/">Delete</a></p>
+<h2>Groups :</h2>
+	
+<table>
+	<tr>
+		<thead>
+		<th>Name</th>
+		<th>Members</th>
+		<thead>
+	</tr>
+	{% for group in detailedassignment.group_set.all %}
+	<tr>
+        <td><a href="/groups/{{group.id}}/details/">{{group.name}}</a></td>
+        <td>{% for user in group.members.all %}{{user.username}} | {% endfor %}</td>
+	</tr>
+	{% empty %}
+	No groups ! <a href="/groups/{{detailedassignment.id}}/add/">Create groups</a>
+	{% endfor %}
+</table>
+
+<h2>Administration :</h2>
+
+<p><a href="/assignments/{{detailedassignment.id}}/edit/">Edit the assignment</a></p>
+<p><a href="/assignments/{{detailedassignment.id}}/delete/">Delete</a></p>
+
+{% else %}
+
+<h2>Your group :</h2>
+Group {{ mygroup.name }}
+<ul>
+    {% for member in mygroup.members.all %}
+    <li>{{ member }}
+    {% endfor %}
+</ul>
 {% endif %}
+
 
 {% endblock %}

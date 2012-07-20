@@ -3,7 +3,7 @@
 {% block title %}List of courses{% endblock %}
 
 {% block content %}
-<a href="/mycourses/">My courses</a>
+<a href="/">Return to dashboard</a>
 
 <h1>List of courses</h1>
 
@@ -23,9 +23,5 @@
     </tr>
 {% endfor %}
 </table>
-
-{% if user.userprofile.status = 'Teacher' %}
-<p><a href="/newcourse/">Add a course</a></p>
-{% endif %}
 
 {% endblock %}

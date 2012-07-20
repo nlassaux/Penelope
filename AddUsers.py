@@ -24,7 +24,7 @@ def teacheradd(num):
         if not User.objects.filter(username='teacher%s' % i):
             query = User.objects.create_user('teacher%s' % i, '', 'password')
             query = UserProfile.objects.get(user__username='teacher%s' % i)
-            query.status = 'Teacher'
+            query.status = 'teacher'
             query.save()
 
 
@@ -33,7 +33,7 @@ def studentadd(num):
         if not User.objects.filter(username='student%s' % i):
             query = User.objects.create_user('student%s' % i, '', 'password')
             query = UserProfile.objects.get(user__username='student%s' % i)
-            query.status = 'Student'
+            query.status = 'student'
             query.save()
 
 

@@ -48,3 +48,10 @@ Notes :
 - The code have been verified to perform with future versions of django (no depreciated code).
 - The Script AddUser.py can add students and teachers to the db, use - python manage.py shell and import the file.
 
+Questions (Français) :
+=========
+
+- Les élèves peuvent-t-ils voir la composition des groupes ?
+
+
+

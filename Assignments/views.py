@@ -3,6 +3,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 from Penelope.models import *
 from Assignments.models import *
+from Groups.models import *
 
 
 # Course's details - Modified for app
@@ -35,7 +36,7 @@ def editassignment(request, Assignment_id):
         if form.is_valid():
             # Save the assignment
             form.save()
-            return redirect('Assignments.views.detailassignments', Assignment_id=Assignment_id)
+            return redirect('Assignments.views.detailassignment', Assignment_id=Assignment_id)
     # Call the .html with informations to insert (with locals())
     return render(request, 'editassignment.html', locals())
 
@@ -44,6 +45,8 @@ def editassignment(request, Assignment_id):
 @login_required
 def detailassignment(request, Assignment_id):
     detailedassignment = Assignment.objects.get(id=Assignment_id)
+    if request.user.userprofile.status == 'student':
+        mygroup = request.user.group_set.get(assignment=detailedassignment)
     return render(request, 'detailassignment.html', locals())
 
 
@@ -51,7 +54,7 @@ def detailassignment(request, Assignment_id):
 @login_required
 def addassignment(request, Course_id):
     # Only the owner can edit an assignment
-    if request.user.userprofile.status != 'Teacher':
+    if request.user.userprofile.status != 'teacher':
         return redirect('Penelope.views.home')
 
     # Use the model EditAssignmentForm
@@ -65,7 +68,7 @@ def addassignment(request, Course_id):
             save = form.save(commit=False)
             save.course = Course.objects.get(id=Course_id)
             save = form.save()
-            return redirect('/%s/details' % Course_id)
+            return redirect('Assignments.views.detailassignment', Assignment_id=save.id)
     # Call the .html with informations to insert
     return render(request, 'addassignment.html', locals())
 
@@ -80,4 +83,4 @@ def deleteassignment(request, Assignment_id):
         return redirect('Penelope.views.home')
 
     deletedassignment.delete()
-    return redirect('Penelope.views.mycourses')
+    return redirect('Penelope.views.detailcourse', Course_id=deletedassignment.course.id)

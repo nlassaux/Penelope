@@ -40,8 +40,9 @@ def deconnexion(request):
 # Dashboard
 @login_required
 def home(request):
+    mycourse_list = Course.objects.filter(owner=request.user)
     # Call the .html
-    return render(request, 'dashboard.html')
+    return render(request, 'dashboard.html', locals())
 
 
 # List of courses
@@ -52,23 +53,11 @@ def courseslist(request):
     return render(request, 'listcourses.html', locals())
 
 
-# List of user's courses
-@login_required
-def mycourses(request):
-    # Only a teacher can access to mycourse page
-    if request.user.userprofile.status != 'Teacher':
-        return redirect('Penelope.views.home')
-
-    mycourse_list = Course.objects.filter(owner=request.user)
-    # Call the .html with informations to insert.
-    return render(request, 'mycourses.html', locals())
-
-
 # Add a new course in db
 @login_required
 def newcourse(request):
     # Only a teacher can add a course
-    if request.user.userprofile.status != 'Teacher':
+    if request.user.userprofile.status != 'teacher':
         return redirect('Penelope.views.home')
 
     # Use the model CourseForm
@@ -82,7 +71,7 @@ def newcourse(request):
             save = form.save(commit=False)
             save.owner = request.user
             save = form.save()
-            return redirect('Penelope.views.mycourses')
+            return redirect('Penelope.views.detailcourse', Course_id=save.id)
     # Call the .html with informations to insert
     return render(request, 'newcourse.html', locals())
 
@@ -96,7 +85,7 @@ def deletecourse(request, Course_id):
         return redirect('Penelope.views.home')
 
     deletedcourse.delete()
-    return redirect('Penelope.views.mycourses')
+    return redirect('Penelope.views.home')
 
 
 # Edition of courses
@@ -117,7 +106,7 @@ def editcourse(request, Course_id):
         if form.is_valid():
             # Save the course.
             form.save()
-            return redirect('Penelope.views.mycourses')
+            return redirect('Penelope.views.detailcourse', Course_id=Course_id)
     # Call the .html with informations to insert.
     return render(request, 'editcourse.html', locals())
 
@@ -126,6 +115,7 @@ def editcourse(request, Course_id):
 @login_required
 def changeowner(request, Course_id):
     editedcourse = Course.objects.get(id=Course_id)  # (The ID is in URL)
+
     # Only the owner can edit a course
     if request.user != editedcourse.owner:
         return redirect('Penelope.views.home')
@@ -139,7 +129,7 @@ def changeowner(request, Course_id):
         if form.is_valid():
             # Save the course
             request = form.save()
-            return redirect('Penelope.views.mycourses')
+            return redirect('Penelope.views.home')
     # Call the .html with informations to insert
     return render(request, 'changeowner.html', locals())
 
@@ -148,6 +138,7 @@ def changeowner(request, Course_id):
 @login_required
 def addstudents(request, Course_id):
     editedcourse = Course.objects.get(id=Course_id)  # (The ID is in URL)
+
     # Only the owner can edit a course.
     if request.user != editedcourse.owner:
         return redirect('Penelope.views.home')
@@ -161,7 +152,7 @@ def addstudents(request, Course_id):
         if form.is_valid():
             # Save the course
             request = form.save()
-            return redirect('Penelope.views.mycourses')
+            return redirect('Penelope.views.detailcourse', Course_id=Course_id)
     # Call the .html with informations to insert
     return render(request, 'addstudents.html', locals())
 

@@ -12,7 +12,7 @@ class Assignment (models.Model):
     enddate = models.DateField(null=True, blank=True)
     deadline = models.DateField(null=True, blank=True)
     admins = models.ManyToManyField(User, limit_choices_to=
-                                    {'userprofile__status': 'Teacher'})
+                                    {'userprofile__status': 'teacher'})
     editdate = models.DateField(auto_now=True)
     visible = models.BooleanField(blank=True)
 

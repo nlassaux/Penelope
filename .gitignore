@@ -1,18 +1,4 @@
 
-Platform/__init__.pyc
-
-Platform/admin.pyc
-
-Platform/settings.pyc
-
-Platform/models.pyc
-
-Platform/urls.pyc
-
-Platform/views.pyc
-
-Platform/wsgi.pyc
-
 Assignments/__init__.pyc
 
 Assignments/admin.pyc
@@ -32,3 +18,19 @@ Groups/models.pyc
 Groups/urls.pyc
 
 Groups/views.pyc
+
+Penelope/wsgi.pyc
+
+Penelope/views.pyc
+
+Penelope/urls.pyc
+
+Penelope/settings.pyc
+
+Penelope/models.pyc
+
+Penelope/admin.pyc
+
+Penelope/__init__.pyc
+
+AddUsers.pyc

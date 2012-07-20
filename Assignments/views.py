@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
-from Platform.models import *
+from Penelope.models import *
 from Assignments.models import *
 
 
@@ -16,6 +16,7 @@ def detailcourse(request, Course_id):
     return render(request, 'detailcourse.html', locals())
 
 
+# Page to edit an assignment
 @login_required
 def editassignment(request, Assignment_id):
     # Use the id in the url (GET) to select our assignment
@@ -23,11 +24,11 @@ def editassignment(request, Assignment_id):
 
     # Only the owner can edit an assignment
     if request.user != editedassignment.course.owner:
-        return redirect('Platform.views.home')
+        return redirect('Penelope.views.home')
 
     # Use the model EditAssignmentForm
     form = EditAssignmentForm(instance=editedassignment)
-    # Test if its a POST request.
+    # Test if it's a POST request.
     if request.method == 'POST':
         # Assign to form all fields
         form = EditAssignmentForm(request.POST, instance=editedassignment)
@@ -35,21 +36,23 @@ def editassignment(request, Assignment_id):
             # Save the assignment
             form.save()
             return redirect('Assignments.views.detailassignments', Assignment_id=Assignment_id)
-    # Call the .html with informations to insert
+    # Call the .html with informations to insert (with locals())
     return render(request, 'editassignment.html', locals())
 
 
+# Page to detail an assignment
 @login_required
 def detailassignment(request, Assignment_id):
     detailedassignment = Assignment.objects.get(id=Assignment_id)
     return render(request, 'detailassignment.html', locals())
 
 
+# Page to add an assignment
 @login_required
 def addassignment(request, Course_id):
     # Only the owner can edit an assignment
     if request.user.userprofile.status != 'Teacher':
-        return redirect('Platform.views.home')
+        return redirect('Penelope.views.home')
 
     # Use the model EditAssignmentForm
     form = AddAssignmentForm()
@@ -67,13 +70,14 @@ def addassignment(request, Course_id):
     return render(request, 'addassignment.html', locals())
 
 
+# Page to delete an assignment
 @login_required
 def deleteassignment(request, Assignment_id):
     deletedassignment = Assignment.objects.get(id=Assignment_id)  # (The ID is in URL)
 
-    # Only the owner can delete a course
+    # Only the owner can delete an assignment
     if request.user != deletedassignment.course.owner:
-        return redirect('Platform.views.home')
+        return redirect('Penelope.views.home')
 
     deletedassignment.delete()
-    return redirect('Platform.views.mycourses')
+    return redirect('Penelope.views.mycourses')

@@ -3,11 +3,12 @@ from Assignments.models import *
 from django.db import models
 
 
+# The definition of the class Group
 class Group(models.Model):
-    name = models.CharField(max_length=30, blank=False)
-    assignment = models.ForeignKey(Assignment, blank=False)
-    user = models.ManyToManyField(User, blank=False)
+    name = models.CharField(max_length=30)
+    assignment = models.ForeignKey(Assignment)
+    user = models.ManyToManyField(User)
 
-    # In Admin panel : object = username.
+    # In Admin panel : object = name
     def __unicode__(self):
         return self.name

@@ -1,4 +1,4 @@
-# Django settings for Platform project.
+# Django settings for Penelope project.
 import os
 
 DEBUG = True
@@ -97,7 +97,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -107,29 +107,29 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'Platform.urls'
+ROOT_URLCONF = 'Penelope.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'Platform.wsgi.application'
+WSGI_APPLICATION = 'Penelope.wsgi.application'
 
 TEMPLATE_DIRS = (
     # Add the Assignments app's Template folder (remove if not used)
-    # Apps must be before the platform to overwrite template (search in order)
+    # Apps must be before the Penelope to overwrite template (search in order)
     '/Groups/Templates',
     '/Assignments/Templates',
     '/Templates',
-    '/Users/Nicolas/Virtualenvs/LaBRI/lib/python2.7/site-packages/debug_toolbar/templates',
+    #'/Users/Nicolas/Virtualenvs/LaBRI/lib/python2.7/site-packages/debug_toolbar/templates',
 )
 
 INSTALLED_APPS = (
-    'debug_toolbar',
+    # 'debug_toolbar',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'Platform',
+    'Penelope',
     # Add the Assignments App, remove if not used.
     'Assignments',
     # Add the Groups App, remove if not used.
@@ -168,7 +168,7 @@ LOGGING = {
     }
 }
 # Link to the module with user's extra informations.
-AUTH_PROFILE_MODULE = 'Platform.UserProfile'
+AUTH_PROFILE_MODULE = 'Penelope.UserProfile'
 
 # URL of the login page.
 LOGIN_URL = '/login/'

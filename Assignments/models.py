@@ -1,19 +1,19 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django import forms
-from Platform.models import *
+from Penelope.models import *
 
 
+# Definition of the model Assignment
 class Assignment (models.Model):
-    name = models.CharField(max_length=30, blank=False)
-    course = models.ForeignKey(Course, blank=False)
-    description = models.TextField(max_length=100, blank=False)
+    name = models.CharField(max_length=30)
+    course = models.ForeignKey(Course)
+    description = models.TextField(max_length=100)
     enddate = models.DateField(null=True, blank=True)
     deadline = models.DateField(null=True, blank=True)
     admins = models.ManyToManyField(User, limit_choices_to=
-                                    {'userprofile__status': 'Teacher'},
-                                    blank=False)
-    editdate = models.DateField(auto_now=True, blank=False)
+                                    {'userprofile__status': 'Teacher'})
+    editdate = models.DateField(auto_now=True)
     visible = models.BooleanField(blank=True)
 
     # In Admin panel : object = username.
@@ -21,6 +21,7 @@ class Assignment (models.Model):
         return self.name
 
 
+# Definition of the form to edit Assignments
 class EditAssignmentForm (forms.ModelForm):
     class Meta:
         model = Assignment
@@ -28,6 +29,7 @@ class EditAssignmentForm (forms.ModelForm):
                   'deadline', 'admins', 'visible')
 
 
+# Definition of the form to add Assignments
 class AddAssignmentForm (forms.ModelForm):
     class Meta:
         model = Assignment

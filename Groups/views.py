@@ -4,21 +4,24 @@ from django.contrib.auth.models import User
 from Groups.models import *
 
 
+# Page to detail a group
 @login_required
 def detailgroup(request, Group_id):
     detailedgroup = Group.objects.get(id=Group_id)
     return render(request, 'detailgroup.html', locals())
 
 
+# Page to add a group
 @login_required
 def addgroup(request, Assignment_id):
+    # Only the owner of the assignment can add a group
+    if request.user != editedassignment.course.owner:
+        return redirect('Penelope.views.home')
+
     editedassignment = Assignment.objects.get(id=Assignment_id)
     subscribed = editedassignment.course.userprofile_set.all()
-    # Only the owner can edit an assignment
-    if request.user != editedassignment.course.owner:
-        return redirect('Platform.views.home')
 
-# UGLY - To review
+    # Create groups and add users in
     if request.method == 'POST':
         for member in subscribed:
             groupnum = request.POST[member.user.username]

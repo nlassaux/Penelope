@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
 
-    # Overwrite Platforms urls.
+    # Overwrite Penelopes urls.
     url(r'^(?P<Course_id>\d+)/details/$', 'Assignments.views.detailcourse'),
 
     # App Assignments urls.

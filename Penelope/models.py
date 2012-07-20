@@ -9,7 +9,7 @@ import datetime
 # Create the list of years from 2O11 to year progress + 5.
 start_date = '2011'
 date = datetime.datetime.now()
-end_date = date.year + 5
+end_date = date.year + 2
 YEARS_CHOICES = ()  # Starts with an empty list and concatenate.
 for year in range(int(start_date), int(end_date)):
     YEARS_CHOICES += (
@@ -19,9 +19,9 @@ for year in range(int(start_date), int(end_date)):
 
 # List of status.
 STATUS_CHOICES = (
-    ('Admin', 'admin'),
-    ('Teacher', 'teacher'),
-    ('Student', 'student'),
+    ('admin', 'Admin'),
+    ('teacher', 'Teacher'),
+    ('student', 'Student'),
 )
 
 
@@ -29,7 +29,7 @@ STATUS_CHOICES = (
 class UserProfile(models.Model):
     user = models.OneToOneField(User, unique=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES,
-                              default='Student')
+                              default='student')
     courses_list = models.ManyToManyField('Course', blank=True)
 
     # In Admin panel : object = username.
@@ -45,18 +45,18 @@ class UserProfile(models.Model):
 
 # The course model.
 class Course(models.Model):
-    name = models.CharField(max_length=30, blank=False)
-    description = models.TextField(max_length=100, blank=False)
+    name = models.CharField(max_length=30)
+    description = models.TextField(max_length=100)
     owner = models.ForeignKey(User, limit_choices_to={'userprofile__status':
-                              'Teacher'}, blank=False)
-    editdate = models.DateField(auto_now=True, blank=False)
-    years = models.CharField(max_length=11, choices=YEARS_CHOICES, blank=False,
+                              'Teacher'})
+    editdate = models.DateField(auto_now=True)
+    years = models.CharField(max_length=11, choices=YEARS_CHOICES,
                              default='%d - %d' % (date.year, date.year + 1))
     subscribed = models.ManyToManyField(UserProfile, through=
                                         UserProfile.courses_list.through,
                                         blank=True)
-    # In Admin panel : object = username.
 
+    # In Admin panel : object = name.
     def __unicode__(self):
         return self.name
 
@@ -82,6 +82,7 @@ class ChangeCourseOwnerForm(forms.ModelForm):
         fields = ('owner',)
 
 
+# The definition of the login form
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=30, required=True)
     password = forms.CharField(widget=forms.PasswordInput, required=True)

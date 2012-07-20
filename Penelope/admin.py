@@ -14,5 +14,5 @@ admin.site.register(models.UserProfile, UserProfileAdmin)
 
 # Display in the list of UserProfile owner & years in columns.
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ['name', 'owner', 'years','editdate']
+    list_display = ['name', 'owner', 'years', 'editdate']
 admin.site.register(models.Course, CourseAdmin)

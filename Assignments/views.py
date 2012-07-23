@@ -59,14 +59,14 @@ def detailassignment(request, Assignment_id):
             mygroup = request.user.group_set.get(assignment=detailedassignment)
             groupwork = Work.objects.filter(group=mygroup)
         except Group.DoesNotExist:
-            print "test"
-
-    if request.method == 'POST':
-        form = UploadWorkForm(request.POST, request.FILES)
-        if form.is_valid():
-            addwork = Work(file=request.FILES['file'], group=mygroup, uploader=request.user)
-            addwork.save()
-            return redirect('Assignments.views.detailassignment', Assignment_id=Assignment_id)
+            nogroup = 'No group'
+        if request.method == 'POST':
+            form = UploadWorkForm(request.POST, request.FILES)
+            if form.is_valid():
+                addwork = Work(file=request.FILES['file'], group=mygroup, uploader=request.user)
+                addwork.save()
+                return redirect('Assignments.views.detailassignment', Assignment_id=Assignment_id)
+    
     return render(request, 'detailassignment.html', locals())
 
 

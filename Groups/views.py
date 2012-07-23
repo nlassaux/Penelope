@@ -38,3 +38,7 @@ def addgroup(request, Assignment_id):
         return redirect('Assignments.views.detailassignment', Assignment_id=Assignment_id)
 
     return render(request, 'addgroup.html', locals())
+
+# Page to add a group
+@login_required
+def userasgroup(request, Assignment_id):

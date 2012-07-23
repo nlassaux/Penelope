@@ -19,40 +19,80 @@
 </ul>
 
 {% if user == detailedassignment.course.owner %}
-<h2>Groups :</h2>
+
+	<h2>Groups :</h2>
 	
-<table>
-	<tr>
-		<thead>
-		<th>Name</th>
-		<th>Members</th>
-		<thead>
-	</tr>
-	{% for group in detailedassignment.group_set.all %}
-	<tr>
-        <td><a href="/groups/{{group.id}}/details/">{{group.name}}</a></td>
-        <td>{% for user in group.members.all %}{{user.username}} | {% endfor %}</td>
-	</tr>
-	{% empty %}
-	No groups ! <a href="/groups/{{detailedassignment.id}}/add/">Create groups</a>
-	{% endfor %}
-</table>
+	{% if detailedassignment.group_set.all %}
 
-<h2>Administration :</h2>
+	<table>
+		<tr>
+			<thead>
+			<th>Name</th>
+			<th>Members</th>
+			<thead>
+		</tr>
+		{% for group in detailedassignment.group_set.all %}
+		<tr>
+	        <td><a href="/groups/{{group.id}}/details/">{{group.name}}</a></td>
+	        <td>{% for user in group.members.all %}
+	        	{{user.username}} | 
+	        	{% endfor %}</td>
+		</tr>
+		{% endfor %}
+	</table>
 
-<p><a href="/assignments/{{detailedassignment.id}}/edit/">Edit the assignment</a></p>
-<p><a href="/assignments/{{detailedassignment.id}}/delete/">Delete</a></p>
+	{% else %}
+
+		<a href="/groups/{{detailedassignment.id}}/add/">Create groups</a>
+
+	{% endif %}
+
+	<h2>Administration :</h2>
+
+	<p><a href="/assignments/{{detailedassignment.id}}/edit/">Edit the assignment</a></p>
+	<p><a href="/assignments/{{detailedassignment.id}}/delete/">Delete</a></p>
 
 {% else %}
 
-<h2>Your group :</h2>
-Group {{ mygroup.name }}
-<ul>
-    {% for member in mygroup.members.all %}
-    <li>{{ member }}
-    {% endfor %}
-</ul>
-{% endif %}
+	<h2>Your group :</h2>
 
+	{% if nogroup %}
+		You havn't got any group.
+	{% else %}
+
+		Group {{ mygroup.name }}
+		<ul>
+		    {% for member in mygroup.members.all %}
+		    <li>{{ member }}
+		    {% endfor %}
+		</ul>
+
+		<h2>Files :</h2>
+
+		<table>
+			<tr>
+				<thead>
+				<th>Name</th>
+				<th>Size</th>
+				<th>Upload date</th>
+				<thead>
+			</tr>
+			{% for work in groupwork %}
+			<tr>
+		        <td>{{ work.file.name }}</td>
+		        <td>{{ work.file.size }} Octet</td>
+		        <td>{{ work.editdate }}</td>
+			</tr>
+			{% endfor %}
+		</table>
+
+		<form action="/assignments/{{detailedassignment.id}}/details/" method="post" enctype="multipart/form-data">{% csrf_token %}
+			{{form.as_p}}
+		<input type="submit" value="Submit" />
+
+	{% endif %}
+
+
+{% endif %}
 
 {% endblock %}

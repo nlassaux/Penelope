@@ -32,6 +32,7 @@ Todo :
 - Uniformise : models's name, files.
 - Overwrite project's template files with apps' templates.
 - New group : Grid / Matrix / Columns UI
+- Verify that all users have a group (else new message)
 
 
 Installation :

@@ -1,2 +1,26 @@
 {% extends "base.html" %}
-{% block id %}<p><a href="/">Dashboard</a> | {{ user.username }} ({{ user.userprofile.status}}) | <a href="/logout/">deconnexion</a></p>{% endblock %}
+
+{% block id %}
+
+	   	<div class="navbar navbar-fixed-top">
+	      <div class="navbar-inner">
+	        <div class="container">
+	          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	          </a>
+	          <a class="brand" href="/">Penelope</a>
+	          <div class="pull-right">{{ user.username }} ({{ user.userprofile.status}})</div>
+	          <div class="nav-collapse">
+	            <ul class="nav">
+	              <li class="active"><a href="#">Dashboard</a></li>
+	              <li><a href="/logout/">Logout</a></li>
+	            </ul>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+
+
+{% endblock %}

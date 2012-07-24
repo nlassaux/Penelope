@@ -33,6 +33,9 @@ Todo :
 - Overwrite work files.
 - Teachers can download an archive.
 
+-- Before production :
+-- -- Change js and css files with compressed
+
 
 Installation :
 ============

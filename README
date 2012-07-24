@@ -22,17 +22,16 @@ Organisation :
 
 -- Penelope (folder)
 -- -- Penelope (project)
--- -- Assignments (app)
--- -- Groups (app)
 
 
 Todo :
 ====
 
 - Uniformise : models's name, files.
-- Overwrite project's template files with apps' templates.
-- New group : Grid / Matrix / Columns UI
-- Verify that all users have a group (else new message)
+- New group : Grid / Matrix / Columns UI.
+- Verify that all users have a group (else new message).
+- Overwrite work files.
+- Teachers can download an archive.
 
 
 Installation :
@@ -52,7 +51,6 @@ Notes :
 Questions (Français) :
 =========
 
-- Les élèves peuvent-t-ils voir la composition des groupes ?
 
 
 

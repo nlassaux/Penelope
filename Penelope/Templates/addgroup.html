@@ -1,0 +1,37 @@
+{% extends "base_log.html" %}
+{% load url from future %}
+{% block title %}Create groups | {{editedassignment.name}}{% endblock %}
+
+{% block content %}
+<a href="/assignments/{{editedassignment.id}}/details/">Retour to the assignment</a>
+
+<p>
+<p>
+
+<form name="groups" method="post" action="">{% csrf_token %}
+<table>
+	<tr>
+		<thead>
+			<th>Name</th>
+			{% for number in subscribed.all %}
+			<th>Group {{forloop.counter}}</th>
+			{% endfor %}
+		<thead>
+	</tr>
+{% for user in subscribed %}	
+	<tr>
+		<td>{{user.user.username}}</td>
+		{% for number in subscribed.all %}
+		<td><input type="radio" name="{{user.user.username}}" value="{{forloop.counter}}" ></td>
+		{% endfor %}
+
+	</tr>
+{% endfor %}
+</table>
+
+<input type="submit" value="Send">
+</form>
+
+<a href="/groups/{{editedassignment.id}}/userasgroup/">Users as group</a>
+
+{% endblock %}

@@ -52,7 +52,7 @@ SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = '/Users/Nicolas/Desktop/Media/'
+MEDIA_ROOT = 'Media'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -97,7 +97,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -115,14 +115,12 @@ WSGI_APPLICATION = 'Penelope.wsgi.application'
 TEMPLATE_DIRS = (
     # Add the Assignments app's Template folder (remove if not used)
     # Apps must be before the Penelope to overwrite template (search in order)
-    '/Groups/Templates',
-    '/Assignments/Templates',
     '/Templates',
-    '/Users/Nicolas/Virtualenvs/LaBRI/lib/python2.7/site-packages/debug_toolbar/templates',
+    # '/Users/Nicolas/Virtualenvs/LaBRI/lib/python2.7/site-packages/debug_toolbar/templates',
 )
 
 INSTALLED_APPS = (
-    'debug_toolbar',
+    # 'debug_toolbar',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -130,10 +128,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'Penelope',
-    # Add the Assignments App, remove if not used.
-    'Assignments',
-    # Add the Groups App, remove if not used.
-    'Groups',
     #'django.contrib.sites',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',

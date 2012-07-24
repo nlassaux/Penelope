@@ -1,24 +1,3 @@
-
-Assignments/__init__.pyc
-
-Assignments/admin.pyc
-
-Assignments/models.pyc
-
-Assignments/urls.pyc
-
-Assignments/views.pyc
-
-Groups/__init__.pyc
-
-Groups/admin.pyc
-
-Groups/models.pyc
-
-Groups/urls.pyc
-
-Groups/views.pyc
-
 Penelope/wsgi.pyc
 
 Penelope/views.pyc

@@ -11,25 +11,25 @@
 {% if user.userprofile.status = 'student' %}
 
     <table class="table table-striped">
-        <thead>
-          <tr>
-            <th colspan='3'><h3>Courses</h3></th>
-          </tr>
-          <tr>
-            <th>Name</th>
-            <th>Teacher</th>
-            <th>Year</th>
-          </tr>
-        <thead>
-        <tbody>
-          {% for Course in user.userprofile.courses_list.all %}
-          <tr>
-            <td><a href="/{{Course.id}}/details">{{Course.name}}</a></td>
-            <td>{{Course.owner}}</td>
-            <td>{{Course.years}}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
+      <thead>
+        <tr>
+          <th colspan='3'><h3>Courses</h3></th>
+        </tr>
+        <tr>
+          <th>Name</th>
+          <th>Teacher</th>
+          <th>Year</th>
+        </tr>
+      <thead>
+      <tbody>
+        {% for Course in user.userprofile.courses_list.all %}
+        <tr>
+          <td><a href="/{{Course.id}}/details">{{Course.name}}</a></td>
+          <td>{{Course.owner}}</td>
+          <td>{{Course.years}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
 
 {% else %}

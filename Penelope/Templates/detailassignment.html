@@ -2,34 +2,35 @@
 {% load url from future %}
 {% block title %}Assignment | {{detailedassignment.name}}{% endblock %}
 
-{% block content %}
+{% block breadcrumb %}
 
 	<ul class="breadcrumb">
-    <li><a href="/">Dashboard</a><span class="divider">/</span></li>
-    <li><a href="/{{detailedassignment.course.id}}/details/">{{detailedassignment.course}}</a><span class="divider">/</span></li>
-    <li class="active">{{detailedassignment.name}}</li>
+		<div class='swift'>
+	    <li>>> <a href="/">Dashboard</a><span class="divider">/</span></li>
+	    <li><a href="/{{detailedassignment.course.id}}/details/">{{detailedassignment.course}}</a><span class="divider">/</span></li>
+	    <li class="active">{{detailedassignment.name}}</li>
+	  </div>
   </ul>
 
+{% endblock %}
+
+{% block content %}
+
   <div class="page-header">
-		<h1>{{detailedassignment.name}}</h1>
-	</div>
+		<h1>{{detailedassignment.name}} <small>{{detailedassignment.description}}</small></h1>
+    <div id='space'>
+	    <strong>Last edit</strong> {{detailedassignment.editdate}}
+	    <strong>Teachers</strong> 
+    	{% for admin in detailedassignment.admins.all %}
+    				{{admin.username}}
+    	{% endfor %}
+    </div>
+  </div>
+	
 
   <div class="row">
-    <div class='span3'>
-			<ul>
-		    <li>Description : {{detailedassignment.description}}
-		    <li>Deadline : {{detailedassignment.deadline}}
-		    <li>Last edit : {{detailedassignment.editdate}}
-		    <li>Admins : 
-		    	{% for admin in detailedassignment.admins.all %}
-		    				{{admin.username}}
-		    	{% endfor %}
-			</ul>
-		</div>
-
 			{% if user == detailedassignment.course.owner %}
-
-				<div class='span4 '>
+				<div class='span9'>
 					{% if detailedassignment.group_set.all %}
 						<table class="table table-striped">
 							<thead>
@@ -38,29 +39,32 @@
 									<th>Members</th>
 								</tr>
 							</thead>
-							{% for group in detailedassignment.group_set.all %}
-								<tbody>
+							<tbody>
+								{% for group in detailedassignment.group_set.all %}
 									<tr>
 					        	<td><a href="/groups/{{group.id}}/details/">{{group.name}}</a></td>
 					        	<td>
 					        		{% for user in group.members.all %}
-					        			{{user.username}} | 
+					        			<div id='user-balise'>{{user.username}}</div>
 					        		{% endfor %}
 					        	</td>
 									</tr>
-								</tbody>
-							{% endfor %}
+								{% endfor %}
+							</tbody>
 						</table>
 					{% else %}
 						<a href="/groups/{{detailedassignment.id}}/add/">Create groups</a>
 					{% endif %}
 					</div>
-					<ul class="nav nav-list span2">
-				        <li class="nav-header">Administration</li>
-				        <li><a href="/assignments/{{detailedassignment.id}}/edit/"><i class="icon-pencil"></i> Edit</a></li>
-				        <li><a href="#DeleteModal" data-toggle="modal"><i class="icon-remove-sign"></i> Delete</a></li>
-				  </ul>
-				</div>
+					<div class='span2 admin-panel'>
+						<ul class="nav nav-list">
+					        <li class="nav-header">Administration</li>
+					        <li><a href="#"><i class="icon-briefcase"></i> Change groups</a></li>
+					        <li><a href="/assignments/{{detailedassignment.id}}/edit/"><i class="icon-pencil"></i> Edit</a></li>
+					        <li><a href="#DeleteModal" data-toggle="modal"><i class="icon-remove-sign"></i> Delete</a></li>
+					  </ul>
+					</div>
+	</div>
 
 			{% else %}
 
@@ -68,7 +72,7 @@
 					<dl class="dl-horizontal">
 						<dt>Your group :</dt>
 						{% if nogroup %}
-						<dd>You havn't got any group</dd>
+						<dd>You have not got any group</dd>
 						{% else %}
 						<dd>Group {{ mygroup.name }}</dd>
 						<dt>Members :</dt>
@@ -107,6 +111,10 @@
 				</div>
 			{% endif %}
 
+	{% endif %}
+
+	{% if detailedassignment.deadline %}
+		<div class='deadline'>Deadline : {{detailedassignment.deadline}}</div>
 	{% endif %}
 
 <div class="modal hide" id="DeleteModal">

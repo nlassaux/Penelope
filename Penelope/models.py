@@ -47,7 +47,7 @@ class UserProfile(models.Model):
 # The course model.
 class Course(models.Model):
     name = models.CharField(max_length=30)
-    description = models.TextField(max_length=100)
+    description = models.CharField(max_length=130)
     owner = models.ForeignKey(User, limit_choices_to={'userprofile__status':
                               'teacher'})
     editdate = models.DateField(auto_now=True)
@@ -93,7 +93,7 @@ class LoginForm(forms.Form):
 class Assignment (models.Model):
     name = models.CharField(max_length=30)
     course = models.ForeignKey(Course)
-    description = models.TextField(max_length=100)
+    description = models.CharField(max_length=130)
     enddate = models.DateField(null=True, blank=True)
     deadline = models.DateField(null=True, blank=True)
     admins = models.ManyToManyField(User, limit_choices_to=

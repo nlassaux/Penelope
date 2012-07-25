@@ -15,7 +15,7 @@
 	</div>
 
   <div class="row">
-    <div class='span5'>
+    <div class='span3'>
 			<ul>
 		    <li>Description : {{detailedassignment.description}}
 		    <li>Deadline : {{detailedassignment.deadline}}
@@ -29,13 +29,12 @@
 
 			{% if user == detailedassignment.course.owner %}
 
-				<div class='span5 '>
-					<h3>Groups :</h3>
+				<div class='span4 '>
 					{% if detailedassignment.group_set.all %}
 						<table class="table table-striped">
 							<thead>
 								<tr>
-									<th>Name</th>
+									<th><h4>Groups :</h4></th>
 									<th>Members</th>
 								</tr>
 							</thead>
@@ -55,10 +54,12 @@
 					{% else %}
 						<a href="/groups/{{detailedassignment.id}}/add/">Create groups</a>
 					{% endif %}
-	
-					<h2>Administration :</h2>
-					<p><a href="/assignments/{{detailedassignment.id}}/edit/">Edit the assignment</a></p>
-					<p><a href="#DeleteModal" data-toggle="modal">Delete</a></p>
+					</div>
+					<ul class="nav nav-list span2">
+				        <li class="nav-header">Administration</li>
+				        <li><a href="/assignments/{{detailedassignment.id}}/edit/"><i class="icon-pencil"></i> Edit</a></li>
+				        <li><a href="#DeleteModal" data-toggle="modal"><i class="icon-remove-sign"></i> Delete</a></li>
+				  </ul>
 				</div>
 
 			{% else %}

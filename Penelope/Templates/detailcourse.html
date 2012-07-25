@@ -11,7 +11,7 @@
     <h1>{{detailedcourse.name}}</h1>
   </div>
   <div class="row">
-    <div class='span5'>
+    <div class='span3'>
       <dl class="dl-horizontal">
         <dt>Teacher</dt>
         <dd>{{detailedcourse.owner}}</dd>
@@ -24,12 +24,11 @@
       </dl>
     </div>
 
-    <div class='span5'>
-      <h3>Assignments :</h3>
+    <div class='span6'>
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>Name</th>
+            <th><h4>Assignments :</h4></th>
             <th>Deadline</th>
             <th>Last edit</th>
           </tr>
@@ -45,22 +44,25 @@
         </tbody>
       </table>
     </div>
-  </div>
 
  {% if user == detailedcourse.owner %}
+      <ul class="nav nav-list span2">
+        <li class="nav-header">Administration</li>
+        <li><a href="/{{detailedcourse.id}}/editcourse"><i class="icon-pencil"></i> Edit</a></li>
+        <li><a href="#DeleteModal" data-toggle="modal"><i class="icon-remove-sign"></i> Delete</a></li>
+        <li><a href="/{{detailedcourse.id}}/changeowner/"><i class="icon-share"></i> Change the owner</a></li>
+        <li><a href="/{{detailedcourse.id}}/addstudents/"><i class="icon-list"></i> Change subscribed</a></li>
+        <li><a href="/assignments/{{detailedcourse.id}}/add/"><i class=" icon-plus-sign"></i> New assignment</a></li>
+      </ul>
+  </div>
 
-      <h2>Subscribed users :</h2>
+      <h3>Subscribed users :</h3>
       	{% for subscribed in subscribed %}
       		<p>{{ subscribed.user.username }}</p>
       	{% endfor %}
 
-      <h2>Administration :</h2>
-      <p><a href="/{{detailedcourse.id}}/editcourse">Edit</a></p>
-      <p><a href="#DeleteModal" data-toggle="modal">Delete</a></p>
-      <p><a href="/{{detailedcourse.id}}/changeowner/">Change the owner</a></p>
-      <p><a href="/{{detailedcourse.id}}/addstudents/">Change subscribed</a></p>
-      <p><a href="/assignments/{{detailedcourse.id}}/add/">New assignment</a></p>
-
+  {% else %}
+  </div>
   {% endif %}
 
 <div class="modal hide" id="DeleteModal">

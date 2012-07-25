@@ -3,13 +3,18 @@
 {% block title %}Edit a course{% endblock %}
 
 {% block content %}
-<a href="/">Return to dashboard</a>
 
-<h1>Edit course</h1>
-    
-<form action="" method="post">{% csrf_token %}
-{{ form.as_p }}
-<input type="submit" value="Submit" />
-</form>
+	<ul class="breadcrumb">
+	  <li><a href="/">Dashboard</a><span class="divider">/</span></li>
+	  <li><a href="/{{Course_id}}/details/">{{editedcourse.name}}</a><span class="divider">/</span></li>
+	  <li class="active">Edit</li>
+	</ul>
+
+	<h1>Edit course</h1>
+	    
+	<form action="" method="post">{% csrf_token %}
+		{{ form.as_p }}
+		<input class='btn btn-primary' type="submit" value="Submit" />
+	</form>
 
 {% endblock %}

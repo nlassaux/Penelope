@@ -4,96 +4,108 @@
 
 {% block content %}
 
-<a href="/{{detailedassignment.course.id}}/details/">Retour to the course</a>
+	<ul class="breadcrumb">
+    <li><a href="/">Dashboard</a><span class="divider">/</span></li>
+    <li><a href="/{{detailedassignment.course.id}}/details/">{{detailedassignment.course}}</a><span class="divider">/</span></li>
+    <li class="active">{{detailedassignment.name}}</li>
+  </ul>
 
-<h1>Details of the assignment :</h1>
+  <div class="page-header">
+		<h1>{{detailedassignment.name}}</h1>
+	</div>
 
-<ul>
-    <li>Name : {{detailedassignment.name}}
-    <li>Course : {{detailedassignment.course}}
-    <li>Description : {{detailedassignment.description}}
-    <li>Deadline : {{detailedassignment.deadline}}
-    <li>Last edit : {{detailedassignment.editdate}}
-    <li>Admins : {% for admin in detailedassignment.admins.all %}
-    				{{admin.username}}{% endfor %}
-</ul>
+  <div class="row">
+    <div class='span5'>
+			<ul>
+		    <li>Description : {{detailedassignment.description}}
+		    <li>Deadline : {{detailedassignment.deadline}}
+		    <li>Last edit : {{detailedassignment.editdate}}
+		    <li>Admins : 
+		    	{% for admin in detailedassignment.admins.all %}
+		    				{{admin.username}}
+		    	{% endfor %}
+			</ul>
+		</div>
 
+			{% if user == detailedassignment.course.owner %}
 
-{% if user == detailedassignment.course.owner %}
-
-	<h2>Groups :</h2>
+				<div class='span5 '>
+					<h3>Groups :</h3>
+					{% if detailedassignment.group_set.all %}
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Members</th>
+								</tr>
+							<thead>
+							{% for group in detailedassignment.group_set.all %}
+								<tbody>
+									<tr>
+					        	<td><a href="/groups/{{group.id}}/details/">{{group.name}}</a></td>
+					        	<td>
+					        		{% for user in group.members.all %}
+					        			{{user.username}} | 
+					        		{% endfor %}
+					        	</td>
+									</tr>
+								</tbody>
+							{% endfor %}
+						</table>
+					{% else %}
+						<a href="/groups/{{detailedassignment.id}}/add/">Create groups</a>
+					{% endif %}
 	
-	{% if detailedassignment.group_set.all %}
+					<h2>Administration :</h2>
+					<p><a href="/assignments/{{detailedassignment.id}}/edit/">Edit the assignment</a></p>
+					<p><a href="/assignments/{{detailedassignment.id}}/delete/">Delete</a></p>
+				</div>
 
-	<table class="table table-striped">
-		<tr>
-			<thead>
-			<th>Name</th>
-			<th>Members</th>
-			<thead>
-		</tr>
-		{% for group in detailedassignment.group_set.all %}
-		<tr>
-	        <td><a href="/groups/{{group.id}}/details/">{{group.name}}</a></td>
-	        <td>{% for user in group.members.all %}
-	        	{{user.username}} | 
-	        	{% endfor %}</td>
-		</tr>
-		{% endfor %}
-	</table>
+			{% else %}
 
-	{% else %}
+				<div class = 'span5'>
+					<dl class="dl-horizontal">
+						<dt>Your group :</dt>
+						{% if nogroup %}
+						<dd>You havn't got any group</dd>
+						{% else %}
+						<dd>Group {{ mygroup.name }}</dd>
+						<dt>Members :</dt>
+						{% for member in mygroup.members.all %}
+					  <dd>{{ member }}</dd>
+						{% endfor %}
+					</dl>
+				</div>
+	</div>
 
-		<a href="/groups/{{detailedassignment.id}}/add/">Create groups</a>
+				<h2>Files :</h2>
 
-	{% endif %}
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Size</th>
+							<th>Upload date</th>
+						</tr>
+					</thead>
+					{% for work in groupwork %}
+						<tbody>
+							<tr>
+			        	<td>{{ work.file.name }}</td>
+			        	<td>{{ work.file.size }} Octet</td>
+			        	<td>{{ work.editdate }}</td>
+							</tr>
+						</tbody>
+					{% endfor %}
+				</table>
 
-	<h2>Administration :</h2>
-
-	<p><a href="/assignments/{{detailedassignment.id}}/edit/">Edit the assignment</a></p>
-	<p><a href="/assignments/{{detailedassignment.id}}/delete/">Delete</a></p>
-
-{% else %}
-
-	<h2>Your group :</h2>
-
-	{% if nogroup %}
-		You havn't got any group.
-	{% else %}
-
-		Group {{ mygroup.name }}
-		<ul>
-		    {% for member in mygroup.members.all %}
-		    <li>{{ member }}
-		    {% endfor %}
-		</ul>
-
-		<h2>Files :</h2>
-
-		<table class="table table-striped">
-			<tr>
-				<thead>
-				<th>Name</th>
-				<th>Size</th>
-				<th>Upload date</th>
-				<thead>
-			</tr>
-			{% for work in groupwork %}
-			<tr>
-		        <td>{{ work.file.name }}</td>
-		        <td>{{ work.file.size }} Octet</td>
-		        <td>{{ work.editdate }}</td>
-			</tr>
-			{% endfor %}
-		</table>
-
-		<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
-			{{form.as_p}}
-		<input type="submit" value="Submit" />
+				<div class='span4 offset3'>
+					<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+						{{form.file}}
+					<input type="submit" value="Submit" class='btn btn-primary pull-right' />
+				</div>
+			{% endif %}
 
 	{% endif %}
-
-
-{% endif %}
 
 {% endblock %}

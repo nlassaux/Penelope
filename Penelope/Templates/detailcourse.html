@@ -3,51 +3,64 @@
 {% block title %}Course | {{detailedcourse.name}}{% endblock %}
 
 {% block content %}
+  <ul class="breadcrumb">
+    <li><a href="/">Dashboard</a><span class="divider">/</span></li>
+    <li class="active">{{detailedcourse.name}}</li>
+  </ul>
+  <div class="page-header">
+    <h1>{{detailedcourse.name}}</h1>
+  </div>
+  <div class="row">
+    <div class='span5'>
+      <dl class="dl-horizontal">
+        <dt>Teacher</dt>
+        <dd>{{detailedcourse.owner}}</dd>
+        <dt>Description</dt>
+        <dd>{{detailedcourse.description}}</dd>
+        <dt>Years</dt>
+        <dd>{{detailedcourse.years}}</dd>
+        <dt>Last edit</dt>
+        <dd>{{detailedcourse.editdate}}</dd>
+      </dl>
+    </div>
 
-<h1>Details of a course {% if user.userprofile in subscribed %}(Subscribed){% endif %}</h1>
+    <div class='span5'>
+      <h3>Assignments :</h3>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Deadline</th>
+            <th>Last edit</th>
+          </tr>
+        <thead>
+        <tbody>
+          {% for assignment in assignments %}
+            <tr>
+              <td><a href="/assignments/{{assignment.id}}/details/">{{assignment.name}}</a></td>
+              <td>{{assignment.deadline}}</td>
+              <td>{{assignment.editdate}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-<ul>
-    <li>Name : {{detailedcourse.name}}
-    <li>Owner : {{detailedcourse.owner}}
-    <li>Description : {{detailedcourse.description}}
-    <li>Years : {{detailedcourse.years}}
-    <li>Last edit : {{detailedcourse.editdate}}
-</ul>
+ {% if user == detailedcourse.owner %}
 
-<h2>Assignments :</h2>
+      <h2>Subscribed users :</h2>
+      	{% for subscribed in subscribed %}
+      		<p>{{ subscribed.user.username }}</p>
+      	{% endfor %}
 
-<table class="table table-striped">
-    <tr>
-    <thead>
-        <th>Name</th>
-        <th>Deadline</th>
-        <th>Last edit</th>
-    <thead>
-    </tr>
-    {% for assignment in assignments %}
-    <tr>
-        <td><a href="/assignments/{{assignment.id}}/details/">{{assignment.name}}</a></td>
-        <td>{{assignment.deadline}}</td>
-        <td>{{assignment.editdate}}</td>
-    </tr>
-    {% endfor %}
-</table>
+      <h2>Administration :</h2>
+      <p><a href="/{{detailedcourse.id}}/editcourse">Edit</a></p>
+      <p><a href="/{{detailedcourse.id}}/deletecourse">Delete</a></p>
+      <p><a href="/{{detailedcourse.id}}/changeowner/">Change the owner</a></p>
+      <p><a href="/{{detailedcourse.id}}/addstudents/">Change subscribed</a></p>
+      <p><a href="/assignments/{{detailedcourse.id}}/add/">New assignment</a></p>
 
-
-{% if user == detailedcourse.owner %}
-
-    <h2>Subscribed users :</h2>
-    	{% for subscribed in subscribed %}
-    		<p>{{ subscribed.user.username }}</p>
-    	{% endfor %}
-
-    <h2>Administration :</h2>
-    <p><a href="/{{detailedcourse.id}}/editcourse">Edit</a></p>
-    <p><a href="/{{detailedcourse.id}}/deletecourse">Delete</a></p>
-    <p><a href="/{{detailedcourse.id}}/changeowner/">Change the owner</a></p>
-    <p><a href="/{{detailedcourse.id}}/addstudents/">Add students to the course</a></p>
-    <p><a href="/assignments/{{detailedcourse.id}}/add/">New assignment</a></p>
-
-{% endif %}
+  {% endif %}
 
 {% endblock %}

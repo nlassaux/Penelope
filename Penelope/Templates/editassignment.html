@@ -3,13 +3,19 @@
 {% block title %}Edit an assignment{% endblock %}
 
 {% block content %}
-<a href="/{{editedassignment.course.id}}/details/">The course</a>
+	
+	<ul class="breadcrumb">
+		<li><a href="/">Dashboard</a><span class="divider">/</span></li>
+		<li><a href="/{{editedassignment.course.id}}/details/">{{editedassignment.course.name}}</a><span class="divider">/</span></li>
+		<li><a href="assignments/{{editedassignment.id}}/details/">{{editedassignment.name}}</a><span class="divider">/</span></li>
+		<li class="active">Edit</li>
+	</ul>
 
-<h1>Edit assignment</h1>
-    
-<form action="" method="post">{% csrf_token %}
-{{ form.as_p }}
-<input type="submit" value="Submit" />
-</form>
+	<h1>Edit assignment</h1>
+	    
+	<form action="" method="post">{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" value="Submit" class='btn btn-primary'/>
+	</form>
 
 {% endblock %}

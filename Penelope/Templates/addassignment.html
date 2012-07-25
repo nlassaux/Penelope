@@ -3,13 +3,18 @@
 {% block title %}Add an assignment{% endblock %}
 
 {% block content %}
-<a href="/{{Course_id}}/details/">Return to the course</a>
 
-<h1>Add assignment</h1>
-    
-<form action="" method="post">{% csrf_token %}
-{{ form.as_p }}
-<input type="submit" value="Submit" />
-</form>
+	<ul class="breadcrumb">
+		<li><a href="/">Dashboard</a><span class="divider">/</span></li>
+		<li><a href="/{{Course_id}}/details/">{{editedcourse.name}}</a><span class="divider">/</span></li>
+		<li class="active">Add assignment</li>
+	</ul>
+
+	<h1>Add assignment</h1>
+	    
+	<form action="" method="post">{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" value="Submit" class='btn btn-primary'/>
+	</form>
 
 {% endblock %}

@@ -28,8 +28,8 @@ urlpatterns = patterns('',
     url(r'assignments/(?P<Assignment_id>\d+)/delete/$', 'Penelope.views.deleteassignment'),
 
     # Log's links
-    url(r'^login/$', 'Penelope.views.log'),
-    url(r'^logout/$', 'Penelope.views.deconnexion'),
+    url(r'^login/$', 'Penelope.views.connection'),
+    url(r'^logout/$', 'Penelope.views.disconnection'),
 
     # Administation's links
     url(r'^admin/', include(admin.site.urls)),

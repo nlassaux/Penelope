@@ -69,7 +69,7 @@ STATIC_ROOT = ''
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
 
-INTERNAL_IPS = ('127.0.0.1',)
+INTERNAL_IPS = ('127.0.0.1', '0.0.0.0',)
 
 # Additional locations of static files
 STATICFILES_DIRS = (

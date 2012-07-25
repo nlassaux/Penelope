@@ -7,7 +7,7 @@ from models import *
 
 
 # Login
-def log(request):
+def connection(request):
     # Redirect to dashboard if the user is log
     if request.user.is_authenticated():
         return redirect('Penelope.views.home')
@@ -32,7 +32,7 @@ def log(request):
 
 
 # Logout
-def deconnexion(request):
+def disconnection(request):
     logout(request)
     return redirect('Penelope.views.home')
 
@@ -227,6 +227,8 @@ def detailassignment(request, Assignment_id):
 @login_required
 def addassignment(request, Course_id):
 
+    editedcourse = Course.objects.get(id=Course_id)
+
     # Only the owner can edit an assignment
     if request.user.userprofile.status != 'teacher':
         return redirect('Penelope.views.home')
@@ -328,13 +330,3 @@ def userasgroup(request, Assignment_id):
         groupnum += 1
 
     return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
-
-
-
-
-
-
-
-
-
-

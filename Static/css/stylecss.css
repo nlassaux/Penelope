@@ -9,7 +9,7 @@
 
 
 #space {
-	margin: -20px 0px -10px 60% ;
+	margin: -20px 0px -10px 55% ;
 }
 
 
@@ -39,8 +39,9 @@
 .deadline {
 	background-color: #ee5f5b;
 	text-align: center;
-  	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+  	text-shadow: 0 1px 1px rgba(100, 100, 100, 0.75);
   	font-size: 25px;
+  	color : #FFF;
   	padding: 10px; 
 	border: 1px solid #cccccc;
 	*border: 0;

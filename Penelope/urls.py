@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url(r'^(?P<Course_id>\d+)/addstudents/$', 'Penelope.views.addstudents'),
     url(r'^(?P<Course_id>\d+)/changeowner/$', 'Penelope.views.changeowner'),
     url(r'^(?P<Course_id>\d+)/deletecourse/$', 'Penelope.views.deletecourse'),
+    url(r'^(?P<Course_id>\d+)/clearallstudents/$', 'Penelope.views.clearallstudents'),
 
     # Assignments urls.
     url(r'groups/(?P<Group_id>\d+)/details/$', 'Penelope.views.detailgroup'),

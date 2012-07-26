@@ -30,7 +30,7 @@
 
   <div class="row">
 			{% if user == detailedassignment.course.owner %}
-				<div class='span9'>
+				<div class='span8'>
 					{% if detailedassignment.group_set.all %}
 						<table class="table table-striped">
 							<thead>
@@ -45,18 +45,25 @@
 					        	<td><a href="/groups/{{group.id}}/details/">{{group.name}}</a></td>
 					        	<td>
 					        		{% for user in group.members.all %}
-					        			<div id='user-balise'>{{user.username}}</div>
+					        			<div id='user-balise'>{{user.user.username}}</div>
 					        		{% endfor %}
 					        	</td>
 									</tr>
 								{% endfor %}
+									<tr>
+										<td>Without group</td>
+												<td>
+													{% for student in groupless %}
+														<div id='user-balise'>{{student.user.username}}</div>
+													{% endfor %}
+												</td>
 							</tbody>
 						</table>
 					{% else %}
 						<a href="/groups/{{detailedassignment.id}}/add/">Create groups</a>
 					{% endif %}
 					</div>
-					<div class='span2 admin-panel'>
+					<div class='span3 admin-panel'>
 						<ul class="nav nav-list">
 					        <li class="nav-header">Administration</li>
 					        <li><a href="#"><i class="icon-briefcase"></i> Change groups</a></li>
@@ -93,15 +100,15 @@
 							<th>Upload date</th>
 						</tr>
 					</thead>
-					{% for work in groupwork %}
-						<tbody>
+					<tbody>
+						{% for work in groupwork %}
 							<tr>
 			        	<td>{{ work.file.name }}</td>
 			        	<td>{{ work.file.size }} Octet</td>
 			        	<td>{{ work.editdate }}</td>
 							</tr>
-						</tbody>
-					{% endfor %}
+						{% endfor %}
+					</tbody>
 				</table>
 
 				<div class='span4 offset3'>

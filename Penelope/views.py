@@ -149,6 +149,20 @@ def addstudents(request, Course_id):
     return render(request, 'addstudents.html', locals())
 
 
+@login_required
+def clearallstudents(request, Course_id):
+    editedcourse = Course.objects.get(id=Course_id)  # (The ID is in URL)
+
+    # Only the owner can edit a course.
+    if request.user != editedcourse.owner:
+        return redirect('Penelope.views.home')
+
+    subscribed = editedcourse.subscribed.all()
+    for student in subscribed:
+        editedcourse.subscribed.remove(student)
+    return redirect('Penelope.views.detailcourse', Course_id=Course_id)
+
+
 # Course's details
 @login_required
 def detailcourse(request, Course_id):
@@ -219,6 +233,8 @@ def detailassignment(request, Assignment_id):
                 addwork = Work(file=request.FILES['file'], group=mygroup, uploader=request.user)
                 addwork.save()
                 return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
+    else:
+        groupless = UserProfile.objects.filter(courses_list__assignment = detailedassignment).exclude(group_list__assignment=detailedassignment).all()
 
     return render(request, 'detailassignment.html', locals())
 
@@ -322,11 +338,9 @@ def userasgroup(request, Assignment_id):
         query = Group.objects.filter(assignment=editedassignment, name=groupnum)
         if query:
             query = Group.objects.get(assignment=editedassignment, name=groupnum)
-            query.members.add(student.user)
         else:
             query = Group.objects.create(assignment=editedassignment, name=groupnum)
-            query = Group.objects.get(assignment=editedassignment, name=groupnum)
-            query.members.add(student.user)
+        query.members.add(student.user.userprofile)
         groupnum += 1
 
     return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)

@@ -32,6 +32,7 @@ class UserProfile(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES,
                               default='student')
     courses_list = models.ManyToManyField('Course', blank=True)
+    group_list = models.ManyToManyField('Group', blank=True)
 
     # In Admin panel : object = username.
     def __unicode__(self):
@@ -47,7 +48,7 @@ class UserProfile(models.Model):
 # The course model.
 class Course(models.Model):
     name = models.CharField(max_length=30)
-    description = models.CharField(max_length=130)
+    description = models.CharField(max_length=100, blank=True)
     owner = models.ForeignKey(User, limit_choices_to={'userprofile__status':
                               'teacher'})
     editdate = models.DateField(auto_now=True)
@@ -126,7 +127,9 @@ class AddAssignmentForm (forms.ModelForm):
 class Group(models.Model):
     name = models.CharField(max_length=30)
     assignment = models.ForeignKey(Assignment)
-    members = models.ManyToManyField(User)
+    members = models.ManyToManyField(UserProfile, through=
+                                    UserProfile.group_list.through,
+                                    blank=True)
 
     # In Admin panel : object = name
     def __unicode__(self):

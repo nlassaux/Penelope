@@ -2,13 +2,19 @@
 {% load url from future %}
 {% block title %}Edit a course{% endblock %}
 
-{% block content %}
+{% block breadcrumb %}
 
 	<ul class="breadcrumb">
-	  <li><a href="/">Dashboard</a><span class="divider">/</span></li>
-	  <li><a href="/{{Course_id}}/details/">{{editedcourse.name}}</a><span class="divider">/</span></li>
-	  <li class="active">Edit</li>
-	</ul>
+		<div class='swift'>
+ 	  	<li>>> <a href="/">Dashboard</a><span class="divider">/</span></li>
+  		<li><a href="/{{Course_id}}/details/">{{editedcourse.name}}</a><span class="divider">/</span></li>
+  		<li class="active">Edit</li>
+	  </div>
+  </ul>
+
+{% endblock %}
+
+{% block content %}
 
 	<h1>Edit course</h1>
 	    

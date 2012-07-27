@@ -1,6 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 from models import *
@@ -11,9 +10,6 @@ def connection(request):
     # Redirect to dashboard if the user is log
     if request.user.is_authenticated():
         return redirect('Penelope.views.home')
-
-    # Call the LoginForm modek (empty)
-    form = LoginForm()
 
     # Control if a POST request has been sent.
     if request.method == 'POST':
@@ -68,16 +64,16 @@ def newcourse(request):
     return render(request, 'newcourse.html', locals())
 
 
+# Course's details - Modified for app
 @login_required
-def deletecourse(request, Course_id):
-    deletedcourse = Course.objects.get(id=Course_id)  # (The ID is in URL)
+def detailcourse(request, Course_id):
 
-    # Only the owner can delete a course
-    if request.user != deletedcourse.owner:
-        return redirect('Penelope.views.home')
-
-    deletedcourse.delete()
-    return redirect('Penelope.views.home')
+    # Call the .html with informations to insert
+    detailedcourse = Course.objects.get(id=Course_id)
+    subscribed = detailedcourse.subscribed.filter()
+    # delete if assignments not used
+    assignments = detailedcourse.assignment.filter(visible=True)
+    return render(request, 'detailcourse.html', locals())
 
 
 # Edition of courses
@@ -137,6 +133,7 @@ def addstudents(request, Course_id):
 
     # Use the model AssSubscribedForm
     form = AddSubscribedForm(instance=editedcourse)
+
     # Test if its a POST request
     if request.method == 'POST':
         # Assign to form all fields of the POST request
@@ -144,6 +141,7 @@ def addstudents(request, Course_id):
         if form.is_valid():
             # Save the course
             request = form.save()
+
             return redirect('Penelope.views.detailcourse', Course_id=Course_id)
     # Call the .html with informations to insert
     return render(request, 'addstudents.html', locals())
@@ -157,34 +155,25 @@ def clearallstudents(request, Course_id):
     if request.user != editedcourse.owner:
         return redirect('Penelope.views.home')
 
-    subscribed = editedcourse.subscribed.all()
-    for student in subscribed:
-        editedcourse.subscribed.remove(student)
+    groups_list = Group.objects.filter(assignment__in=editedcourse.assignment.all())
+    for group in groups_list:
+        group.delete()
+
+    subscribed = editedcourse.subscribed.clear()
+
     return redirect('Penelope.views.detailcourse', Course_id=Course_id)
 
 
-# Course's details
 @login_required
-def detailcourse(request, Course_id):
-    detailedcourse = Course.objects.get(id=Course_id)
-    # Save the list of users subscribed to the course
-    subscribed = detailedcourse.userprofile_set.all()
-    # Call the .html with informations to insert
-    return render(request, 'detailcourse.html', locals())
+def deletecourse(request, Course_id):
+    deletedcourse = Course.objects.get(id=Course_id)  # (The ID is in URL)
 
+    # Only the owner can delete a course
+    if request.user != deletedcourse.owner:
+        return redirect('Penelope.views.home')
 
-# Course's details - Modified for app
-@login_required
-def detailcourse(request, Course_id):
-
-    # Call the .html with informations to insert
-    detailedcourse = Course.objects.get(id=Course_id)
-
-    subscribed = detailedcourse.userprofile_set.all()
-
-    # delete if assignments not used
-    assignments = detailedcourse.assignment_set.filter(visible=True)
-    return render(request, 'detailcourse.html', locals())
+    deletedcourse.delete()
+    return redirect('Penelope.views.home')
 
 
 # Page to edit an assignment
@@ -223,10 +212,10 @@ def detailassignment(request, Assignment_id):
 
     if request.user.userprofile.status == 'student':
         try:
-            mygroup = request.user.group_set.get(assignment=detailedassignment)
+            mygroup = request.user.group_list.get(assignment=detailedassignment)
             groupwork = Work.objects.filter(group=mygroup)
         except Group.DoesNotExist:
-            nogroup = 'No group'
+            nogroup.none()
         if request.method == 'POST':
             form = UploadWorkForm(request.POST, request.FILES)
             if form.is_valid():
@@ -234,7 +223,7 @@ def detailassignment(request, Assignment_id):
                 addwork.save()
                 return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
     else:
-        groupless = UserProfile.objects.filter(courses_list__assignment = detailedassignment).exclude(group_list__assignment=detailedassignment).all()
+        groupless = User.objects.filter(course_list__assignment=detailedassignment).exclude(group_list__assignment=detailedassignment)
 
     return render(request, 'detailassignment.html', locals())
 
@@ -299,21 +288,20 @@ def addgroup(request, Assignment_id):
     if request.user != editedassignment.course.owner:
         return redirect('Penelope.views.home')
 
-    subscribed = editedassignment.course.userprofile_set.all()
+    subscribed = editedassignment.course.subscribed.all()
 
     # Create groups and add users in
     if request.method == 'POST':
         for student in subscribed:
 
-            groupnum = request.POST[student.user.username]
+            groupnum = request.POST[student.username]
             query = Group.objects.filter(assignment=editedassignment, name=groupnum)
             if query:
                 query = Group.objects.get(assignment=editedassignment, name=groupnum)
-                query.members.add(student.user)
             else:
                 query = Group.objects.create(assignment=editedassignment, name=groupnum)
-                query = Group.objects.get(assignment=editedassignment, name=groupnum)
-                query.members.add(student.user)
+
+            query.members.add(student)
 
         return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
 
@@ -330,17 +318,18 @@ def userasgroup(request, Assignment_id):
     if request.user != editedassignment.course.owner:
         return redirect('Penelope.views.home')
 
-    subscribed = editedassignment.course.userprofile_set.all()
+    subscribed = editedassignment.course.subscribed.all()
+
+    # We delete all groups before creating new ones
+    groups_list = Group.objects.filter(assignment=editedassignment)
+    for group in groups_list:
+        group.delete()
 
     # Assign to a student a group
     groupnum = 1
     for student in subscribed:
-        query = Group.objects.filter(assignment=editedassignment, name=groupnum)
-        if query:
-            query = Group.objects.get(assignment=editedassignment, name=groupnum)
-        else:
-            query = Group.objects.create(assignment=editedassignment, name=groupnum)
-        query.members.add(student.user.userprofile)
+        query = Group.objects.create(assignment=editedassignment, name=groupnum)
+        student.group_list.add(query)
         groupnum += 1
 
     return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)

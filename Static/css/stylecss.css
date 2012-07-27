@@ -2,26 +2,17 @@
     text-align: center ;
 }
 
-
 .swift {
 	padding-left: 100px ;
 }
-
 
 #space {
 	margin: -20px 0px -10px 55% ;
 }
 
-
 #space strong {
 	margin-left: 16px ;
 }
-
-
-.page-header h1 {
-	width : 700px;
-}
-
 
 .admin-panel {
 	background-color: #f8f8f8;
@@ -30,7 +21,6 @@
 	-webkit-border-radius: 5px;
   	-moz-border-radius: 5px;
 }
-
 
 .admin-panel > .nav > li > a:hover {
   	background-color: #ffffff;

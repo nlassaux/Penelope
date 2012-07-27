@@ -2,11 +2,22 @@
 {% load url from future %}
 {% block title %}Create groups | {{editedassignment.name}}{% endblock %}
 
+{% block breadcrumb %}
+
+	<ul class="breadcrumb">
+		<div class='swift'>
+			<li>>> <a href="/">Dashboard</a><span class="divider">/</span></li>
+			<li><a href="/{{editedassignment.course.id}}/details/">{{editedassignment.course.name}}</a><span class="divider">/</span></li>
+			<li><a href="/assignments/{{editedassignment.id}}/details/">{{editedassignment.name}}</a><span class="divider">/</span></li>
+			<li class="active">Edit groups</li>
+	  </div>
+  </ul>
+
+{% endblock %}
+
 {% block content %}
 <a href="/assignments/{{editedassignment.id}}/details/">Retour to the assignment</a>
 
-<p>
-<p>
 
 <form name="groups" method="post" action="">{% csrf_token %}
 <table>
@@ -20,9 +31,9 @@
 	</tr>
 {% for user in subscribed %}	
 	<tr>
-		<td>{{user.user.username}}</td>
+		<td>{{user.username}}</td>
 		{% for number in subscribed.all %}
-		<td><input type="radio" name="{{user.user.username}}" value="{{forloop.counter}}" ></td>
+		<td><input type="radio" name="{{user.username}}" value="{{forloop.counter}}" ></td>
 		{% endfor %}
 
 	</tr>

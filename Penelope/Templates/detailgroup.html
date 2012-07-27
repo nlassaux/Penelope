@@ -2,8 +2,21 @@
 {% load url from future %}
 {% block title %}Group | {{detailedgroup.name}}{% endblock %}
 
+{% block breadcrumb %}
+
+	<ul class="breadcrumb">
+		<div class='swift'>
+	    <li>>> <a href="/">Dashboard</a><span class="divider">/</span></li>
+	    <li><a href="/{{detailedgroup.assignment.course.id}}/details/">{{detailedgroup.assignment.course.name}}</a><span class="divider">/</span></li>
+	    <li><a href="/assignments/{{detailedgroup.assignment.id}}/details/">{{detailedgroup.assignment.name}}</a><span class="divider">/</span></li>
+	    <li class="active">Group {{detailedgroup.name}}</li>
+
+	  </div>
+  </ul>
+
+{% endblock %}
+
 {% block content %}
-	<a href="/assignments/{{detailedgroup.assignment.id}}/details/">Return to assignment</a>
 
 	<h1>Details of the assignment :</h1>
 

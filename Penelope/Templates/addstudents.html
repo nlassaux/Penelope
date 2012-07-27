@@ -2,13 +2,21 @@
 {% load url from future %}
 {% block title %}Add students{% endblock %}
 
-{% block content %}
+
+{% block breadcrumb %}
 
 	<ul class="breadcrumb">
-		<li><a href="/">Dashboard</a><span class="divider">/</span></li>
-		<li><a href="/{{Course_id}}/details/">{{editedcourse.name}}</a><span class="divider">/</span></li>
-		<li class="active">Change subscribed</li>
-	</ul>
+		<div class='swift'>
+			<li>>> <a href="/">Dashboard</a><span class="divider">/</span></li>
+			<li><a href="/{{Course_id}}/details/">{{editedcourse.name}}</a><span class="divider">/</span></li>
+			<li class="active">Change subscribed</li>
+	  </div>
+  </ul>
+
+{% endblock %}
+
+
+{% block content %}
 
 	<h1>Add students</h1>
 	    
@@ -18,20 +26,25 @@
 		<a class='btn btn-danger'href="#DeleteModal" data-toggle="modal">Clear all students</a>
 	</form>
 
+{% endblock %}
 
 
-<div class="modal hide" id="DeleteModal">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal">×</button>
-    <h3>Clear all students</h3>
-  </div>
-  <div class="modal-body">
-    <p>You will remove all students of the course and assignments and groups will be destroyed.</p>
-  </div>
-  <div class="modal-footer">
-    <a href="#" class="btn" data-dismiss="modal">Cancel</a>
-    <a href="/{{Course_id}}/clearallstudents" class="btn btn-danger">Clear</a>
-  </div>
-</div>
+{% block modals %}
+
+	<div class="modal hide" id="DeleteModal">
+	  <div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal">×</button>
+	    <h3>Clear all students</h3>
+	  </div>
+	  <div class="modal-body">
+	    <p>You will remove all students of the course and assignments and groups will be destroyed.</p>
+	  </div>
+	  <div class="modal-footer">
+	    <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+	    <a href="/{{Course_id}}/clearallstudents" class="btn btn-danger">Clear</a>
+	  </div>
+	</div>
 
 {% endblock %}
+
+

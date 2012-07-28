@@ -17,8 +17,10 @@
 {% block content %}
 
   <div class="page-header">
-		<h1>{{detailedassignment.name}} <small>{{detailedassignment.description}}</small></h1>
-    <div id='space'>
+		<h1>{{detailedassignment.name}} <small>{{detailedassignment.description}}</small>
+		</h1>
+
+    <div class='infos pull-right'>
 	    <strong>Last edit</strong> {{detailedassignment.editdate}}
 	    <strong>Teachers</strong> 
     	{% for admin in detailedassignment.admins.all %}
@@ -30,7 +32,7 @@
 
   <div class="row">
 			{% if user == detailedassignment.course.owner %}
-				<div class='span8'>
+				<div class='span8 panel'>
 					{% if detailedassignment.group_set.all %}
 						<table class="table table-striped">
 							<thead>
@@ -45,7 +47,7 @@
 					        	<td><a href="/groups/{{group.id}}/details/">{{group.name}}</a></td>
 					        	<td>
 					        		{% for user in group.members.all %}
-					        			<div id='user-balise'>{{user.username}}</div>
+					        			<div draggable="true" class='user-balise'>{{user.username}}</div>
 					        		{% endfor %}
 					        	</td>
 									</tr>
@@ -54,7 +56,7 @@
 										<td>Without group</td>
 												<td>
 													{% for student in groupless %}
-														<div id='user-balise'>{{student.user.username}}</div>
+														<div class='user-balise'>{{student.username}}</div>
 													{% endfor %}
 												</td>
 							</tbody>
@@ -63,10 +65,10 @@
 						<a href="/groups/{{detailedassignment.id}}/add/">Create groups</a>
 					{% endif %}
 					</div>
-					<div class='span3 admin-panel'>
+					<div class='span3 panel'>
 						<ul class="nav nav-list">
 					        <li class="nav-header">Administration</li>
-					        <li><a href="#"><i class="icon-briefcase"></i> Change groups</a></li>
+					        <li><a href="/groups/{{detailedassignment.id}}/edit/"><i class="icon-briefcase"></i> Change groups</a></li>
 					        <li><a href="/assignments/{{detailedassignment.id}}/edit/"><i class="icon-pencil"></i> Edit</a></li>
 					        <li><a href="#DeleteModal" data-toggle="modal"><i class="icon-remove-sign"></i> Delete</a></li>
 					  </ul>
@@ -75,23 +77,8 @@
 
 			{% else %}
 
-				<div class = 'span5'>
-					<dl class="dl-horizontal">
-						<dt>Your group :</dt>
-						{% if nogroup %}
-						<dd>You have not got any group</dd>
-						{% else %}
-						<dd>Group {{ mygroup.name }}</dd>
-						<dt>Members :</dt>
-						{% for member in mygroup.members.all %}
-					  <dd>{{ member }}</dd>
-						{% endfor %}
-					</dl>
-				</div>
-	</div>
-
-				<h2>Files :</h2>
-
+			<div class='span8 panel'>
+				<h4>Group's files</h4>
 				<table class="table table-striped">
 					<thead>
 						<tr>
@@ -110,13 +97,26 @@
 						{% endfor %}
 					</tbody>
 				</table>
-
-				<div class='span4 offset3'>
-					<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+				<hr>
+				<h4>Upload</h4>
+				<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
 						{{form.file}}
-					<input type="submit" value="Submit" class='btn btn-primary pull-right' />
-				</div>
+				<input type="submit" value="Submit" class='btn btn-primary' />
+			</div>
+
+			<div class = 'span3 panel'>
+					{% if nogroup %}
+					You have not got any group
+					{% else %}
+					<p><strong>Group {{ mygroup.name }}</strong></p>
+					<hr>
+					{% for member in mygroup.members.all %}
+				  <div class='user-balise'>{{member}}</div>
+					{% endfor %}
+			</div>
+	</div>
 			{% endif %}
+
 
 	{% endif %}
 

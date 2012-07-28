@@ -1,0 +1,109 @@
+{% extends "base_log.html" %}
+{% load url from future %}
+{% block title %}Create groups | {{editedassignment.name}}{% endblock %}
+
+{% block breadcrumb %}
+
+	<ul class="breadcrumb">
+		<div class='swift'>
+			<li>>> <a href="/">Dashboard</a><span class="divider">/</span></li>
+			<li><a href="/{{editedassignment.course.id}}/details/">{{editedassignment.course.name}}</a><span class="divider">/</span></li>
+			<li><a href="/assignments/{{editedassignment.id}}/details/">{{editedassignment.name}}</a><span class="divider">/</span></li>
+			<li class="active">Edit groups</li>
+	  </div>
+  </ul>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+	<div class='row'>
+		<div class='span4 panel'>
+			<h4>Users</h4>
+			<hr>
+			<div id='users'>
+				{% for user in editedassignment.course.subscribed.all %}
+					<div draggable="true" class='user-balise' id='user{{forloop.counter}}'>{{user}}</div>
+				{% endfor %}
+		</div>
+		</div>
+
+		<div class='span6 panel'>
+			<h4>Groups</h4>
+			<hr>
+	  	<div class="panel" id="groups"><h4>Group 1</h4></div>
+	  </div>
+	</div>
+
+
+
+{% endblock %}
+
+
+
+{% block scripts%}
+
+	<script>
+	  /* on associe le dÃ©marrage du drag and drop Ã  la fonction
+	     dragStartHandler */
+	  document.getElementById('user1').addEventListener("dragstart", dragStartHandler, false);
+	  document.getElementById('user2').addEventListener("dragstart", dragStartHandler, false);
+
+	  function dragStartHandler(event) {
+	      /* autoriser les drag and drop de type "copy" */
+	      event.dataTransfer.effectAllowed = 'move';
+	      /* transmettre en donnÃ©e de drag and drop l'id de la boite
+	         dÃ©placÃ©e */
+	      event.dataTransfer.setData('Text', event.target.id);
+	      return false;
+	  }
+	  /* on associe l'entrÃ©e du drag and drop sur la cible Ã  la fonction
+	     dragEnterHandler */
+	  document.getElementById('groups').addEventListener("dragenter", dragEnterHandler, false);
+	  document.getElementById('users').addEventListener("dragenter", dragEnterHandler, false);
+
+	  function dragEnterHandler(event) {
+	      /* Ã©viter le comportement par dÃ©faut du navigateur (dÃ©placement
+	         de sÃ©lection) */
+	      event.preventDefault();
+	      return false;
+	  }
+	  /* on associe le survole de la cible Ã  la fonction
+	     dragOverHandler */
+	  document.getElementById('groups').addEventListener("dragover", dragOverHandler, false);
+	  document.getElementById('users').addEventListener("dragover", dragOverHandler, false);
+
+	  function dragOverHandler(event) {
+	      /* verification de la cible au cas oÃ¹ l'on survole un autre
+	         objet */
+	      if (event.target != document.getElementById('groups') && event.target != document.getElementById('users')) {
+	          return false;
+	      } else {
+	          /* on attribue l'effet de curseur qui correspond au type
+	             acceptÃ© plus haut */
+	          event.dataTransfer.dropEffect = 'move';
+	          /* Ã©viter le comportement par dÃ©faut du navigateur
+	             (dÃ©placement de sÃ©lection) */
+	          event.preventDefault();
+	      }
+	      return false;
+	  }
+	  /* on associe le 'lachÃ©' d'un Ã©lÃ©ment sur la cible Ã  la fonction
+	     dropHandler */
+	  document.getElementById('groups').addEventListener("drop", dropHandler, false);
+	  document.getElementById('users').addEventListener("drop", dropHandler, false);
+
+	  function dropHandler(event) {
+	      /* on se sert de l'id transportÃ© en donnÃ©e pour dÃ©placer
+	         l'Ã©lÃ©ment dans son nouveau parent DOM */
+	      event.target.appendChild(document.getElementById(event.dataTransfer.getData('Text')));
+	      /* et voila, on a finit et pour s'assurer on coupe manuellement
+	         la propagation de l'Ã©vÃ¨nement (pas forcÃ©ment nÃ©cessaire !) */
+	      event.stopPropagation();
+	      return false;
+	  }
+	</script>
+
+{% endblock %}

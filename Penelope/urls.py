@@ -17,9 +17,9 @@ urlpatterns = patterns('',
     url(r'^(?P<Course_id>\d+)/deletecourse/$', 'Penelope.views.deletecourse'),
     url(r'^(?P<Course_id>\d+)/clearallstudents/$', 'Penelope.views.clearallstudents'),
 
-    # Assignments urls.
+    # Groups urls.
     url(r'groups/(?P<Group_id>\d+)/details/$', 'Penelope.views.detailgroup'),
-    url(r'groups/(?P<Assignment_id>\d+)/add/$', 'Penelope.views.addgroup'),
+    url(r'groups/(?P<Assignment_id>\d+)/edit/$', 'Penelope.views.addgroup'),
     url(r'groups/(?P<Assignment_id>\d+)/userasgroup/$', 'Penelope.views.userasgroup'),
 
     # Assignments urls.

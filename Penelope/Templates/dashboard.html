@@ -9,7 +9,7 @@
 </div>    
 
 {% if user.userprofile.status = 'student' %}
-
+    <div class='panel'>
     <table class="table table-striped">
       <thead>
         <tr>
@@ -22,7 +22,7 @@
         </tr>
       <thead>
       <tbody>
-        {% for Course in user.userprofile.courses_list.all %}
+        {% for Course in user.course_list.all %}
         <tr>
           <td><a href="/{{Course.id}}/details">{{Course.name}}</a></td>
           <td>{{Course.owner}}</td>
@@ -31,10 +31,11 @@
         {% endfor %}
       </tbody>
     </table>
+    </div>
 
 {% else %}
     
-
+  <div class='panel'>
     <table class="table table-striped">
         <thead>
           <tr>
@@ -55,6 +56,7 @@
     <p><a class='btn btn-primary' href="/newcourse/">
           <i class="icon-plus icon-white"></i> Add a course
     </a></p>
+  </div>
 
 {% endif %}
 

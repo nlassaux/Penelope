@@ -305,7 +305,7 @@ def addgroup(request, Assignment_id):
 
         return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
 
-    return render(request, 'addgroup.html', locals())
+    return render(request, 'editgroups.html', locals())
 
 
 # Page to add a group

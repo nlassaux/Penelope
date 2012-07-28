@@ -34,8 +34,13 @@
 		<div class='span6 panel'>
 			<h4>Groups</h4>
 			<hr>
-	  	<div class="panel" id="groups">
+	  	<div class="panel" name='group'  id="group1">
 	  			<h4>Group 1</h4>
+	  			<p></p>
+	  			<p></p>
+	  	</div>
+	  	<div class="panel" name='group'  id="group2">
+	  			<h4>Group 2</h4>
 	  			<p></p>
 	  			<p></p>
 	  	</div>
@@ -75,13 +80,17 @@
 	  }
 	  /* on associe le survole de la cible a  la fonction
 	     dragOverHandler */
-	  document.getElementById('groups').addEventListener("dragover", dragOverHandler, false);
+
+	  var e = document.getElementsByName('group');
+	  for(var i=1;i<=e.length;i++){
+	  	document.getElementById('group'+[i]).addEventListener("dragover", dragOverHandler, false);
+	  }
 	  document.getElementById('users').addEventListener("dragover", dragOverHandler, false);
 
 	  function dragOverHandler(event) {
 	      /* verification de la cible au cas ou l'on survole un autre
 	         objet */
-	      if (event.target != document.getElementById('groups') && event.target != document.getElementById('users')) {
+	      if (1 == 2 && event.target != document.getElementById('users')) {
 	          return false;
 	      } else {
 	          /* on attribue l'effet de curseur qui correspond au type
@@ -95,14 +104,16 @@
 	  }
 	  /* on associe le 'lachÃ©' d'un Ã©lÃ©ment sur la cible Ã  la fonction
 	     dropHandler */
-	  document.getElementById('groups').addEventListener("drop", dropHandler, false);
+	  for(var i=1;i<=e.length;i++){
+	  	document.getElementById('group'+[i]).addEventListener("drop", dropHandler, false);
+	  }
 	  document.getElementById('users').addEventListener("drop", dropHandler, false);
 
 	  function dropHandler(event) {
 	      /* on se sert de l'id transportÃ© en donnÃ©e pour dÃ©placer
 	         l'Ã©lÃ©ment dans son nouveau parent DOM */
 	      event.target.appendChild(document.getElementById(event.dataTransfer.getData('Text')));
-	      /* on coupe manuellementla propagation de l'Ã©vÃ¨nement (pas forcÃ©ment nÃ©cessaire !) */
+	      /* on coupe manuellement la propagation de l'Ã©vÃ¨nement (pas forcÃ©ment nÃ©cessaire !) */
 	      event.stopPropagation();
 	      return false;
 	  }

@@ -23,9 +23,10 @@
 		<div class='span4 panel'>
 			<h4>Users</h4>
 			<hr>
+			<p></p>
 			<div id='users'>
 				{% for user in editedassignment.course.subscribed.all %}
-					<div draggable="true" class='user-balise' id='user{{forloop.counter}}'>{{user}}</div>
+					<div draggable="true" class='user-balise' id='{{user}}'>{{user}}</div>
 				{% endfor %}
 		</div>
 		</div>
@@ -33,7 +34,11 @@
 		<div class='span6 panel'>
 			<h4>Groups</h4>
 			<hr>
-	  	<div class="panel" id="groups"><h4>Group 1</h4></div>
+	  	<div class="panel" id="groups">
+	  			<h4>Group 1</h4>
+	  			<p></p>
+	  			<p></p>
+	  	</div>
 	  </div>
 	</div>
 
@@ -46,10 +51,9 @@
 {% block scripts%}
 
 	<script>
-	  /* on associe le dÃ©marrage du drag and drop Ã  la fonction
+	  /* on associe le dÃ©marrage du drag and drop a la fonction
 	     dragStartHandler */
-	  document.getElementById('user1').addEventListener("dragstart", dragStartHandler, false);
-	  document.getElementById('user2').addEventListener("dragstart", dragStartHandler, false);
+	  document.addEventListener("dragstart", dragStartHandler, false);
 
 	  function dragStartHandler(event) {
 	      /* autoriser les drag and drop de type "copy" */
@@ -59,30 +63,29 @@
 	      event.dataTransfer.setData('Text', event.target.id);
 	      return false;
 	  }
-	  /* on associe l'entrÃ©e du drag and drop sur la cible Ã  la fonction
+	  /* on associe l'entrÃ©e du drag and drop sur la cible a la fonction
 	     dragEnterHandler */
-	  document.getElementById('groups').addEventListener("dragenter", dragEnterHandler, false);
-	  document.getElementById('users').addEventListener("dragenter", dragEnterHandler, false);
+	  document.addEventListener("dragenter", dragEnterHandler, false);
 
 	  function dragEnterHandler(event) {
-	      /* Ã©viter le comportement par dÃ©faut du navigateur (dÃ©placement
-	         de sÃ©lection) */
+	      /* eviter le comportement par dÃ©faut du navigateur (deplacement
+	         de selection) */
 	      event.preventDefault();
 	      return false;
 	  }
-	  /* on associe le survole de la cible Ã  la fonction
+	  /* on associe le survole de la cible a  la fonction
 	     dragOverHandler */
 	  document.getElementById('groups').addEventListener("dragover", dragOverHandler, false);
 	  document.getElementById('users').addEventListener("dragover", dragOverHandler, false);
 
 	  function dragOverHandler(event) {
-	      /* verification de la cible au cas oÃ¹ l'on survole un autre
+	      /* verification de la cible au cas ou l'on survole un autre
 	         objet */
 	      if (event.target != document.getElementById('groups') && event.target != document.getElementById('users')) {
 	          return false;
 	      } else {
 	          /* on attribue l'effet de curseur qui correspond au type
-	             acceptÃ© plus haut */
+	             accepte plus haut */
 	          event.dataTransfer.dropEffect = 'move';
 	          /* Ã©viter le comportement par dÃ©faut du navigateur
 	             (dÃ©placement de sÃ©lection) */
@@ -99,8 +102,7 @@
 	      /* on se sert de l'id transportÃ© en donnÃ©e pour dÃ©placer
 	         l'Ã©lÃ©ment dans son nouveau parent DOM */
 	      event.target.appendChild(document.getElementById(event.dataTransfer.getData('Text')));
-	      /* et voila, on a finit et pour s'assurer on coupe manuellement
-	         la propagation de l'Ã©vÃ¨nement (pas forcÃ©ment nÃ©cessaire !) */
+	      /* on coupe manuellementla propagation de l'Ã©vÃ¨nement (pas forcÃ©ment nÃ©cessaire !) */
 	      event.stopPropagation();
 	      return false;
 	  }

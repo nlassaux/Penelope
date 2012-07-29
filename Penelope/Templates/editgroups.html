@@ -18,7 +18,7 @@
 {% block content %}
 
 	<div class='row'>
-		<div class='span5 panel'>
+		<div class='span4 panel users_box'>
 			<h4>Users</h4>
 			<hr>
 			<p></p>
@@ -29,13 +29,12 @@
 			</div>
 			<hr>
 			<a onClick='newgroup()' class="btn"><i class="icon-plus"></i> New group</a>
-			<a onClick='deletegroup()' class="btn"><i class="icon-remove"></i> New group</a>
+			<a onClick='deletegroup()' class="btn"><i class="icon-remove"></i> Delete group</a>
 		</div>
-		<div class='span6 panel' id='groups'>
+		<div class='span6 offset5 panel' id='groups'>
 			<h4>Groups</h4>
 			<hr>
 	  	<div class="panel_drop" name='group'  id="group1">
-	  			<a onClick='removegroup(1)' group='1' class="pull-right"><i class="icon-remove"></i></a>
 	  			<h5>Group 1</h5>
 	  			<div class='drop_zone'></div>
 	  	</div>
@@ -55,10 +54,14 @@
 		document.getElementById('groups').addEventListener("dragenter", dragEnterHandler, false);
 
 	  document.getElementById('users').addEventListener("drop", dropHandler, false);
-	 	document.getElementById('group1').addEventListener("drop", dropHandler, false);
+		document.getElementById('users').addEventListener("dragover", dragOverHandler, false);
 
-	  document.getElementById('users').addEventListener("dragover", dragOverHandler, false);
-	  document.getElementById('group1').addEventListener("dragover", dragOverHandler, false);
+		var nb_groups = document.getElementsByName('group').length;
+
+		for(var i=1;i<=nb_groups;i++){
+		 	document.getElementById('group'+i).addEventListener("drop", dropHandler, false);
+		 	document.getElementById('group'+i).addEventListener("dragover", dragOverHandler, false);
+		}
 
 	  function dragStartHandler(event) {
 	      /* Allow Drag and Drop's type "move" */
@@ -107,7 +110,6 @@
 			div.id = 'group'+nb;
 			div.className = 'panel_drop';
 			div.setAttribute('name', 'group');
-			div.innerHTML = '<a onClick=\'removegroup('+nb+')\' class=\'pull-right\'><i class=\'icon-remove\'></i></a>';
 			div.innerHTML += '<h5>Group '+nb+'</h5>';
 			div.innerHTML += '<div class=\'drop_zone\'></div>';
 			document.getElementById('groups').appendChild(div);
@@ -116,9 +118,11 @@
 			div.addEventListener("dragover", dragOverHandler, false);
 		}
 
-		function removegroup(group) {
-			alert('group'+group);
-			document.getElementById('groups').removeChild(document.getElementById('group'+group));
+		function deletegroup() {
+			/* Get the number of elements with name : 'group' to 
+	  	 automatically increase the number of groups */ 
+			var nb = document.getElementsByName('group').length;
+			document.getElementById('groups').removeChild(document.getElementById('group'+nb));
 		}
 
 

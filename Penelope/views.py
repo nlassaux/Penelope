@@ -67,10 +67,14 @@ def newcourse(request):
 # Course's details - Modified for app
 @login_required
 def detailcourse(request, Course_id):
-
     # Call the .html with informations to insert
     detailedcourse = Course.objects.get(id=Course_id)
     subscribed = detailedcourse.subscribed.filter()
+
+    # Only subscribed students and owner(teacher) can view the course
+    if detailedcourse not in request.user.course_list.all() and request.user != detailedcourse.owner :
+        return redirect('Penelope.views.home')
+
     # delete if assignments not used
     assignments = detailedcourse.assignment.filter(visible=True)
     return render(request, 'detailcourse.html', locals())

@@ -31,20 +31,19 @@
 		</div>
 		</div>
 
-		<div class='span6 panel'>
+		<div class='span6 panel' id='groups'>
 			<h4>Groups</h4>
 			<hr>
-	  	<div class="panel" name='group'  id="group1">
-	  			<h4>Group 1</h4>
-	  			<p></p>
-	  			<p></p>
+	  	<div class="panel_drop" name='group'  id="group1">
+	  			<h5>Group 1</h5>
+	  			<div class='drop_zone'></div>
 	  	</div>
-	  	<div class="panel" name='group'  id="group2">
-	  			<h4>Group 2</h4>
-	  			<p></p>
-	  			<p></p>
+	  	<div class="panel_drop" name='group'  id="group2">
+	  			<h5>Group 2</h5>
+	  			<div class='drop_zone'></div>
 	  	</div>
 	  </div>
+	  <a onClick='newgroup()' class="btn btn-" data-dismiss="modal">New group</a>
 	</div>
 
 
@@ -56,6 +55,7 @@
 {% block scripts%}
 
 	<script>
+
 	  /* on associe le dÃ©marrage du drag and drop a la fonction
 	     dragStartHandler */
 	  document.addEventListener("dragstart", dragStartHandler, false);
@@ -68,6 +68,8 @@
 	      event.dataTransfer.setData('Text', event.target.id);
 	      return false;
 	  }
+
+
 	  /* on associe l'entrÃ©e du drag and drop sur la cible a la fonction
 	     dragEnterHandler */
 	  document.addEventListener("dragenter", dragEnterHandler, false);
@@ -78,9 +80,9 @@
 	      event.preventDefault();
 	      return false;
 	  }
+
 	  /* on associe le survole de la cible a  la fonction
 	     dragOverHandler */
-
 	  var e = document.getElementsByName('group');
 	  for(var i=1;i<=e.length;i++){
 	  	document.getElementById('group'+[i]).addEventListener("dragover", dragOverHandler, false);
@@ -88,35 +90,51 @@
 	  document.getElementById('users').addEventListener("dragover", dragOverHandler, false);
 
 	  function dragOverHandler(event) {
-	      /* verification de la cible au cas ou l'on survole un autre
-	         objet */
-	      if (1 == 2 && event.target != document.getElementById('users')) {
-	          return false;
-	      } else {
-	          /* on attribue l'effet de curseur qui correspond au type
-	             accepte plus haut */
-	          event.dataTransfer.dropEffect = 'move';
-	          /* Ã©viter le comportement par dÃ©faut du navigateur
-	             (dÃ©placement de sÃ©lection) */
-	          event.preventDefault();
-	      }
-	      return false;
+      /* verification de la cible au cas ou l'on survole un autre objet */
+      if ((event.target.name == 'group') && (event.target != document.getElementById('users'))) {
+          return false;
+      } else {
+          /* on attribue l'effet de curseur qui correspond au type
+             accepte plus haut */
+          event.dataTransfer.dropEffect = 'move';
+          /* Ã©viter le comportement par dÃ©faut du navigateur
+             (dÃ©placement de sÃ©lection) */
+          event.preventDefault();
+      }
+      return false;
 	  }
+
+
 	  /* on associe le 'lachÃ©' d'un Ã©lÃ©ment sur la cible Ã  la fonction
 	     dropHandler */
+	  var e = document.getElementsByName('group');
+
 	  for(var i=1;i<=e.length;i++){
 	  	document.getElementById('group'+[i]).addEventListener("drop", dropHandler, false);
 	  }
 	  document.getElementById('users').addEventListener("drop", dropHandler, false);
 
 	  function dropHandler(event) {
-	      /* on se sert de l'id transportÃ© en donnÃ©e pour dÃ©placer
-	         l'Ã©lÃ©ment dans son nouveau parent DOM */
-	      event.target.appendChild(document.getElementById(event.dataTransfer.getData('Text')));
-	      /* on coupe manuellement la propagation de l'Ã©vÃ¨nement (pas forcÃ©ment nÃ©cessaire !) */
-	      event.stopPropagation();
-	      return false;
+      /* on se sert de l'id transportÃ© en donnÃ©e pour dÃ©placer
+         l'Ã©lÃ©ment dans son nouveau parent DOM */
+      event.target.appendChild(document.getElementById(event.dataTransfer.getData('Text')));
+      /* on coupe manuellement la propagation de l'Ã©vÃ¨nement (pas forcÃ©ment nÃ©cessaire !) */
+      event.stopPropagation();
+      return false;
 	  }
+
+
+	  function newgroup() {
+			var e = document.getElementsByName('group');
+			var nb = e.length + 1;
+			div = document.createElement("div");
+			div.id = 'group'+nb;
+			div.className = 'panel_drop';
+			div.setAttribute('name', 'group');
+			div.innerHTML = '<h5>Group '+nb+'</h5>';
+			div.innerHTML += '<div class=\'drop_zone\'></div>';
+			document.getElementById('groups').appendChild(div);
+		}
 	</script>
 
 {% endblock %}

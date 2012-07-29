@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django import forms
 from models import *
+import os
 import datetime
 
 
@@ -92,6 +93,9 @@ class Work (models.Model):
 
     def __unicode__(self):
         return self.file.name
+
+    def filename(self):
+        return os.path.basename(self.file.name)
 
 
 # The definition of a form to add a course.

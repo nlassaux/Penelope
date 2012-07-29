@@ -20,7 +20,7 @@
 {% block content %}
 
 	<div class='row'>
-		<div class='span4 panel'>
+		<div class='span5 panel'>
 			<h4>Users</h4>
 			<hr>
 			<p></p>
@@ -28,9 +28,10 @@
 				{% for user in editedassignment.course.subscribed.all %}
 					<div draggable="true" class='user-balise' id='{{user}}'>{{user}}</div>
 				{% endfor %}
+			</div>
+			<hr>
+		<a onClick='newgroup()' class="btn btn-">New group</a>
 		</div>
-		</div>
-
 		<div class='span6 panel' id='groups'>
 			<h4>Groups</h4>
 			<hr>
@@ -38,12 +39,7 @@
 	  			<h5>Group 1</h5>
 	  			<div class='drop_zone'></div>
 	  	</div>
-	  	<div class="panel_drop" name='group'  id="group2">
-	  			<h5>Group 2</h5>
-	  			<div class='drop_zone'></div>
-	  	</div>
 	  </div>
-	  <a onClick='newgroup()' class="btn btn-" data-dismiss="modal">New group</a>
 	</div>
 
 
@@ -93,6 +89,7 @@
       /* verification de la cible au cas ou l'on survole un autre objet */
       if ((event.target.name == 'group') && (event.target != document.getElementById('users'))) {
           return false;
+          alert('erreeuuuur')
       } else {
           /* on attribue l'effet de curseur qui correspond au type
              accepte plus haut */
@@ -115,6 +112,7 @@
 	  document.getElementById('users').addEventListener("drop", dropHandler, false);
 
 	  function dropHandler(event) {
+	  	event.preventDefault();
       /* on se sert de l'id transportÃ© en donnÃ©e pour dÃ©placer
          l'Ã©lÃ©ment dans son nouveau parent DOM */
       event.target.appendChild(document.getElementById(event.dataTransfer.getData('Text')));
@@ -134,7 +132,13 @@
 			div.innerHTML = '<h5>Group '+nb+'</h5>';
 			div.innerHTML += '<div class=\'drop_zone\'></div>';
 			document.getElementById('groups').appendChild(div);
+
+
+
+			div.addEventListener("drop", dropHandler, false);
+			div.addEventListener("dragover", dragOverHandler, false);
 		}
+
 	</script>
 
 {% endblock %}

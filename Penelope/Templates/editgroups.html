@@ -15,8 +15,6 @@
 
 {% endblock %}
 
-
-
 {% block content %}
 
 	<div class='row'>
@@ -30,114 +28,99 @@
 				{% endfor %}
 			</div>
 			<hr>
-		<a onClick='newgroup()' class="btn btn-">New group</a>
+			<a onClick='newgroup()' class="btn"><i class="icon-plus"></i> New group</a>
+			<a onClick='deletegroup()' class="btn"><i class="icon-remove"></i> New group</a>
 		</div>
 		<div class='span6 panel' id='groups'>
 			<h4>Groups</h4>
 			<hr>
 	  	<div class="panel_drop" name='group'  id="group1">
+	  			<a onClick='removegroup(1)' group='1' class="pull-right"><i class="icon-remove"></i></a>
 	  			<h5>Group 1</h5>
 	  			<div class='drop_zone'></div>
 	  	</div>
 	  </div>
 	</div>
 
-
-
 {% endblock %}
-
-
 
 {% block scripts%}
 
 	<script>
+		/* Start events listening on existing elements */
+	  document.getElementById('users').addEventListener("dragstart", dragStartHandler, false);
+	  document.getElementById('groups').addEventListener("dragstart", dragStartHandler, false);
 
-	  /* on associe le dÃ©marrage du drag and drop a la fonction
-	     dragStartHandler */
-	  document.addEventListener("dragstart", dragStartHandler, false);
+	  document.getElementById('users').addEventListener("dragenter", dragEnterHandler, false);
+		document.getElementById('groups').addEventListener("dragenter", dragEnterHandler, false);
+
+	  document.getElementById('users').addEventListener("drop", dropHandler, false);
+	 	document.getElementById('group1').addEventListener("drop", dropHandler, false);
+
+	  document.getElementById('users').addEventListener("dragover", dragOverHandler, false);
+	  document.getElementById('group1').addEventListener("dragover", dragOverHandler, false);
 
 	  function dragStartHandler(event) {
-	      /* autoriser les drag and drop de type "copy" */
+	      /* Allow Drag and Drop's type "move" */
 	      event.dataTransfer.effectAllowed = 'move';
-	      /* transmettre en donnÃ©e de drag and drop l'id de la boite
-	         dÃ©placÃ©e */
+	      /* Set the valiue of the data as the id of moved target */
 	      event.dataTransfer.setData('Text', event.target.id);
 	      return false;
 	  }
 
-
-	  /* on associe l'entrÃ©e du drag and drop sur la cible a la fonction
-	     dragEnterHandler */
-	  document.addEventListener("dragenter", dragEnterHandler, false);
-
 	  function dragEnterHandler(event) {
-	      /* eviter le comportement par dÃ©faut du navigateur (deplacement
-	         de selection) */
+	      /* Avoid selection of text by the browser */
 	      event.preventDefault();
 	      return false;
 	  }
 
-	  /* on associe le survole de la cible a  la fonction
-	     dragOverHandler */
-	  var e = document.getElementsByName('group');
-	  for(var i=1;i<=e.length;i++){
-	  	document.getElementById('group'+[i]).addEventListener("dragover", dragOverHandler, false);
-	  }
-	  document.getElementById('users').addEventListener("dragover", dragOverHandler, false);
-
 	  function dragOverHandler(event) {
-      /* verification de la cible au cas ou l'on survole un autre objet */
+      /* Control if it's the good target */
       if ((event.target.name == 'group') && (event.target != document.getElementById('users'))) {
           return false;
-          alert('erreeuuuur')
       } else {
-          /* on attribue l'effet de curseur qui correspond au type
-             accepte plus haut */
-          event.dataTransfer.dropEffect = 'move';
-          /* Ã©viter le comportement par dÃ©faut du navigateur
-             (dÃ©placement de sÃ©lection) */
+      		/* Avoid selection of text by the browser */
           event.preventDefault();
+          /* Avoid selection of text by the browser */
+          event.dataTransfer.dropEffect = 'move';
       }
       return false;
 	  }
 
-
-	  /* on associe le 'lachÃ©' d'un Ã©lÃ©ment sur la cible Ã  la fonction
-	     dropHandler */
-	  var e = document.getElementsByName('group');
-
-	  for(var i=1;i<=e.length;i++){
-	  	document.getElementById('group'+[i]).addEventListener("drop", dropHandler, false);
-	  }
-	  document.getElementById('users').addEventListener("drop", dropHandler, false);
-
 	  function dropHandler(event) {
+	  	/* Avoid the lunch of a httprequest on firefox */
 	  	event.preventDefault();
-      /* on se sert de l'id transportÃ© en donnÃ©e pour dÃ©placer
-         l'Ã©lÃ©ment dans son nouveau parent DOM */
+      /* Move data to parent DOM */
       event.target.appendChild(document.getElementById(event.dataTransfer.getData('Text')));
-      /* on coupe manuellement la propagation de l'Ã©vÃ¨nement (pas forcÃ©ment nÃ©cessaire !) */
+      /* Stop impact of the child creation */
       event.stopPropagation();
       return false;
 	  }
 
-
 	  function newgroup() {
-			var e = document.getElementsByName('group');
-			var nb = e.length + 1;
+	  	/* Get the number of elements with name : 'group' to 
+	  	 automatically increase the number of groups */ 
+			var nb = document.getElementsByName('group').length + 1;
+
+			/* Create a new div element with its attributes */
 			div = document.createElement("div");
 			div.id = 'group'+nb;
 			div.className = 'panel_drop';
 			div.setAttribute('name', 'group');
-			div.innerHTML = '<h5>Group '+nb+'</h5>';
+			div.innerHTML = '<a onClick=\'removegroup('+nb+')\' class=\'pull-right\'><i class=\'icon-remove\'></i></a>';
+			div.innerHTML += '<h5>Group '+nb+'</h5>';
 			div.innerHTML += '<div class=\'drop_zone\'></div>';
 			document.getElementById('groups').appendChild(div);
-
-
-
+			/* Start events listening on new div */
 			div.addEventListener("drop", dropHandler, false);
 			div.addEventListener("dragover", dragOverHandler, false);
 		}
+
+		function removegroup(group) {
+			alert('group'+group);
+			document.getElementById('groups').removeChild(document.getElementById('group'+group));
+		}
+
 
 	</script>
 

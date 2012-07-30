@@ -119,11 +119,13 @@
 							{% endfor %}
 						</tbody>
 					</table>
-					<hr>
-					<h4>Upload</h4>
-					<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
-							{{form.file}}
-					<input type="submit" value="Submit" class='btn btn-primary' />
+					{% if not nogroup %}
+						<hr>
+						<h4>Upload</h4>
+						<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+								{{form.file}}
+						<input type="submit" value="Submit" class='btn btn-primary' />
+					{% endif %}
 				</div>
 
 				<div class = 'span3 panel'>

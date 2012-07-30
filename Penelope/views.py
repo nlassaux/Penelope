@@ -222,8 +222,9 @@ def detailassignment(request, Assignment_id):
         try:
             mygroup = request.user.group_list.get(assignment=detailedassignment)
             groupwork = Work.objects.filter(group=mygroup)
+        # UGLY ---- To change
         except Group.DoesNotExist:
-            nogroup.none()
+            nogroup='nogroup'
         if request.method == 'POST':
             form = UploadWorkForm(request.POST, request.FILES)
             if form.is_valid():

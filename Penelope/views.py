@@ -226,6 +226,7 @@ def detailassignment(request, Assignment_id):
         if request.method == 'POST':
             form = UploadWorkForm(request.POST, request.FILES)
             if form.is_valid():
+                path = '/test'
                 addwork = Work(file=request.FILES['file'], group=mygroup, uploader=request.user)
                 addwork.save()
                 return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
@@ -343,3 +344,12 @@ def userasgroup(request, Assignment_id):
         groupnum += 1
 
     return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
+
+# Page to add a group
+@login_required
+def deletework(request, Work_id):
+    deletedwork = Work.objects.get(id=Work_id)
+
+    deletedwork.delete()
+
+    return redirect('Penelope.views.detailassignment', Assignment_id=deletedwork.group.assignment.id)

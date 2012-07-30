@@ -86,16 +86,20 @@ class Group(models.Model):
 
 
 class Work (models.Model):
-    file = models.FileField(upload_to='Assignments')
+
+    def filename(self):
+        return os.path.basename(self.file.name)
+
+    def path(instance, filename):
+        return '/'.join(['Work', instance.group.assignment.course.name, instance.group.assignment.name, 'Group '+instance.group.name, filename])
+
+    file = models.FileField(upload_to=path)
     group = models.ForeignKey(Group)
     uploader = models.ForeignKey(User)
     editdate = models.DateField(auto_now=True)
 
     def __unicode__(self):
         return self.file.name
-
-    def filename(self):
-        return os.path.basename(self.file.name)
 
 
 # The definition of a form to add a course.

@@ -87,6 +87,7 @@
 								<th>Uploader</th>
 								<th>Size</th>
 								<th>Upload date</th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -96,6 +97,7 @@
 				        	<td>{{ work.uploader }}</td>
 				        	<td>{{ work.file.size }} Octets</td>
 				        	<td>{{ work.editdate }}</td>
+				        	<td><a href="/works/{{ work.id }}/delete">x</td>
 								</tr>
 							{% endfor %}
 						</tbody>

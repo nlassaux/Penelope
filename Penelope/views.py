@@ -72,7 +72,7 @@ def detailcourse(request, Course_id):
     subscribed = detailedcourse.subscribed.filter()
 
     # Only subscribed students and owner(teacher) can view the course
-    if detailedcourse not in request.user.course_list.all() and request.user != detailedcourse.owner :
+    if detailedcourse not in request.user.course_list.all() and request.user != detailedcourse.owner:
         return redirect('Penelope.views.home')
 
     # delete if assignments not used
@@ -212,6 +212,9 @@ def detailassignment(request, Assignment_id):
 
     detailedassignment = Assignment.objects.get(id=Assignment_id)
 
+    if detailedassignment.course not in request.user.course_list.all() and request.user != detailedassignment.course.owner:
+        return redirect('Penelope.views.home')
+
     form = UploadWorkForm()
 
     if request.user.userprofile.status == 'student':
@@ -278,6 +281,9 @@ def deleteassignment(request, Assignment_id):
 def detailgroup(request, Group_id):
 
     detailedgroup = Group.objects.get(id=Group_id)
+
+    if detailedgroup.assignment.course not in request.user.course_list.all() and request.user != detailedgroup.assignment.course.owner:
+        return redirect('Penelope.views.home')
 
     return render(request, 'detailgroup.html', locals())
 

@@ -18,20 +18,22 @@
 {% block content %}
 
 	<div class='row'>
-		<div class='span4 panel users_box'>
+		<div class='span5 panel users_box'>
 			<h4>Users</h4>
 			<hr>
 			<p></p>
 			<div id='users'>
-				{% for user in editedassignment.course.subscribed.all %}
-					<div draggable="true" class='user-balise' id='{{user}}'>{{user}}</div>
-				{% endfor %}
+				<div class='drop_zone'>
+					{% for user in editedassignment.course.subscribed.all %}
+						<div draggable="true" class='user-balise' name='user' id='{{user}}'>{{user}}</div>
+					{% endfor %}
+				</div>
 			</div>
 			<hr>
 			<a onClick='newgroup()' class="btn"><i class="icon-plus"></i> New group</a>
 			<a onClick='deletegroup()' class="btn"><i class="icon-remove"></i> Delete group</a>
 		</div>
-		<div class='span6 offset5 panel' id='groups'>
+		<div class='span6 offset5 panel pull-right' id='groups'>
 			<h4>Groups</h4>
 			<hr>
 	  	<div class="panel_drop" name='group'  id="group1">
@@ -123,6 +125,7 @@
 	  	 automatically increase the number of groups */ 
 			var nb = document.getElementsByName('group').length;
 			document.getElementById('groups').removeChild(document.getElementById('group'+nb));
+
 		}
 
 

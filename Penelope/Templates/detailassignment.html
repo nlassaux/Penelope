@@ -29,9 +29,8 @@
     </div>
   </div>
 	
-
-  <div class="row">
-			{% if user == detailedassignment.course.owner %}
+		{% if user == detailedassignment.course.owner %}
+			<div class="row">
 				<div class='span8 panel'>
 					{% if detailedassignment.group_set.all %}
 						<table class="table table-striped">
@@ -54,11 +53,12 @@
 								{% endfor %}
 									<tr>
 										<td>Without group</td>
-												<td>
-													{% for student in groupless %}
-														<div class='user-balise'>{{student.username}}</div>
-													{% endfor %}
-												</td>
+										<td>
+											{% for student in groupless %}
+												<div class='user-balise'>{{student.username}}</div>
+											{% endfor %}
+										</td>
+									</tr>
 							</tbody>
 						</table>
 					{% else %}
@@ -73,51 +73,52 @@
 					        <li><a href="#DeleteModal" data-toggle="modal"><i class="icon-remove-sign"></i> Delete</a></li>
 					  </ul>
 					</div>
-	</div>
+				</div>
 
-			{% else %}
+		{% else %}
 
-			<div class='span8 panel'>
-				<h4>Group's files</h4>
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Uploader</th>
-							<th>Size</th>
-							<th>Upload date</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for work in groupwork %}
+			<div class="row">
+				<div class='span8 panel'>
+					<h4>Group's files</h4>
+					<table class="table table-striped">
+						<thead>
 							<tr>
-			        	<td>{{ work.filename }}</td>
-			        	<td>{{ work.uploader }}</td>
-			        	<td>{{ work.file.size }} Octet</td>
-			        	<td>{{ work.editdate }}</td>
+								<th>Name</th>
+								<th>Uploader</th>
+								<th>Size</th>
+								<th>Upload date</th>
 							</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-				<hr>
-				<h4>Upload</h4>
-				<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
-						{{form.file}}
-				<input type="submit" value="Submit" class='btn btn-primary' />
-			</div>
-
-			<div class = 'span3 panel'>
-					{% if nogroup %}
-					You have not got any group
-					{% else %}
-					<p><strong>Group {{ mygroup.name }}</strong></p>
+						</thead>
+						<tbody>
+							{% for work in groupwork %}
+								<tr>
+				        	<td>{{ work.filename }}</td>
+				        	<td>{{ work.uploader }}</td>
+				        	<td>{{ work.file.size }} Octets</td>
+				        	<td>{{ work.editdate }}</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
 					<hr>
-					{% for member in mygroup.members.all %}
-				  <div class='user-balise'>{{member}}</div>
-					{% endfor %}
+					<h4>Upload</h4>
+					<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+							{{form.file}}
+					<input type="submit" value="Submit" class='btn btn-primary' />
+				</div>
+
+				<div class = 'span3 panel'>
+						{% if nogroup %}
+							You have not got any group
+						{% else %}
+							<p><strong>Group {{ mygroup.name }}</strong></p>
+							<hr>
+						{% for member in mygroup.members.all %}
+					  	<div class='user-balise'>{{member}}</div>
+						{% endfor %}
+				</div>
 			</div>
-	</div>
-			{% endif %}
+		{% endif %}
 
 
 	{% endif %}
@@ -127,6 +128,7 @@
 	{% endif %}
 
 {% endblock %}
+
 
 {% block modals %}
 

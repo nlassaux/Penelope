@@ -50,7 +50,7 @@ class Course(models.Model):
     name = models.CharField(max_length=40)
     description = models.CharField(max_length=100, blank=True)
     owner = models.ForeignKey(User, related_name='course', limit_choices_to={'userprofile__status': 'teacher'})
-    editdate = models.DateField(auto_now=True)
+    editdate = models.DateTimeField(auto_now=True)
     years = models.CharField(max_length=11, choices=YEARS_CHOICES, default='%d - %d' % (date.year, date.year + 1))
     subscribed = models.ManyToManyField(User, related_name='course_list', blank=True, null=True, limit_choices_to={'userprofile__status': 'student'})
 
@@ -64,10 +64,10 @@ class Assignment (models.Model):
     name = models.CharField(max_length=40)
     course = models.ForeignKey(Course, related_name='assignment')
     description = models.CharField(max_length=130)
-    enddate = models.DateField(null=True, blank=True)
-    deadline = models.DateField(null=True, blank=True)
+    enddate = models.DateTimeField(null=True, blank=True)
+    deadline = models.DateTimeField(null=True, blank=True)
     admins = models.ManyToManyField(User, limit_choices_to={'userprofile__status': 'teacher'})
-    editdate = models.DateField(auto_now=True)
+    editdate = models.DateTimeField(auto_now=True)
     visible = models.BooleanField(blank=True)
 
     # In Admin panel : object = username.
@@ -96,12 +96,12 @@ class Work (models.Model):
         return os.path.basename(self.file.name)
 
     def path(instance, filename):
-        return '/'.join(['Work', instance.group.assignment.course.name, instance.group.assignment.name, 'Group '+instance.group.name, filename])
+        return '/'.join(['Work', instance.group.assignment.course.name, instance.group.assignment.name, 'Group ' + instance.group.name, filename])
 
     file = models.FileField(upload_to=path)
     group = models.ForeignKey(Group, related_name='work_list')
     uploader = models.ForeignKey(User)
-    editdate = models.DateField(auto_now=True)
+    editdate = models.DateTimeField(auto_now=True)
     version = models.CharField(max_length=30)
 
     def __unicode__(self):

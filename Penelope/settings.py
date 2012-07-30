@@ -52,7 +52,7 @@ SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = 'Media'
+MEDIA_ROOT = 'Penelope/Media'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -114,7 +114,6 @@ ROOT_URLCONF = 'Penelope.urls'
 WSGI_APPLICATION = 'Penelope.wsgi.application'
 
 TEMPLATE_DIRS = (
-    # Add the Assignments app's Template folder (remove if not used)
     # Apps must be before the Penelope to overwrite template (search in order)
     'Penelope/Templates',
     #'/Users/Nicolas/Virtualenvs/LaBRI/lib/python2.7/site-packages/debug_toolbar/templates',

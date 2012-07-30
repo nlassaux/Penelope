@@ -72,7 +72,7 @@
 					        <li class="nav-header">Administration</li>
 					        <li><a href="/groups/{{detailedassignment.id}}/edit/"><i class="icon-briefcase"></i> Change groups</a></li>
 					        <li><a href="/assignments/{{detailedassignment.id}}/edit/"><i class="icon-pencil"></i> Edit</a></li>
-					        <li><a href="#DeleteModal" data-toggle="modal"><i class="icon-remove-sign"></i> Delete</a></li>
+					        <li><a href="#DeleteAssignmentModal" data-toggle="modal"><i class="icon-remove-sign"></i> Delete</a></li>
 					  </ul>
 					</div>
 				</div>
@@ -90,6 +90,7 @@
 								<th>Size</th>
 								<th>Upload date</th>
 								<th></th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -99,8 +100,22 @@
 				        	<td>{{ work.uploader }}</td>
 				        	<td>{{ work.file.size }} Octets</td>
 				        	<td>{{ work.editdate }}</td>
-				        	<td><a href="/works/{{ work.id }}/delete"><i class="icon-remove"></i></a><a href='/works/{{ work.id }}/download'><i class='icon-download'></i></a> </td>
+				        	<td><a href='/works/{{ work.id }}/download'><i class='icon-download'></i></a></td>
+				        	<td><a data-target='#DeleteWorkModal{{work.id}}' data-toggle="modal"><i class="icon-remove"></i></a></td>
 								</tr>
+								<div class="modal hide" id="DeleteWorkModal{{work.id}}">
+								  <div class="modal-header">
+								    <button type="button" class="close" data-dismiss="modal">×</button>
+								    <h3>Delete the file</h3>
+								  </div>
+								  <div class="modal-body">
+								    <p>Are you sure you want to delete your work ?</p>
+								  </div>
+								  <div class="modal-footer">
+								    <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+								    <a href="/works/{{work.id}}/delete" class="btn btn-danger">Delete</a>
+								  </div>
+								</div>
 							{% endfor %}
 						</tbody>
 					</table>
@@ -136,7 +151,7 @@
 
 {% block modals %}
 
-	<div class="modal hide" id="DeleteModal">
+	<div class="modal hide" id="DeleteAssignmentModal">
 	  <div class="modal-header">
 	    <button type="button" class="close" data-dismiss="modal">×</button>
 	    <h3>Delete the assignment</h3>
@@ -149,5 +164,8 @@
 	    <a href="/assignments/{{detailedassignment.id}}/delete/" class="btn btn-danger">Delete</a>
 	  </div>
 	</div>
+	
+{% endblock %}
 
+{% block scripts %}
 {% endblock %}

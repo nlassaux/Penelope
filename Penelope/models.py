@@ -2,6 +2,7 @@ from django.forms.widgets import PasswordInput
 from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from django.contrib.auth.models import User
+from django.core.files import *
 from django.db import models
 from django import forms
 from models import *
@@ -46,7 +47,7 @@ class UserProfile(models.Model):
 
 # The course model.
 class Course(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=40)
     description = models.CharField(max_length=100, blank=True)
     owner = models.ForeignKey(User, related_name='course', limit_choices_to={'userprofile__status': 'teacher'})
     editdate = models.DateField(auto_now=True)
@@ -60,7 +61,7 @@ class Course(models.Model):
 
 # Definition of the model Assignment
 class Assignment (models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=40)
     course = models.ForeignKey(Course, related_name='assignment')
     description = models.CharField(max_length=130)
     enddate = models.DateField(null=True, blank=True)
@@ -84,6 +85,10 @@ class Group(models.Model):
     def __unicode__(self):
         return self.name
 
+    def name_id(self):
+        ID = u'%s' % self.id
+        return 'Group ' + ID
+
 
 class Work (models.Model):
 
@@ -94,12 +99,17 @@ class Work (models.Model):
         return '/'.join(['Work', instance.group.assignment.course.name, instance.group.assignment.name, 'Group '+instance.group.name, filename])
 
     file = models.FileField(upload_to=path)
-    group = models.ForeignKey(Group)
+    group = models.ForeignKey(Group, related_name='work_list')
     uploader = models.ForeignKey(User)
     editdate = models.DateField(auto_now=True)
+    version = models.CharField(max_length=30)
 
     def __unicode__(self):
         return self.file.name
+
+    def delete(self):
+        self.file.delete()
+        super(Work, self).delete()
 
 
 # The definition of a form to add a course.

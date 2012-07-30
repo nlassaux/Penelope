@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
+from django.http import HttpResponse
 from models import *
 
 
@@ -345,7 +346,19 @@ def userasgroup(request, Assignment_id):
 
     return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
 
-# Page to add a group
+
+# Page to download a work
+@login_required
+def downloadwork(request, Work_id):
+    downloadededwork = Work.objects.get(id=Work_id)
+    filename = downloadededwork.file.name.split('/')[-1]
+    response = HttpResponse(downloadededwork.file ,mimetype='application/octet-stream')
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+
+    return response
+
+
+# Page to delete a work
 @login_required
 def deletework(request, Work_id):
     deletedwork = Work.objects.get(id=Work_id)

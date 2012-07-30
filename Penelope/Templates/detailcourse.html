@@ -18,12 +18,14 @@
 {% block content %}
 
     <div class="page-header">
-      <h1>{{detailedcourse.name}}
-      <small>{{detailedcourse.description}}</small></h1>
-      <div class='infos pull-right'>
-        <strong>Teacher : </strong> {{detailedcourse.owner}}
-        <strong>Years : </strong> {{detailedcourse.years}}
-        <strong>Last edit : </strong> {{detailedcourse.editdate}}
+      <div class='row'>
+        <h1 class='span7'>{{detailedcourse.name}}
+        <small>{{detailedcourse.description}}</small></h1>
+        <div class=' infos pull-right'>
+          <strong>Teacher : </strong> {{detailedcourse.owner}}
+          <strong>Years : </strong> {{detailedcourse.years}}
+          <strong>Last edit : </strong> {{detailedcourse.editdate}}
+        </div>
       </div>
     </div>
 

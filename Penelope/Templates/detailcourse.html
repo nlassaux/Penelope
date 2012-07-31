@@ -43,7 +43,7 @@
           {% for assignment in assignments %}
             <tr>
               <td><a href="/assignments/{{assignment.id}}/details/">{{assignment.name}}</a></td>
-              <td>{{assignment.deadline}}</td>
+              <td>{{assignment.official_deadline}}</td>
               <td>{{assignment.editdate}}</td>
             </tr>
           {% endfor %}

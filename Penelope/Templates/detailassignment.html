@@ -98,7 +98,8 @@
 								<tr>
 				        	<td>{{ work.filename }}</td>
 				        	<td>{{ work.uploader }}</td>
-				        	<td>{{ work.file.size }} Octets</td>
+				        	{% load functions %}
+				        	<td>{% number_human work.file.size %} Octets</td>
 				        	<td>{{ work.editdate }}</td>
 				        	<td><a href='/works/{{ work.id }}/download'><i class='icon-download'></i></a></td>
 				        	<td><a data-target='#DeleteWorkModal{{work.id}}' data-toggle="modal"><i class="icon-remove"></i></a></td>
@@ -119,33 +120,32 @@
 							{% endfor %}
 						</tbody>
 					</table>
-					{% if not nogroup %}
+					{% if mygroup %}
 						<hr>
 						<h4>Upload</h4>
-						<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+						<form action="/works/{{detailedassignment.id}}/1/upload/" method="post" enctype="multipart/form-data">{% csrf_token %}
 								{{form.file}}
 						<input type="submit" value="Submit" class='btn btn-primary' />
 					{% endif %}
 				</div>
 
 				<div class = 'span3 panel'>
-						{% if nogroup %}
+						{% if not mygroup %}
 							You have not got any group
 						{% else %}
 							<p><strong>Group {{ mygroup.name }}</strong></p>
 							<hr>
-						{% for member in mygroup.members.all %}
-					  	<div class='user-balise'>{{member}}</div>
-						{% endfor %}
+							{% for member in mygroup.members.all %}
+						  	<div class='user-balise'>{{member}}</div>
+							{% endfor %}
+						{% endif %}
 				</div>
 			</div>
+
 		{% endif %}
 
-
-	{% endif %}
-
-	{% if detailedassignment.deadline %}
-		<div class='deadline'>Deadline : {{detailedassignment.deadline}}</div>
+	{% if detailedassignment.official_deadline %}
+		<div class='deadline'>Deadline : {{detailedassignment.official_deadline}}</div>
 	{% endif %}
 
 {% endblock %}

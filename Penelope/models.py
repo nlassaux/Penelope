@@ -3,6 +3,7 @@ from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.core.files import *
+from django.utils.encoding import smart_unicode
 from django.db import models
 from django import forms
 from models import *
@@ -64,8 +65,8 @@ class Assignment (models.Model):
     name = models.CharField(max_length=40)
     course = models.ForeignKey(Course, related_name='assignment')
     description = models.CharField(max_length=130)
-    enddate = models.DateTimeField(null=True, blank=True)
-    deadline = models.DateTimeField(null=True, blank=True)
+    firm_deadline = models.DateTimeField(null=True, blank=True)
+    official_deadline = models.DateTimeField(null=True, blank=True)
     admins = models.ManyToManyField(User, limit_choices_to={'userprofile__status': 'teacher'})
     editdate = models.DateTimeField(auto_now=True)
     visible = models.BooleanField(blank=True)
@@ -96,7 +97,12 @@ class Work (models.Model):
         return os.path.basename(self.file.name)
 
     def path(instance, filename):
-        return '/'.join(['Work', instance.group.assignment.course.name, instance.group.assignment.name, 'Group ' + instance.group.name, filename])
+        return '/'.join(['Work',
+            instance.group.assignment.course.name + '_' +
+            unicode(instance.group.assignment.course.id),
+            instance.group.assignment.name + '_' +
+            unicode(instance.group.assignment.id),
+            'Group ' + unicode(instance.group.id), filename])
 
     file = models.FileField(upload_to=path)
     group = models.ForeignKey(Group, related_name='work_list')
@@ -137,16 +143,16 @@ class ChangeCourseOwnerForm(forms.ModelForm):
 class EditAssignmentForm (forms.ModelForm):
     class Meta:
         model = Assignment
-        fields = ('name', 'description', 'enddate',
-                  'deadline', 'admins', 'visible')
+        fields = ('name', 'description', 'official_deadline',
+                  'firm_deadline', 'admins', 'visible')
 
 
 # Definition of the form to add Assignments
 class AddAssignmentForm (forms.ModelForm):
     class Meta:
         model = Assignment
-        fields = ('name', 'description', 'enddate', 'admins',
-                  'deadline', 'admins', 'visible')
+        fields = ('name', 'description', 'official_deadline', 'admins',
+                  'firm_deadline', 'admins', 'visible')
 
 
 # The definition of the form to send files

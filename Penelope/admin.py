@@ -20,7 +20,7 @@ admin.site.register(models.Course, CourseAdmin)
 
 # Display in the list of UserProfile the status in a column.
 class AssignmentAdmin(admin.ModelAdmin):
-    list_display = ['name', 'course', 'enddate', 'visible', 'editdate']
+    list_display = ['name', 'course', 'official_deadline', 'firm_deadline', 'visible', 'editdate']
     # Add right filter
     list_filter = ('course',)
 admin.site.register(models.Assignment, AssignmentAdmin)

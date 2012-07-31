@@ -213,25 +213,18 @@ def detailassignment(request, Assignment_id):
 
     detailedassignment = Assignment.objects.get(id=Assignment_id)
 
+    # Control if the user is subscribed or is the owner of the assignment's course
     if detailedassignment.course not in request.user.course_list.all() and request.user != detailedassignment.course.owner:
         return redirect('Penelope.views.home')
 
     form = UploadWorkForm()
 
+    # If the user is a student, we load his group and his work.
     if request.user.userprofile.status == 'student':
-        try:
-            mygroup = request.user.group_list.get(assignment=detailedassignment)
-            groupwork = Work.objects.filter(group=mygroup)
-        # UGLY ---- To change
-        except Group.DoesNotExist:
-            nogroup='nogroup'
-        if request.method == 'POST':
-            form = UploadWorkForm(request.POST, request.FILES)
-            if form.is_valid():
-                path = '/test'
-                addwork = Work(file=request.FILES['file'], group=mygroup, uploader=request.user)
-                addwork.save()
-                return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
+        mygroup = request.user.group_list.filter(assignment=detailedassignment)
+        groupwork = Work.objects.filter(group=mygroup)
+
+    # If the user is a teacher, we load the list of users without groups.
     else:
         groupless = User.objects.filter(course_list__assignment=detailedassignment).exclude(group_list__assignment=detailedassignment)
 
@@ -344,6 +337,29 @@ def userasgroup(request, Assignment_id):
         query = Group.objects.create(assignment=editedassignment, name=groupnum)
         student.group_list.add(query)
         groupnum += 1
+
+    return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
+
+
+# function to upload a work file with two methods : simple upload(1) and overwriting(2)
+@login_required
+def uploadwork(request, Assignment_id, Method):
+    detailedassignment = Assignment.objects.get(id=Assignment_id)
+
+    if (request.user not in detailedassignment.course.subscribed.all()) or not request.user.group_list.get(assignment=detailedassignment):
+        return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
+
+    # Test if a post request has been sent and save informations
+    if request.method == 'POST':
+        mygroup = request.user.group_list.get(assignment=detailedassignment)
+        form = UploadWorkForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Simple upload : only save to a new file.
+            if Method == '1':
+                addwork = Work(file=request.FILES['file'], group=mygroup, uploader=request.user)
+                addwork.save()
+            if Method == '2':
+                pass
 
     return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
 

@@ -18,19 +18,20 @@ urlpatterns = patterns('',
     url(r'^(?P<Course_id>\d+)/clearallstudents/$', 'Penelope.views.clearallstudents'),
 
     # Works urls.
-    url(r'works/(?P<Work_id>\d+)/delete/$', 'Penelope.views.deletework'),
-    url(r'works/(?P<Work_id>\d+)/download/$', 'Penelope.views.downloadwork'),
+    url(r'^works/(?P<Work_id>\d+)/delete/$', 'Penelope.views.deletework'),
+    url(r'^works/(?P<Assignment_id>\d+)/(?P<Method>\d+)/upload/$', 'Penelope.views.uploadwork'),
+    url(r'^works/(?P<Work_id>\d+)/download/$', 'Penelope.views.downloadwork'),
 
     # Groups urls.
-    url(r'groups/(?P<Group_id>\d+)/details/$', 'Penelope.views.detailgroup'),
-    url(r'groups/(?P<Assignment_id>\d+)/edit/$', 'Penelope.views.addgroup'),
-    url(r'groups/(?P<Assignment_id>\d+)/userasgroup/$', 'Penelope.views.userasgroup'),
+    url(r'^groups/(?P<Group_id>\d+)/details/$', 'Penelope.views.detailgroup'),
+    url(r'^groups/(?P<Assignment_id>\d+)/edit/$', 'Penelope.views.addgroup'),
+    url(r'^groups/(?P<Assignment_id>\d+)/userasgroup/$', 'Penelope.views.userasgroup'),
 
     # Assignments urls.
-    url(r'assignments/(?P<Assignment_id>\d+)/edit/$', 'Penelope.views.editassignment'),
-    url(r'assignments/(?P<Assignment_id>\d+)/details/$', 'Penelope.views.detailassignment'),
-    url(r'assignments/(?P<Course_id>\d+)/add/$', 'Penelope.views.addassignment'),
-    url(r'assignments/(?P<Assignment_id>\d+)/delete/$', 'Penelope.views.deleteassignment'),
+    url(r'^assignments/(?P<Assignment_id>\d+)/edit/$', 'Penelope.views.editassignment'),
+    url(r'^assignments/(?P<Assignment_id>\d+)/details/$', 'Penelope.views.detailassignment'),
+    url(r'^assignments/(?P<Course_id>\d+)/add/$', 'Penelope.views.addassignment'),
+    url(r'^assignments/(?P<Assignment_id>\d+)/delete/$', 'Penelope.views.deleteassignment'),
 
     # Log's links
     url(r'^login/$', 'Penelope.views.connection'),

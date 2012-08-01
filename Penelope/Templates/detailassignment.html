@@ -5,11 +5,9 @@
 {% block breadcrumb %}
 
 	<ul class="breadcrumb">
-		<div class='swift'>
-	    <li>>> <a href="/">Dashboard</a><span class="divider">/</span></li>
-	    <li><a href="/{{detailedassignment.course.id}}/details/">{{detailedassignment.course}}</a><span class="divider">/</span></li>
-	    <li class="active">{{detailedassignment.name}}</li>
-	  </div>
+    <li>>> <a href="/">Dashboard</a><span class="divider">/</span></li>
+    <li><a href="/{{detailedassignment.course.id}}/details/">{{detailedassignment.course}}</a><span class="divider">/</span></li>
+    <li class="active">{{detailedassignment.name}}</li>
   </ul>
 
 {% endblock %}
@@ -38,7 +36,7 @@
 						<table class="table table-striped">
 							<thead>
 								<tr>
-									<th><h4>Groups :</h4></th>
+									<th>Groups :</th>
 									<th>Members</th>
 								</tr>
 							</thead>

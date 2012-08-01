@@ -4,14 +4,10 @@
 
 
 {% block breadcrumb %}
-
   <ul class="breadcrumb">
-    <div class='swift'>
-      <li>>> <a href="/">Dashboard</a><span class="divider">/</span></li>
-      <li class="active">{{detailedcourse.name}}</li>
-    </div>
+    <li>>> <a href="/">Dashboard</a><span class="divider">/</span></li>
+    <li class="active">{{detailedcourse.name}}</li>
   </ul>
-
 {% endblock %}
 
 
@@ -34,11 +30,11 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th><h4>Assignments :</h4></th>
+            <th>Assignments :</th>
             <th>Deadline</th>
             <th>Last edit</th>
           </tr>
-        <thead>
+        </thead>
         <tbody>
           {% for assignment in assignments %}
             <tr>

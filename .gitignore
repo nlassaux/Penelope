@@ -1,19 +1,9 @@
-Penelope/wsgi.pyc
-
-Penelope/views.pyc
-
-Penelope/urls.pyc
-
-Penelope/settings.pyc
-
-Penelope/models.pyc
-
-Penelope/admin.pyc
-
-Penelope/__init__.pyc
-
-AddUsers.pyc
-
 Media/
 
+*.pyc
 
+database.sqlite3
+
+*.pyc
+
+Penelope/templatetags/functions.pyc

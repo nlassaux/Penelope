@@ -123,7 +123,7 @@
 					{% if mygroup %}
 						<hr>
 						<h4>Upload</h4>
-						<form action="/works/{{detailedassignment.id}}/1/upload/" method="post" enctype="multipart/form-data">{% csrf_token %}
+						<form action="/works/{{detailedassignment.id}}/upload/" method="post" enctype="multipart/form-data">{% csrf_token %}
 								{{form.file}}
 						<input type="submit" value="Submit" class='btn btn-primary' />
 					{% endif %}
@@ -135,7 +135,7 @@
 						{% else %}
 							<p><strong>Group {{ mygroup.name }}</strong></p>
 							<hr>
-							{% for member in mygroup.members.all %}
+							{% for member in memberlist %}
 						  	<div class='user-balise'>{{member}}</div>
 							{% endfor %}
 						{% endif %}

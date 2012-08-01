@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from models import *
+from settings import *
+import os
 
 
 # Login
@@ -222,6 +224,7 @@ def detailassignment(request, Assignment_id):
     # If the user is a student, we load his group and his work.
     if request.user.userprofile.status == 'student':
         mygroup = request.user.group_list.filter(assignment=detailedassignment)
+        memberlist = User.objects.filter(group_list__id=mygroup)
         groupwork = Work.objects.filter(group=mygroup)
 
     # If the user is a teacher, we load the list of users without groups.
@@ -299,7 +302,6 @@ def addgroup(request, Assignment_id):
     # Create groups and add users in
     if request.method == 'POST':
         for student in subscribed:
-
             groupnum = request.POST[student.username]
             query = Group.objects.filter(assignment=editedassignment, name=groupnum)
             if query:
@@ -343,7 +345,7 @@ def userasgroup(request, Assignment_id):
 
 # function to upload a work file with two methods : simple upload(1) and overwriting(2)
 @login_required
-def uploadwork(request, Assignment_id, Method):
+def uploadwork(request, Assignment_id):
     detailedassignment = Assignment.objects.get(id=Assignment_id)
 
     if (request.user not in detailedassignment.course.subscribed.all()) or not request.user.group_list.get(assignment=detailedassignment):
@@ -353,13 +355,22 @@ def uploadwork(request, Assignment_id, Method):
     if request.method == 'POST':
         mygroup = request.user.group_list.get(assignment=detailedassignment)
         form = UploadWorkForm(request.POST, request.FILES)
+        
         if form.is_valid():
-            # Simple upload : only save to a new file.
-            if Method == '1':
-                addwork = Work(file=request.FILES['file'], group=mygroup, uploader=request.user)
-                addwork.save()
-            if Method == '2':
-                pass
+            groupwork = mygroup.work_list.all()
+            for work in groupwork :
+                # Try to find a file in work_list with same path (path contain name)
+                try :
+                    # Select tha path and cut just after MEDIA_ROOT (var in settings) and remove base filename
+                    path = work.file.path.lstrip(SITE_ROOT+'/'+MEDIA_ROOT+'/').rstrip(request.FILES['file'].name)
+                    deletedwork = groupwork.get(file=path+request.FILES['file'].name)
+                    deletedwork.delete()
+                except:
+                    pass
+
+            # Upload and overwrite if the same file's name exists
+            addwork = Work(file=request.FILES['file'], group=mygroup, uploader=request.user)
+            addwork.save()
 
     return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
 
@@ -369,9 +380,8 @@ def uploadwork(request, Assignment_id, Method):
 def downloadwork(request, Work_id):
     downloadededwork = Work.objects.get(id=Work_id)
     filename = downloadededwork.file.name.split('/')[-1]
-    response = HttpResponse(downloadededwork.file ,mimetype='application/octet-stream')
+    response = HttpResponse(downloadededwork.file, mimetype='application/octet-stream')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
-
     return response
 
 

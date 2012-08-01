@@ -19,7 +19,7 @@ urlpatterns = patterns('',
 
     # Works urls.
     url(r'^works/(?P<Work_id>\d+)/delete/$', 'Penelope.views.deletework'),
-    url(r'^works/(?P<Assignment_id>\d+)/(?P<Method>\d+)/upload/$', 'Penelope.views.uploadwork'),
+    url(r'^works/(?P<Assignment_id>\d+)/upload/$', 'Penelope.views.uploadwork'),
     url(r'^works/(?P<Work_id>\d+)/download/$', 'Penelope.views.downloadwork'),
 
     # Groups urls.

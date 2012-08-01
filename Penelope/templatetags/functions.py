@@ -1,13 +1,14 @@
 from django import template
 
+
 register = template.Library()
+
 
 @register.simple_tag
 def number_human(value, separator=' ', precision=2, delimeter_count=3, decimal_separator=','):
-    """ Converts an integer or floating-point number or a string to a string
-        containing the delimiter character (default comma)
-        after every delimeter_count digits (by default 3 digits).
-    """
+    #    Converts an integer or floating-point number or a string to a string
+    #    containing the delimiter character (default comma)
+    #    after every delimeter_count digits (by default 3 digits)
 
     f = ''
     if isinstance(value, float):

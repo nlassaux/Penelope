@@ -1,14 +1,15 @@
+from django.core.files.storage import FileSystemStorage
+from django.db.models.signals import post_save
 from django.forms.widgets import PasswordInput
-from django.db.models.signals import post_save, m2m_changed
-from django.dispatch import receiver
 from django.contrib.auth.models import User
+from django.dispatch import receiver
 from django.core.files import *
-from django.utils.encoding import smart_unicode
 from django.db import models
 from django import forms
 from models import *
-import os
+import settings
 import datetime
+import os
 
 
 # Create the list of years from 2O11 to year progress + 5.
@@ -28,6 +29,15 @@ STATUS_CHOICES = (
     ('teacher', 'Teacher'),
     ('student', 'Student'),
 )
+
+
+class OverwriteStorage(FileSystemStorage):
+    def get_available_name(self, name):
+        # If the filename already exists, remove it as if it was a
+        # true file system
+        if self.exists(name):
+            os.remove(os.path.join(settings.MEDIA_ROOT, name))
+        return name
 
 
 # More field for an user.
@@ -96,25 +106,30 @@ class Work (models.Model):
     def filename(self):
         return os.path.basename(self.file.name)
 
+    # The path for a file : MEDIA_ROOT/Work/Coursename_CourseID/
+    # Assignmname_Assignment_ID/Group Group_ID/filename
     def path(instance, filename):
         return '/'.join(['Work',
-            instance.group.assignment.course.name + '_' +
-            unicode(instance.group.assignment.course.id),
-            instance.group.assignment.name + '_' +
-            unicode(instance.group.assignment.id),
-            'Group ' + unicode(instance.group.id), filename])
+                instance.group.assignment.course.name + '_' +
+                unicode(instance.group.assignment.course.id),
+                instance.group.assignment.name + '_' +
+                unicode(instance.group.assignment.id),
+                'Group ' + unicode(instance.group.id), filename])
 
-    file = models.FileField(upload_to=path)
+    file = models.FileField(storage=OverwriteStorage(), upload_to=path)
     group = models.ForeignKey(Group, related_name='work_list')
     uploader = models.ForeignKey(User)
     editdate = models.DateTimeField(auto_now=True)
-    version = models.CharField(max_length=30)
 
     def __unicode__(self):
         return self.file.name
 
+    # Overwrite delete() function to delete the file before delete the model'enter
     def delete(self):
-        self.file.delete()
+        try :
+            self.file.delete()
+        except :
+            pass
         super(Work, self).delete()
 
 
@@ -160,3 +175,4 @@ class UploadWorkForm(forms.ModelForm):
     class Meta:
         model = Work
         fields = ('file',)
+

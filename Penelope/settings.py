@@ -45,7 +45,7 @@ USE_I18N = True
 USE_L10N = True
 
 # If you set this to False, Django will not use timezone-aware datetimes.
-USE_TZ = True
+USE_TZ = False
 
 # Adapt the root path to the system.
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
@@ -69,7 +69,7 @@ STATIC_ROOT = ''
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
 
-INTERNAL_IPS = ('127.0.0.1', '0.0.0.0',)
+INTERNAL_IPS = ('127.0.0.1',)
 
 # Additional locations of static files
 STATICFILES_DIRS = (

@@ -118,7 +118,7 @@
 							{% endfor %}
 						</tbody>
 					</table>
-					{% if mygroup %}
+					{% if mygroup and not detailedassignment.firm_deadline_past %}
 						<hr>
 						<h4>Upload</h4>
 						<form action="/works/{{detailedassignment.id}}/upload/" method="post" enctype="multipart/form-data">{% csrf_token %}
@@ -142,7 +142,9 @@
 
 		{% endif %}
 
-	{% if detailedassignment.official_deadline %}
+	{% if detailedassignment.official_deadline_past %}
+		<div class='deadline'>Close</div>
+	{% elif detailedassignment.official_deadline %}
 		<div class='deadline'>Deadline : {{detailedassignment.official_deadline}}</div>
 	{% endif %}
 

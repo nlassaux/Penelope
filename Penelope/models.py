@@ -85,6 +85,16 @@ class Assignment (models.Model):
     def __unicode__(self):
         return self.name
 
+    def official_deadline_past(self):
+        if datetime.datetime.today() >= self.official_deadline:
+            return True
+        return False
+
+    def firm_deadline_past(self):
+        if  datetime.datetime.today() >= self.firm_deadline:
+            return True
+        return False
+
 
 # The definition of the class Group
 class Group(models.Model):

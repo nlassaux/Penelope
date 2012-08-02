@@ -348,6 +348,9 @@ def userasgroup(request, Assignment_id):
 def uploadwork(request, Assignment_id):
     detailedassignment = Assignment.objects.get(id=Assignment_id)
 
+    if detailedassignment.firm_deadline_past():
+        return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
+
     if (request.user not in detailedassignment.course.subscribed.all()) or not request.user.group_list.get(assignment=detailedassignment):
         return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
 
@@ -355,7 +358,7 @@ def uploadwork(request, Assignment_id):
     if request.method == 'POST':
         mygroup = request.user.group_list.get(assignment=detailedassignment)
         form = UploadWorkForm(request.POST, request.FILES)
-        
+
         if form.is_valid():
             groupwork = mygroup.work_list.all()
             for work in groupwork :

@@ -7,7 +7,7 @@ from django.core.files import *
 from django.db import models
 from django import forms
 from models import *
-import settings
+from settings import *
 import datetime
 import os
 
@@ -86,12 +86,12 @@ class Assignment (models.Model):
         return self.name
 
     def official_deadline_past(self):
-        if datetime.datetime.today() >= self.official_deadline:
+        if datetime.datetime.now() >= self.official_deadline:
             return True
         return False
 
     def firm_deadline_past(self):
-        if  datetime.datetime.today() >= self.firm_deadline:
+        if  datetime.datetime.now() >= self.firm_deadline:
             return True
         return False
 

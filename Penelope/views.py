@@ -362,14 +362,8 @@ def uploadwork(request, Assignment_id):
         if form.is_valid():
             groupwork = mygroup.work_list.all()
             for work in groupwork :
-                # Try to find a file in work_list with same path (path contain name)
-                try :
-                    # Select tha path and cut just after MEDIA_ROOT (var in settings) and remove base filename
-                    path = work.file.path.lstrip(SITE_ROOT+'/'+MEDIA_ROOT+'/').rstrip(request.FILES['file'].name)
-                    deletedwork = groupwork.get(file=path+request.FILES['file'].name)
-                    deletedwork.delete()
-                except:
-                    pass
+                if work.filename()==request.FILES['file'].name:
+                    work.delete()
 
             # Upload and overwrite if the same file's name exists
             addwork = Work(file=request.FILES['file'], group=mygroup, uploader=request.user)

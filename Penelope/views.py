@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
+from django.core import serializers
 from models import *
 from settings import *
 import os
@@ -219,13 +220,13 @@ def detailassignment(request, Assignment_id):
     if detailedassignment.course not in request.user.course_list.all() and request.user != detailedassignment.course.owner:
         return redirect('Penelope.views.home')
 
-    form = UploadWorkForm()
+    form = UploadFileForm()
 
-    # If the user is a student, we load his group and his work.
+    # If the user is a student, we load his group and his file.
     if request.user.userprofile.status == 'student':
         mygroup = request.user.group_list.filter(assignment=detailedassignment)
         memberlist = User.objects.filter(group_list__id=mygroup)
-        groupwork = Work.objects.filter(group=mygroup)
+        groupfile = File.objects.filter(group=mygroup)
 
     # If the user is a teacher, we load the list of users without groups.
     else:
@@ -343,9 +344,9 @@ def userasgroup(request, Assignment_id):
     return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
 
 
-# function to upload a work file with two methods : simple upload(1) and overwriting(2)
+# function to upload a file file with two methods : simple upload(1) and overwriting(2)
 @login_required
-def uploadwork(request, Assignment_id):
+def uploadfile(request, Assignment_id):
     detailedassignment = Assignment.objects.get(id=Assignment_id)
 
     if detailedassignment.firm_deadline_past():
@@ -357,36 +358,58 @@ def uploadwork(request, Assignment_id):
     # Test if a post request has been sent and save informations
     if request.method == 'POST':
         mygroup = request.user.group_list.get(assignment=detailedassignment)
-        form = UploadWorkForm(request.POST, request.FILES)
+        form = UploadFileForm(request.POST, request.FILES)
 
         if form.is_valid():
-            groupwork = mygroup.work_list.all()
-            for work in groupwork :
-                if work.filename()==request.FILES['file'].name:
-                    work.delete()
+            groupfile = mygroup.file_list.all()
+            for file in groupfile:
+                if file.filename() == request.FILES['file'].name:
+                    file.delete()
 
             # Upload and overwrite if the same file's name exists
-            addwork = Work(file=request.FILES['file'], group=mygroup, uploader=request.user)
-            addwork.save()
+            addfile = File(file=request.FILES['file'], group=mygroup, uploader=request.user)
+            addfile.save()
 
     return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
 
 
-# Page to download a work
+# Page to download a file
 @login_required
-def downloadwork(request, Work_id):
-    downloadededwork = Work.objects.get(id=Work_id)
-    filename = downloadededwork.file.name.split('/')[-1]
-    response = HttpResponse(downloadededwork.file, mimetype='application/octet-stream')
+def downloadfile(request, File_id):
+    downloadedfile = File.objects.get(id=File_id)
+    filename = downloadedfile.file.name.split('/')[-1]
+    response = HttpResponse(downloadedfile.file, mimetype='application/octet-stream')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     return response
 
 
-# Page to delete a work
+# Page to delete a file
 @login_required
-def deletework(request, Work_id):
-    deletedwork = Work.objects.get(id=Work_id)
+def deletefile(request, File_id):
+    deletedfile = file.objects.get(id=File_id)
 
-    deletedwork.delete()
+    deletedfile.delete()
 
     return redirect('Penelope.views.detailassignment', Assignment_id=deletedwork.group.assignment.id)
+
+
+@login_required
+def addrequirement(request):
+    editedassignment = Assignment.objects.get(id=request.POST['assignment_id'])
+    i = 1
+    try : 
+        required = Required.objects.get(id=request.POST['workid' + unicode(i)])
+    except : 
+        required = Required.objects.create()
+
+    required.assignment=editedassignment
+    required.name=request.POST['workname' + unicode(i)]
+    required.description=request.POST['workdescription' + unicode(i)]
+    required.type=request.POST['worktype' + unicode(i)]
+    required.save()
+
+    test = list(Required.objects.filter(assignment=editedassignment))
+
+    data = serializers.serialize("xml", test)
+
+    return HttpResponse(data)

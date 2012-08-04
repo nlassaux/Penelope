@@ -60,7 +60,7 @@ print('')
 
 print ('##############################################################')
 print ('##                                                          ##')
-print ('##      You have created %s teachers and %s students         ##' % (num1, num2))
+print ('##      You have created %s teachers and %s students        ##' % (num1, num2))
 print ('##     Usernames are student1, student2, teacher1...        ##')
 print ('##              All passwords are "password"                ##')
 print ('##                                                          ##')

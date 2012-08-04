@@ -5,11 +5,11 @@
 {% block breadcrumb %}
 
 	<ul class="breadcrumb">
- 	  	<li>>> <a href="/">Dashboard</a><span class="divider">/</span></li>
+		<li>>> <a href="/">Dashboard</a><span class="divider">/</span></li>
 		<li><a href="/{{editedassignment.course.id}}/details/">{{editedassignment.course.name}}</a><span class="divider">/</span></li>
 		<li><a href="/assignments/{{editedassignment.id}}/details/">{{editedassignment.name}}</a><span class="divider">/</span></li>
 		<li class="active">Edit</li>
-  </ul>
+	</ul>
 
 {% endblock %}
 
@@ -17,10 +17,141 @@
 {% block content %}
 
 	<h1>Edit assignment</h1>
-	    
-	<form action="" method="post">{% csrf_token %}
-		{{ form.as_p }}
-		<input type="submit" value="Submit" class='btn btn-primary'/>
-	</form>
+	<hr>
+	<div class='span4 panel'>
+		<h2>Informations</h2>
+		<form class="centered-text" method="post">{% csrf_token %}
+			<dl class="dl-horizontal">
+				<dt><label for="id_name"><strong>Name :</strong></label></dt>
+				<dl>{{ form.name }}{{ form.name.errors }}</dl>
+				<dt><label for="id_description"><strong>Description :</strong></label></dt>
+				<dl>{{ form.description }}</dl>
+				<dt><label for="id_official_deadline"><strong>Official deadline :</strong></label></dt>
+				<dl>{{ form.official_deadline }}</dl>
+				<dt><label for="id_firm_deadline"><strong>Firm deadline :</strong></label></dt>
+				<dl>{{ form.firm_deadline }}</dl>
+				<dt><label for="id_admins"><strong>Admins :</strong></label></dt>
+				<dl>{{ form.admins }}</dl>
+				<dt><label for="id_work_method"><strong>Work method :</strong></label></dt>
+				<dl>{{ form.work_method }}</dl>
+				<dt><label for="id_visible"><strong>Visible :</strong></label></dt>
+				<dl>{{ form.visible }}</dl>
+				<dt><input type="submit" value="Submit" class='btn btn-primary'/></dt>
+			</dl>
+		</form>
+	</div>
 
+
+	<div class='span7 panel'>
+		<h2>Work management</h2>
+		<p id='work_method_explain_free'>Free file upload for students, without restrictions as filetype or files'number.</p>
+		<p id='work_method_explain_required'>Controled upload, students have definied files to upload.</p>
+		<form id='ajax_form' method="post">{% csrf_token %}
+			<div id='work_method_required'></div>
+			<input type="text" value='{{editedassignment.id}}' name='assignment_id' id='assignment_id'/>
+			<input type="submit" id ='savebtn' value="Save" class='btn'/>
+		</form>
+		<a id='addfilebtn' class='btn'>Add a requirement</a>
+		<p style='color: #46a546;' id='response'></p>
+	</div>
+
+{% endblock %}
+
+{% block scripts %}
+	<script type="text/javascript">
+
+		// These lines are executed when the document has been loaded
+		$('#assignment_id').hide();
+		$('#addfilebtn').click(function(){
+			addwork('','','','');
+		});
+		$('#savebtn').click(ajaxrequest);
+		$('#id_work_method').change(change_text);
+		change_text();
+
+
+		// Apply effects when we change value of workmethod select
+		function change_text() {
+			if ($('#id_work_method').val() == 'free') {
+				$('#work_method_explain_required').hide();
+				$('#addfilebtn').hide();
+				$('#savebtn').hide();
+				$('#work_method_explain_free').show();
+				$('#work_method_required').empty();
+			} else {
+				$('#work_method_explain_free').hide();
+				$('#work_method_explain_required').show();
+				$('#addfilebtn').show();
+				$('#savebtn').show();
+			}
+		};
+
+		// Read XML response to build an edit form
+		function loadworks(xml) {
+			test = $(xml).find('object').each(function(){
+				var id = $(this).attr('pk');
+				var name = $(this).find("field[name='name']").text();
+				var description = $(this).find("field[name='description']").text();
+				var type = $(this).find("field[name='type']").text();
+				addwork(id, name, description, type);
+			});
+		}
+
+		// Add an empty form with : id, name, description and type fields. Hide id field.
+		function addwork(id, name, description, type) {
+			var worknb = $(".work").length;
+			var nextworknb = worknb + 1;
+
+			addworkclass('#ajax_form');
+			$('.work:last').html(idfield(id, nextworknb) + namefield(name,nextworknb) + descriptionfield(description, nextworknb) + typefield(type,nextworknb));
+			$('#workid'+nextworknb).hide();
+		};
+
+		// create new <div class='work'></div> in a parent
+		function addworkclass(parent){
+			$(parent).append("<div class='work under_panel'></div>");
+		};
+
+		// return a name field with a value (content), and an index(index) to add to id 
+		function namefield(content, index){
+			var namefield = "<label>Name :</label><input type='text' value='" + content + "' name='workname" + index + "' />";
+			return (namefield);
+		};
+
+		// return an id field with a value (content), and an index(index) to add to id 
+		function idfield(content, index){
+			var idfield = "<input type='text' value='" + content + "' id='workid" + index + "' name='workid" + index + "' />";
+			return (idfield);
+		};
+
+		// return a description field with a value (content), and an index(index) to add to id 
+		function descriptionfield(content, index){
+			var descriptionfield = "<label>Description :</label><textarea class='input-xlarge' name='workdescription" + index + "' rows='3'>" + content + "</textarea>";
+			return (descriptionfield);
+		};
+
+		// return a type field with a value (content), and an index(index) to add to id 
+		function typefield(content, index){
+			var typefield = "<label>Type :</label><select value='" + content + "' name='worktype" + index + "'><option value='none'>None</option><option value='tar_gz'>Tar.gz</option><option value='pdf'>PDF</option></select>";
+			return (typefield);
+		};
+
+		// Build an ajax request with value of ajax_form's fields serialized
+		function ajaxrequest() {
+			$("#ajax_form").submit( function() {
+				$.ajax({  
+					type: "POST",
+					url: "/addrequirement/",
+					data: $(this).serializeArray(),
+					success: function(xml) {
+						$('#response').html(xml);
+						$('.work').remove();
+						loadworks(xml);
+					}
+				});
+				return false;
+			});
+		};
+
+	</script>
 {% endblock %}

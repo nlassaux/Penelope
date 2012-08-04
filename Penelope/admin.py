@@ -32,7 +32,10 @@ class GroupAdmin(admin.ModelAdmin):
 admin.site.register(models.Group, GroupAdmin)
 
 
-# Display the list of Uploaded work.
-class WorkAdmin(admin.ModelAdmin):
+# Display the list of Uploaded file
+class FileAdmin(admin.ModelAdmin):
     list_display = ['file', 'group', 'uploader', 'editdate']
-admin.site.register(models.Work, WorkAdmin)
+admin.site.register(models.File, FileAdmin)
+
+
+admin.site.register(models.Required)

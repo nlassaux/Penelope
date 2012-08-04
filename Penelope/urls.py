@@ -18,9 +18,10 @@ urlpatterns = patterns('',
     url(r'^(?P<Course_id>\d+)/clearallstudents/$', 'Penelope.views.clearallstudents'),
 
     # Works urls.
-    url(r'^works/(?P<Work_id>\d+)/delete/$', 'Penelope.views.deletework'),
-    url(r'^works/(?P<Assignment_id>\d+)/upload/$', 'Penelope.views.uploadwork'),
-    url(r'^works/(?P<Work_id>\d+)/download/$', 'Penelope.views.downloadwork'),
+    url(r'^works/(?P<Work_id>\d+)/delete/$', 'Penelope.views.deletefile'),
+    url(r'^works/(?P<Assignment_id>\d+)/upload/$', 'Penelope.views.uploadfile'),
+    url(r'^works/(?P<Work_id>\d+)/download/$', 'Penelope.views.downloadfile'),
+    url(r'^addrequirement/$', 'Penelope.views.addrequirement'),
 
     # Groups urls.
     url(r'^groups/(?P<Group_id>\d+)/details/$', 'Penelope.views.detailgroup'),

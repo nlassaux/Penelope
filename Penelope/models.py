@@ -30,6 +30,19 @@ STATUS_CHOICES = (
     ('student', 'Student'),
 )
 
+# List of assignments work management
+# (free = illimited files - Restricted = Planned uploads)
+WORK_METHOD_CHOICES = (
+    ('free', 'Free'),
+    ('restricted', 'Restricted'),
+)
+
+FILE_TYPE_CHOICES = (
+    ('none', 'None'),
+    ('pdf', 'PDF'),
+    ('tar.gz', 'Tar.gz'),
+)
+
 
 class OverwriteStorage(FileSystemStorage):
     def get_available_name(self, name):
@@ -75,24 +88,27 @@ class Assignment (models.Model):
     name = models.CharField(max_length=40)
     course = models.ForeignKey(Course, related_name='assignment')
     description = models.CharField(max_length=130)
-    firm_deadline = models.DateTimeField(null=True, blank=True)
-    official_deadline = models.DateTimeField(null=True, blank=True)
+    firm_deadline = models.DateTimeField(blank=True)
+    official_deadline = models.DateTimeField(blank=True)
     admins = models.ManyToManyField(User, limit_choices_to={'userprofile__status': 'teacher'})
     editdate = models.DateTimeField(auto_now=True)
     visible = models.BooleanField(blank=True)
+    work_method = models.CharField(max_length=10, choices=WORK_METHOD_CHOICES, default='free')
 
     # In Admin panel : object = username.
     def __unicode__(self):
         return self.name
 
     def official_deadline_past(self):
-        if datetime.datetime.now() >= self.official_deadline:
-            return True
+        if self.official_deadline:
+            if datetime.datetime.now() >= self.official_deadline:
+                return True
         return False
 
     def firm_deadline_past(self):
-        if  datetime.datetime.now() >= self.firm_deadline:
-            return True
+        if self.firm_deadline:
+            if  datetime.datetime.now() >= self.firm_deadline:
+                return True
         return False
 
 
@@ -111,7 +127,7 @@ class Group(models.Model):
         return 'Group ' + ID
 
 
-class Work (models.Model):
+class File(models.Model):
 
     def filename(self):
         return os.path.basename(self.file.name)
@@ -127,7 +143,7 @@ class Work (models.Model):
                 'Group ' + unicode(instance.group.id), filename])
 
     file = models.FileField(storage=OverwriteStorage(), upload_to=path)
-    group = models.ForeignKey(Group, related_name='work_list')
+    group = models.ForeignKey(Group, related_name='file_list')
     uploader = models.ForeignKey(User)
     editdate = models.DateTimeField(auto_now=True)
 
@@ -140,7 +156,19 @@ class Work (models.Model):
             self.file.delete()
         except :
             pass
-        super(Work, self).delete()
+        super(File, self).delete()
+
+
+class Required (models.Model):
+    file = models.OneToOneField(File, unique=True, blank=True, null=True)
+    assignment = models.ForeignKey(Assignment)
+    name = models.CharField(max_length=40)
+    description = models.CharField(max_length=100, blank=True, null=True)
+    type = models.CharField(max_length=6, choices=FILE_TYPE_CHOICES, default='none')
+
+    # In Admin panel : object = name
+    def __unicode__(self):
+        return self.name
 
 
 # The definition of a form to add a course.
@@ -169,20 +197,20 @@ class EditAssignmentForm (forms.ModelForm):
     class Meta:
         model = Assignment
         fields = ('name', 'description', 'official_deadline',
-                  'firm_deadline', 'admins', 'visible')
+                  'firm_deadline', 'admins', 'visible', 'work_method')
 
 
 # Definition of the form to add Assignments
 class AddAssignmentForm (forms.ModelForm):
     class Meta:
         model = Assignment
-        fields = ('name', 'description', 'official_deadline', 'admins',
-                  'firm_deadline', 'admins', 'visible')
+        fields = ('name', 'description', 'official_deadline', 'firm_deadline',
+            'admins', 'visible', 'work_method')
 
 
 # The definition of the form to send files
-class UploadWorkForm(forms.ModelForm):
+class UploadFileForm(forms.ModelForm):
     class Meta:
-        model = Work
+        model = File
         fields = ('file',)
 

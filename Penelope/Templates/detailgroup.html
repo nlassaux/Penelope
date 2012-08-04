@@ -9,7 +9,7 @@
 	    <li><a href="/{{detailedgroup.assignment.course.id}}/details/">{{detailedgroup.assignment.course.name}}</a><span class="divider">/</span></li>
 	    <li><a href="/assignments/{{detailedgroup.assignment.id}}/details/">{{detailedgroup.assignment.name}}</a><span class="divider">/</span></li>
 	    <li class="active">Group {{detailedgroup.name}}</li>
-  	</ul>
+	</ul>
 
 {% endblock %}
 
@@ -40,27 +40,27 @@
 				</tr>
 			</thead>
 			<tbody>
-				{% for work in detailedgroup.work_list.all %}
+				{% for file in detailedgroup.file_list.all %}
 					<tr>
-			        	<td>{{ work.filename }}</td>
-			        	<td>{{ work.uploader }}</td>
+			        	<td>{{ file.filename }}</td>
+			        	<td>{{ file.uploader }}</td>
 			        	{% load functions %}
-			        	<td>{% number_human work.file.size %} Octets</td>
-			        	<td>{{ work.editdate }}</td>
-			        	<td><a href='/works/{{ work.id }}/download'><i class='icon-download'></i></a></td>
-			        	<td><a data-target='#DeleteWorkModal{{work.id}}' data-toggle="modal"><i class="icon-remove"></i></a></td>
+			        	<td>{% number_human file.file.size %} Octets</td>
+			        	<td>{{ file.editdate }}</td>
+			        	<td><a href='/works/{{ file.id }}/download'><i class='icon-download'></i></a></td>
+			        	<td><a data-target='#DeleteFileModal{{file.id}}' data-toggle="modal"><i class="icon-remove"></i></a></td>
 					</tr>
-					<div class="modal hide" id="DeleteWorkModal{{work.id}}">
+					<div class="modal hide" id="DeleteFileModal{{ file.id }}">
 					  <div class="modal-header">
 					    <button type="button" class="close" data-dismiss="modal">×</button>
 					    <h3>Delete the file</h3>
 					  </div>
 					  <div class="modal-body">
-					    <p>Are you sure you want to delete this work ?</p>
+					    <p>Are you sure you want to delete this file ?</p>
 					  </div>
 					  <div class="modal-footer">
 					    <a href="#" class="btn" data-dismiss="modal">Cancel</a>
-					    <a href="/works/{{work.id}}/delete" class="btn btn-danger">Delete</a>
+					    <a href="/works/{{file.id}}/delete" class="btn btn-danger">Delete</a>
 					  </div>
 					</div>
 				{% endfor %}

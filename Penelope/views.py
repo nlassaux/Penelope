@@ -395,21 +395,29 @@ def deletefile(request, File_id):
 
 @login_required
 def addrequirement(request):
-    editedassignment = Assignment.objects.get(id=request.POST['assignment_id'])
-    i = 1
-    try : 
-        required = Required.objects.get(id=request.POST['workid' + unicode(i)])
-    except : 
-        required = Required.objects.create()
+    if request.method == 'POST':
+        editedassignment = Assignment.objects.get(id=request.POST['assignment_id'])
+        if request.POST['worknb'] != '0':
+            for i in range(1, int(request.POST.get('worknb')) +1):
+                try:
+                    required = Required.objects.get(id=request.POST.get('workid' + unicode(i)))
+                    required.name=request.POST.get('workname' + unicode(i))
+                    required.description=request.POST.get('workdescription' + unicode(i))
+                    required.type=request.POST.get('worktype' + unicode(i))
+                    required.save()
+                except:
+                    required = Required(assignment=editedassignment,
+                        name=request.POST['workname' + unicode(i)],
+                        description=request.POST['workdescription' + unicode(i)],
+                        type=request.POST['worktype' + unicode(i)])
+                    required.save()
 
-    required.assignment=editedassignment
-    required.name=request.POST['workname' + unicode(i)]
-    required.description=request.POST['workdescription' + unicode(i)]
-    required.type=request.POST['worktype' + unicode(i)]
-    required.save()
+        data = list(Required.objects.filter(assignment=editedassignment))
+        response = serializers.serialize("xml", data)
+        return render(request, 'editassignment.html', locals())
 
-    test = list(Required.objects.filter(assignment=editedassignment))
-
-    data = serializers.serialize("xml", test)
-
-    return HttpResponse(data)
+    if request.method == 'GET':
+        editedassignment = Assignment.objects.get(id=request.GET['assignment_id'])
+        data = list(Required.objects.filter(assignment=editedassignment))
+        response = serializers.serialize("xml", data)
+        return render(request, 'editassignment.html', locals())

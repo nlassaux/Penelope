@@ -42,14 +42,13 @@
 	</div>
 
 
-	<div class='span7 panel'>
+	<div class='panel pull-right span6'>
 		<h2>Work management</h2>
-		<p id='work_method_explain_free'>Free file upload for students, without restrictions as filetype or files'number.</p>
-		<p id='work_method_explain_required'>Controled upload, students have definied files to upload.</p>
 		<form id='ajax_form' method="post">{% csrf_token %}
+			<input type="text" id='assignment_id' value='{{editedassignment.id}}' name='assignment_id' style="display: none;"/>
+			<input type="text" id='worknb' name='worknb' style="display: none;" />
+			<input type="submit" id='savebtn' value="Save" class='btn'/>
 			<div id='work_method_required'></div>
-			<input type="text" value='{{editedassignment.id}}' name='assignment_id' id='assignment_id'/>
-			<input type="submit" id ='savebtn' value="Save" class='btn'/>
 		</form>
 		<a id='addfilebtn' class='btn'>Add a requirement</a>
 		<p style='color: #46a546;' id='response'></p>
@@ -60,26 +59,32 @@
 {% block scripts %}
 	<script type="text/javascript">
 
-		// These lines are executed when the document has been loaded
-		$('#assignment_id').hide();
+			// These lines are executed when the document has been loaded
 		$('#addfilebtn').click(function(){
 			addwork('','','','');
 		});
+		$('#worknb').val($(".work").length);
 		$('#savebtn').click(ajaxrequest);
 		$('#id_work_method').change(change_text);
 		change_text();
 
+		$.ajax({
+				type: "GET",
+				url: "/addrequirement/",
+				data: {assignment_id:$('#assignment_id').val()},
+				success: function(xml) {
+					loadworks(xml);
+				}
+		});
 
 		// Apply effects when we change value of workmethod select
 		function change_text() {
 			if ($('#id_work_method').val() == 'free') {
-				$('#work_method_explain_required').hide();
 				$('#addfilebtn').hide();
 				$('#savebtn').hide();
 				$('#work_method_explain_free').show();
 				$('#work_method_required').empty();
 			} else {
-				$('#work_method_explain_free').hide();
 				$('#work_method_explain_required').show();
 				$('#addfilebtn').show();
 				$('#savebtn').show();
@@ -94,22 +99,23 @@
 				var description = $(this).find("field[name='description']").text();
 				var type = $(this).find("field[name='type']").text();
 				addwork(id, name, description, type);
+				$('#worknb').val($(".work").length);
 			});
 		}
 
 		// Add an empty form with : id, name, description and type fields. Hide id field.
 		function addwork(id, name, description, type) {
-			var worknb = $(".work").length;
-			var nextworknb = worknb + 1;
+			var nextworknb = $(".work").length + 1;
 
-			addworkclass('#ajax_form');
-			$('.work:last').html(idfield(id, nextworknb) + namefield(name,nextworknb) + descriptionfield(description, nextworknb) + typefield(type,nextworknb));
-			$('#workid'+nextworknb).hide();
+			addworkclass('#work_method_required');
+			$('.work:last').append(idfield(id, nextworknb) + namefield(name,nextworknb) + descriptionfield(description, nextworknb) + typefield(type,nextworknb));
+			$('#worknb').val($(".work").length);
 		};
 
 		// create new <div class='work'></div> in a parent
 		function addworkclass(parent){
 			$(parent).append("<div class='work under_panel'></div>");
+
 		};
 
 		// return a name field with a value (content), and an index(index) to add to id 
@@ -120,7 +126,7 @@
 
 		// return an id field with a value (content), and an index(index) to add to id 
 		function idfield(content, index){
-			var idfield = "<input type='text' value='" + content + "' id='workid" + index + "' name='workid" + index + "' />";
+			var idfield = "<input type='text' value='" + content + "' id='workid" + index + "' name='workid" + index + "' style='display: none;'' />";
 			return (idfield);
 		};
 
@@ -144,8 +150,8 @@
 					url: "/addrequirement/",
 					data: $(this).serializeArray(),
 					success: function(xml) {
-						$('#response').html(xml);
-						$('.work').remove();
+						$('#response').html('Saved with success');
+						$('#work_method_required').empty();
 						loadworks(xml);
 					}
 				});

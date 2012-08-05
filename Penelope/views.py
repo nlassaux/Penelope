@@ -344,15 +344,17 @@ def userasgroup(request, Assignment_id):
     return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
 
 
-# function to upload a file file with two methods : simple upload(1) and overwriting(2)
+# Function to upload a file file with two methods : simple upload(1) and overwriting(2)
 @login_required
 def uploadfile(request, Assignment_id):
     detailedassignment = Assignment.objects.get(id=Assignment_id)
 
+    # Verify if the firm deadline is past
     if detailedassignment.firm_deadline_past():
         return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
 
-    if (request.user not in detailedassignment.course.subscribed.all()) or not request.user.group_list.get(assignment=detailedassignment):
+    # Verify if the user is subscribed to the course and if he his in a group attached to the assignment.
+    if not (request.user in detailedassignment.course.subscribed.all()) or request.user.group_list.get(assignment=detailedassignment):
         return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
 
     # Test if a post request has been sent and save informations
@@ -380,6 +382,7 @@ def downloadfile(request, File_id):
     filename = downloadedfile.file.name.split('/')[-1]
     response = HttpResponse(downloadedfile.file, mimetype='application/octet-stream')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    
     return response
 
 
@@ -387,37 +390,34 @@ def downloadfile(request, File_id):
 @login_required
 def deletefile(request, File_id):
     deletedfile = file.objects.get(id=File_id)
-
     deletedfile.delete()
 
-    return redirect('Penelope.views.detailassignment', Assignment_id=deletedwork.group.assignment.id)
+    return redirect('Penelope.views.detailassignment', Assignment_id=deletedfile.group.assignment.id)
 
 
 @login_required
-def addrequirement(request):
+def addrequirement(request, Assignment_id):
     if request.method == 'POST':
-        editedassignment = Assignment.objects.get(id=request.POST['assignment_id'])
-        if request.POST['worknb'] != '0':
-            for i in range(1, int(request.POST.get('worknb')) +1):
+        editedassignment = Assignment.objects.get(id=Assignment_id)
+        if request.POST['requiredfilesnb'] != '0':
+            for i in range(1, int(request.POST.get('requiredfilesnb')) + 1):
                 try:
-                    required = Required.objects.get(id=request.POST.get('workid' + unicode(i)))
-                    required.name=request.POST.get('workname' + unicode(i))
-                    required.description=request.POST.get('workdescription' + unicode(i))
-                    required.type=request.POST.get('worktype' + unicode(i))
+                    required = RequiredFile.objects.get(id=request.POST.get('requiredfileid' + unicode(i)))
+                    required.name=request.POST.get('requiredfilename' + unicode(i))
+                    required.description=request.POST.get('requiredfiledescription' + unicode(i))
+                    required.type=request.POST.get('requiredfiletype' + unicode(i))
                     required.save()
                 except:
-                    required = Required(assignment=editedassignment,
-                        name=request.POST['workname' + unicode(i)],
-                        description=request.POST['workdescription' + unicode(i)],
-                        type=request.POST['worktype' + unicode(i)])
+                    required = RequiredFile(assignment=editedassignment,
+                        name=request.POST['requiredfilename' + unicode(i)],
+                        description=request.POST['requiredfiledescription' + unicode(i)],
+                        type=request.POST['requiredfiletype' + unicode(i)])
                     required.save()
 
-        data = list(Required.objects.filter(assignment=editedassignment))
-        response = serializers.serialize("xml", data)
-        return render(request, 'editassignment.html', locals())
+        return redirect('Penelope.views.editassignment', Assignment_id=Assignment_id)
 
     if request.method == 'GET':
         editedassignment = Assignment.objects.get(id=request.GET['assignment_id'])
-        data = list(Required.objects.filter(assignment=editedassignment))
+        data = list(RequiredFile.objects.filter(assignment=editedassignment))
         response = serializers.serialize("xml", data)
-        return render(request, 'editassignment.html', locals())
+        return HttpResponse(response)

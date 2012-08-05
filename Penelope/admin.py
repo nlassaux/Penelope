@@ -38,4 +38,4 @@ class FileAdmin(admin.ModelAdmin):
 admin.site.register(models.File, FileAdmin)
 
 
-admin.site.register(models.Required)
+admin.site.register(models.RequiredFile)

@@ -32,15 +32,15 @@ STATUS_CHOICES = (
 
 # List of assignments work management
 # (free = illimited files - Restricted = Planned uploads)
-WORK_METHOD_CHOICES = (
+METHOD_CHOICES = (
     ('free', 'Free'),
-    ('restricted', 'Restricted'),
+    ('required files', 'Required File'),
 )
 
 FILE_TYPE_CHOICES = (
-    ('none', 'None'),
-    ('pdf', 'PDF'),
-    ('tar.gz', 'Tar.gz'),
+    ('none', 'none'),
+    ('pdf', 'pdf'),
+    ('tar.gz', 'tar.gz'),
 )
 
 
@@ -88,12 +88,12 @@ class Assignment (models.Model):
     name = models.CharField(max_length=40)
     course = models.ForeignKey(Course, related_name='assignment')
     description = models.CharField(max_length=130)
-    firm_deadline = models.DateTimeField(blank=True)
-    official_deadline = models.DateTimeField(blank=True)
+    firm_deadline = models.DateTimeField(blank=True, null=True)
+    official_deadline = models.DateTimeField(blank=True, null=True)
     admins = models.ManyToManyField(User, limit_choices_to={'userprofile__status': 'teacher'})
     editdate = models.DateTimeField(auto_now=True)
     visible = models.BooleanField(blank=True)
-    work_method = models.CharField(max_length=10, choices=WORK_METHOD_CHOICES, default='free')
+    method = models.CharField(max_length=14, choices=METHOD_CHOICES, default='free')
 
     # In Admin panel : object = username.
     def __unicode__(self):
@@ -159,7 +159,7 @@ class File(models.Model):
         super(File, self).delete()
 
 
-class Required (models.Model):
+class RequiredFile (models.Model):
     file = models.OneToOneField(File, unique=True, blank=True, null=True)
     assignment = models.ForeignKey(Assignment)
     name = models.CharField(max_length=40)
@@ -197,7 +197,7 @@ class EditAssignmentForm (forms.ModelForm):
     class Meta:
         model = Assignment
         fields = ('name', 'description', 'official_deadline',
-                  'firm_deadline', 'admins', 'visible', 'work_method')
+                  'firm_deadline', 'admins', 'visible', 'method')
 
 
 # Definition of the form to add Assignments
@@ -205,7 +205,7 @@ class AddAssignmentForm (forms.ModelForm):
     class Meta:
         model = Assignment
         fields = ('name', 'description', 'official_deadline', 'firm_deadline',
-            'admins', 'visible', 'work_method')
+            'admins', 'visible', 'method')
 
 
 # The definition of the form to send files

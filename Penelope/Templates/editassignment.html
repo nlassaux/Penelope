@@ -1,6 +1,6 @@
 {% extends "base_log.html" %}
 {% load url from future %}
-{% block title %}Edit an assignment{% endblock %}
+{% block title %}Edit assignment{% endblock %}
 
 {% block breadcrumb %}
 
@@ -32,8 +32,8 @@
 				<dl>{{ form.firm_deadline }}</dl>
 				<dt><label for="id_admins"><strong>Admins :</strong></label></dt>
 				<dl>{{ form.admins }}</dl>
-				<dt><label for="id_work_method"><strong>Work method :</strong></label></dt>
-				<dl>{{ form.work_method }}</dl>
+				<dt><label for="id_method"><strong>Method :</strong></label></dt>
+				<dl>{{ form.method }}</dl>
 				<dt><label for="id_visible"><strong>Visible :</strong></label></dt>
 				<dl>{{ form.visible }}</dl>
 				<dt><input type="submit" value="Submit" class='btn btn-primary'/></dt>
@@ -42,15 +42,14 @@
 	</div>
 
 
-	<div class='panel pull-right span6'>
-		<h2>Work management</h2>
-		<form id='ajax_form' method="post">{% csrf_token %}
+	<div class='panel span6'>
+		<h2>Required files management</h2>
+		<form id='ajax_form' name='ajax_form' method="post" action='/works/{{editedassignment.id}}/addrequirement/' >{% csrf_token %}
 			<input type="text" id='assignment_id' value='{{editedassignment.id}}' name='assignment_id' style="display: none;"/>
-			<input type="text" id='worknb' name='worknb' style="display: none;" />
+			<input type="text" id='requiredfilesnb' name='requiredfilesnb' style="display: none;" />
 			<input type="submit" id='savebtn' value="Save" class='btn'/>
-			<div id='work_method_required'></div>
+			<a id='addfilebtn' class='btn'>Add a requirement</a>
 		</form>
-		<a id='addfilebtn' class='btn'>Add a requirement</a>
 		<p style='color: #46a546;' id='response'></p>
 	</div>
 
@@ -59,104 +58,96 @@
 {% block scripts %}
 	<script type="text/javascript">
 
-			// These lines are executed when the document has been loaded
+		// These lines are executed when the document has been loaded
 		$('#addfilebtn').click(function(){
-			addwork('','','','');
+			addrequiredfile('','','','');
 		});
-		$('#worknb').val($(".work").length);
-		$('#savebtn').click(ajaxrequest);
-		$('#id_work_method').change(change_text);
+		$('#requiredfilesnb').val($(".requiredfile").length);
+		$('#id_method').change(change_text);
 		change_text();
 
+		// An ajax request to load requiredFilesFields
 		$.ajax({
 				type: "GET",
-				url: "/addrequirement/",
+				url: "/works/" + $('#assignment_id').val() + "/addrequirement/",
 				data: {assignment_id:$('#assignment_id').val()},
 				success: function(xml) {
-					loadworks(xml);
+					loadrequiredfiles(xml);
 				}
 		});
 
-		// Apply effects when we change value of workmethod select
+		// Apply effects when we change value of method select
 		function change_text() {
-			if ($('#id_work_method').val() == 'free') {
-				$('#addfilebtn').hide();
-				$('#savebtn').hide();
-				$('#work_method_explain_free').show();
-				$('#work_method_required').empty();
+			if ($('#id_method').val() == 'free') {
+				$('#ajax_form').hide();
 			} else {
-				$('#work_method_explain_required').show();
-				$('#addfilebtn').show();
-				$('#savebtn').show();
+				$('#ajax_form').show();
 			}
 		};
 
 		// Read XML response to build an edit form
-		function loadworks(xml) {
+		function loadrequiredfiles(xml) {
 			test = $(xml).find('object').each(function(){
 				var id = $(this).attr('pk');
 				var name = $(this).find("field[name='name']").text();
 				var description = $(this).find("field[name='description']").text();
 				var type = $(this).find("field[name='type']").text();
-				addwork(id, name, description, type);
-				$('#worknb').val($(".work").length);
+				addrequiredfile(id, name, description, type);
+				$('#requiredfilesnb').val($(".requiredfile").length);
 			});
 		}
 
-		// Add an empty form with : id, name, description and type fields. Hide id field.
-		function addwork(id, name, description, type) {
-			var nextworknb = $(".work").length + 1;
 
-			addworkclass('#work_method_required');
-			$('.work:last').append(idfield(id, nextworknb) + namefield(name,nextworknb) + descriptionfield(description, nextworknb) + typefield(type,nextworknb));
-			$('#worknb').val($(".work").length);
+		// *****************************************************
+		//
+		//									Add required file function
+		//
+		// *****************************************************
+
+		// Add an empty form with : id, name, description and type fields. Hide id field
+		function addrequiredfile(id, name, description, type) {
+			// the id and name of all fields is dynamically set with that value
+			var nextid = $(".requiredfile").length + 1;
+
+			addrequiredfileclass('#ajax_form');
+			addidfield('.requiredfile:last', id, nextid);
+			addnamefield('.requiredfile:last', name, nextid);
+			adddescriptionfield('.requiredfile:last', description, nextid);
+			addtypefield('.requiredfile:last', type, nextid);
+
+			// set to 'requiredfilenb' field the number of required file as value to be used after POST send
+			$('#requiredfilesnb').val($(".requiredfile").length);
 		};
 
-		// create new <div class='work'></div> in a parent
-		function addworkclass(parent){
-			$(parent).append("<div class='work under_panel'></div>");
-
+		// create new <div class='requiredfile'></div> in a parent
+		function addrequiredfileclass(parent){
+			$(parent).append("<div class='requiredfile under_panel'></div>");
 		};
 
-		// return a name field with a value (content), and an index(index) to add to id 
-		function namefield(content, index){
-			var namefield = "<label>Name :</label><input type='text' value='" + content + "' name='workname" + index + "' />";
-			return (namefield);
+		// return an id field with a value (content), and an index(index) to add to parent
+		function addidfield(parent, content, index){
+			var idfield = "<input type='text' value='" + content + "' id='requiredfileid" + index + "' name='requiredfileid" + index + "' style='display: none;''/>";
+			$(parent).append(idfield);
 		};
 
-		// return an id field with a value (content), and an index(index) to add to id 
-		function idfield(content, index){
-			var idfield = "<input type='text' value='" + content + "' id='workid" + index + "' name='workid" + index + "' style='display: none;'' />";
-			return (idfield);
+		// return a name field with a value (content), and an index(index) to add to parent
+		function addnamefield(parent, content, index){
+			var namefield = "<label>Name :</label><input type='text' value='" + content + "' name='requiredfilename" + index + "'/>";
+			$(parent).append(namefield);
 		};
 
-		// return a description field with a value (content), and an index(index) to add to id 
-		function descriptionfield(content, index){
-			var descriptionfield = "<label>Description :</label><textarea class='input-xlarge' name='workdescription" + index + "' rows='3'>" + content + "</textarea>";
-			return (descriptionfield);
+		// return a description field with a value (content), and an index(index) to add to parent
+		function adddescriptionfield(parent, content, index){
+			var descriptionfield = "<label>Description :</label><textarea class='input-xlarge' name='requiredfiledescription" + index + "' rows='3'>" + content + "</textarea>";
+			$(parent).append(descriptionfield);
 		};
 
-		// return a type field with a value (content), and an index(index) to add to id 
-		function typefield(content, index){
-			var typefield = "<label>Type :</label><select value='" + content + "' name='worktype" + index + "'><option value='none'>None</option><option value='tar_gz'>Tar.gz</option><option value='pdf'>PDF</option></select>";
-			return (typefield);
-		};
+		// return a type field with a value (content), and an index(index) to add to parent
+		function addtypefield(parent, content, index){
+			var typefield = "<label>Type :</label><select name='requiredfiletype" + index + "'><option value='none'>none</option><option value='tar.gz'>tar.gz</option><option value='pdf'>pdf</option></select>";
+			$(parent).append(typefield);
+			$('select:last').val(content);
 
-		// Build an ajax request with value of ajax_form's fields serialized
-		function ajaxrequest() {
-			$("#ajax_form").submit( function() {
-				$.ajax({  
-					type: "POST",
-					url: "/addrequirement/",
-					data: $(this).serializeArray(),
-					success: function(xml) {
-						$('#response').html('Saved with success');
-						$('#work_method_required').empty();
-						loadworks(xml);
-					}
-				});
-				return false;
-			});
 		};
 
 	</script>

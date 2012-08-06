@@ -26,7 +26,7 @@
     </div>
 
   <div class='row'>
-    <div class='span8 panel'>
+    <div class='span9 panel'>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -48,14 +48,14 @@
     </div>
 
  {% if user == detailedcourse.owner %}
-    <div class='span3 panel pull-right'>
+    <div class='panel pull-right'>
       <ul class="nav nav-list">
         <li class="nav-header">Administration</li>
         <li><a href="/{{detailedcourse.id}}/editcourse"><i class="icon-pencil"></i> Edit course</a></li>
-        <li><a href="#DeleteModal" data-toggle="modal"><i class="icon-remove-sign"></i> Delete</a></li>
-        <li><a href="/{{detailedcourse.id}}/changeowner/"><i class="icon-share"></i> Change the owner</a></li>
         <li><a href="/{{detailedcourse.id}}/addstudents/"><i class="icon-list"></i> Change subscribed</a></li>
         <li><a href="/assignments/{{detailedcourse.id}}/add/"><i class="icon-plus-sign"></i> New assignment</a></li>
+        <li><a href="/{{detailedcourse.id}}/changeowner/"><i class="icon-share"></i> Change the owner</a></li>
+        <li><a href="#DeleteModal" data-toggle="modal"><i class="icon-remove-sign"></i> Delete course</a></li>
       </ul>
     </div>
   </div>

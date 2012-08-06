@@ -7,11 +7,26 @@ body {
     text-align: center;
 }
 
+.swift {
+	margin-left: 70px;
+}
+
 .breadcrumb {
-	position: fixed;
-	width: 100%;
 	margin-top: -45px;
-	padding-left: 150px;
+	padding-left: 120px;
+}
+
+@media (max-width: 980px) {
+.breadcrumb{
+	margin-top: -20px;
+	padding-left: 5px;
+}
+}
+
+@media (max-width: 800px) {
+.breadcrumb{
+	margin-top: -18px;
+}
 }
 
 .infos {
@@ -33,6 +48,7 @@ body {
 	box-shadow: 0px 3px 7px #ddd; 
 	-webkit-border-radius: 4px;
   	-moz-border-radius: 4px;
+  	margin-bottom: 20px;
 }
 
 .under_panel {
@@ -42,6 +58,10 @@ body {
 	-webkit-border-radius: 3px;
   	-moz-border-radius: 3px;
   	margin : 10px 0px;
+}
+
+.panel > .nav {
+	width : 200px;
 }
 
 .panel > .nav > li > a:hover {
@@ -55,8 +75,6 @@ body {
 	background-image: -o-linear-gradient(top, #ffffff, #0088cc);
 	background-image: linear-gradient(top, #ffffff, #0088cc);
 	background-repeat: repeat-x;
-	border: 1px solid #cccccc;
-	margin: -1px 0px;
 	border-bottom-color: #b3b3b3;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;

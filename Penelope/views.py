@@ -163,11 +163,9 @@ def clearallstudents(request, Course_id):
     if request.user != editedcourse.owner:
         return redirect('Penelope.views.home')
 
-    groups_list = Group.objects.filter(assignment__in=editedcourse.assignment.all())
-    for group in groups_list:
-        group.delete()
+    for user in User.objects.filter(editedcourse__in=course_list):
+        user.course_list.remove(editedcourse)
 
-    subscribed = editedcourse.subscribed.clear()
 
     return redirect('Penelope.views.detailcourse', Course_id=Course_id)
 

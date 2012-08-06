@@ -9,9 +9,10 @@
     <link href="{{STATIC_URL}}/css/stylecss.css" rel="stylesheet" type="text/css" media="all">
     <script src="{{STATIC_URL}}/bootstrap/js/jquery.js"></script>
     <script src="{{STATIC_URL}}/bootstrap/js/bootstrap.js"></script>
+    <link href="{{STATIC_URL}}/bootstrap/css/bootstrap-responsive.css" rel="stylesheet" type="text/css" media="all">
   </head>
 
-  <body>
+  <body style=''>
 		{% block id %}{% endblock %}
     {% block breadcrumb %}{% endblock %}
 		<div class="container">{% block content %}{% endblock %}</div>

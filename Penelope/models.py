@@ -143,6 +143,7 @@ class File(models.Model):
                 'Group ' + unicode(instance.group.id), filename])
 
     file = models.FileField(storage=OverwriteStorage(), upload_to=path)
+    requiredfile = models.ForeignKey('RequiredFile', blank=True, null=True)
     group = models.ForeignKey(Group, related_name='file_list')
     uploader = models.ForeignKey(User)
     editdate = models.DateTimeField(auto_now=True)
@@ -152,15 +153,14 @@ class File(models.Model):
 
     # Overwrite delete() function to delete the file before delete the model'enter
     def delete(self):
-        try :
+        try:
             self.file.delete()
-        except :
+        except:
             pass
         super(File, self).delete()
 
 
 class RequiredFile (models.Model):
-    file = models.OneToOneField(File, unique=True, blank=True, null=True)
     assignment = models.ForeignKey(Assignment)
     name = models.CharField(max_length=40)
     description = models.CharField(max_length=100, blank=True, null=True)
@@ -213,4 +213,3 @@ class UploadFileForm(forms.ModelForm):
     class Meta:
         model = File
         fields = ('file',)
-

@@ -8,6 +8,7 @@ Penelope is a platform developed with Django for education. It is an inteface fo
 - Assignments linked to courses.
 - Students' Groups system to work on assignments.
 - Upload of work on the server, with updates until deadline.
+- Ask for some required files with a name, description and filetype.
 
 
 Softwares:
@@ -24,17 +25,32 @@ Organisation :
 -- -- Penelope (project)
 
 
-Todo :
+Todo (french):
 ====
 
-- Uniformise : models's name, files.
-- New group : Grid / Matrix / Columns UI.
-- Verify that all users have a group (else new message).
-- Overwrite work files.
-- Teachers can download an archive.
+- Fusion rôles avec ceux de Django
+- Bouton ajout étudiant sur la page editgroup
+- Download tous les devoirs
+- Download tous les fichiers d'un groupe
+- Suppression d'un subscribed --> suppression dans les groupes de l'user
+- Finir le DnD avec AJAX
+- Verifier toutes les URL
+- Modifier l'intégration des modals-box dans les pages de consultation de fichiers
+- Vérifier les titres de page
+- Factoriser le broadcrumb
+- Ajouter la taille limite d'upload (50Mb ou au choix)
+- Les owners des cours peuvent ajouter des admins
+- Choisir les admins des assignments : ne pas mettre l'owner.
+- Ajout des requirements (name - description - type : none, pdf, tar.gz) 
 
--- Before production :
--- -- Change js and css files with compressed
+
+
+Bug :
+===
+
+- Clear all students
+
+
 
 
 Installation :
@@ -50,9 +66,6 @@ Notes :
 
 - The code have been verified to perform with future versions of django (no depreciated code).
 - The Script AddUser.py can add students and teachers to the db, use - python manage.py shell and import the file.
-
-Questions (Français) :
-=========
 
 
 

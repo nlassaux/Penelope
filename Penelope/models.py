@@ -12,7 +12,7 @@ import datetime
 import os
 
 
-# Create the list of years from 2O11 to year progress + 5.
+# Create the list of years from 2O11 to year progress + 2.
 start_date = '2011'
 date = datetime.datetime.now()
 end_date = date.year + 2
@@ -90,7 +90,7 @@ class Assignment (models.Model):
     description = models.CharField(max_length=130)
     firm_deadline = models.DateTimeField(blank=True, null=True)
     official_deadline = models.DateTimeField(blank=True, null=True)
-    admins = models.ManyToManyField(User, limit_choices_to={'userprofile__status': 'teacher'})
+    admins = models.ManyToManyField(User, blank=True, null=True,limit_choices_to={'userprofile__status': 'teacher'})
     editdate = models.DateTimeField(auto_now=True)
     visible = models.BooleanField(blank=True)
     method = models.CharField(max_length=14, choices=METHOD_CHOICES, default='free')
@@ -99,12 +99,14 @@ class Assignment (models.Model):
     def __unicode__(self):
         return self.name
 
+    # A variable True if official deadline date is in past
     def official_deadline_past(self):
         if self.official_deadline:
             if datetime.datetime.now() >= self.official_deadline:
                 return True
         return False
 
+    # A variable True if firm deadline date is in past
     def firm_deadline_past(self):
         if self.firm_deadline:
             if  datetime.datetime.now() >= self.firm_deadline:
@@ -112,7 +114,7 @@ class Assignment (models.Model):
         return False
 
 
-# The definition of the class Group
+# The definition of the model Group
 class Group(models.Model):
     name = models.CharField(max_length=30)
     assignment = models.ForeignKey(Assignment)
@@ -122,13 +124,16 @@ class Group(models.Model):
     def __unicode__(self):
         return self.name
 
+    # The name_id is a classic name with Group + ID (of the group)
     def name_id(self):
         ID = u'%s' % self.id
         return 'Group ' + ID
 
 
+# The definition of the model File
 class File(models.Model):
 
+    # That define the filename as the real name of the file without path
     def filename(self):
         return os.path.basename(self.file.name)
 
@@ -148,6 +153,7 @@ class File(models.Model):
     uploader = models.ForeignKey(User)
     editdate = models.DateTimeField(auto_now=True)
 
+    # In Admin panel : object = file.name
     def __unicode__(self):
         return self.file.name
 
@@ -160,6 +166,7 @@ class File(models.Model):
         super(File, self).delete()
 
 
+# The definition of the model RequiredFile
 class RequiredFile (models.Model):
     assignment = models.ForeignKey(Assignment)
     name = models.CharField(max_length=40)

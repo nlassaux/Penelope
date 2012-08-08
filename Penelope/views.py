@@ -41,6 +41,7 @@ def disconnection(request):
 @login_required
 def home(request):
     mycourse_list = Course.objects.filter(owner=request.user)
+
     # Call the .html
     return render(request, 'dashboard.html', locals())
 
@@ -64,6 +65,7 @@ def newcourse(request):
             save.owner = request.user
             save = form.save()
             return redirect('Penelope.views.detailcourse', Course_id=save.id)
+
     # Call the .html with informations to insert
     return render(request, 'newcourse.html', locals())
 
@@ -93,7 +95,7 @@ def editcourse(request, Course_id):
     if request.user != editedcourse.owner:
         return redirect('Penelope.views.home')
 
-    # Use the model CourseForm
+    # Use the model CourseForm with as initial values them of editedcourse
     form = CourseForm(instance=editedcourse)
     # Test if its a POST request
     if request.method == 'POST':
@@ -116,7 +118,7 @@ def changeowner(request, Course_id):
     if request.user != editedcourse.owner:
         return redirect('Penelope.views.home')
 
-    # Use the model ChangeCourseOwnerForm
+    # Use the model ChangeCourseOwnerForm with as initial values them of editedcourse
     form = ChangeCourseOwnerForm(instance=editedcourse)
     # Test if its a POST request.
     if request.method == 'POST':
@@ -139,7 +141,7 @@ def addstudents(request, Course_id):
     if request.user != editedcourse.owner:
         return redirect('Penelope.views.home')
 
-    # Use the model AssSubscribedForm
+    # Use the model AssSubscribedForm with as initial values them of editedcourse
     form = AddSubscribedForm(instance=editedcourse)
 
     # Test if its a POST request
@@ -165,7 +167,6 @@ def clearallstudents(request, Course_id):
 
     for user in User.objects.filter(editedcourse__in=course_list):
         user.course_list.remove(editedcourse)
-
 
     return redirect('Penelope.views.detailcourse', Course_id=Course_id)
 
@@ -204,6 +205,7 @@ def editassignment(request, Assignment_id):
             # Save the assignment
             form.save()
             return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
+
     # Call the .html with informations to insert (with locals())
     return render(request, 'editassignment.html', locals())
 
@@ -225,6 +227,9 @@ def detailassignment(request, Assignment_id):
         mygroup = request.user.group_list.filter(assignment=detailedassignment)
         memberlist = User.objects.filter(group_list__id=mygroup)
         groupfile = File.objects.filter(group=mygroup)
+        if detailedassignment.method == 'required files':
+            for required in detailedassignment.requiredfile_set.all():
+                name = 'fileassociate' + unicode(required.id)
 
     # If the user is a teacher, we load the list of users without groups.
     else:
@@ -256,6 +261,7 @@ def addassignment(request, Course_id):
             save.course = Course.objects.get(id=Course_id)
             save = form.save()
             return redirect('Penelope.views.detailassignment', Assignment_id=save.id)
+
     # Call the .html with informations to insert
     return render(request, 'addassignment.html', locals())
 
@@ -271,6 +277,7 @@ def deleteassignment(request, Assignment_id):
         return redirect('Penelope.views.home')
 
     deletedassignment.delete()
+
     return redirect('Penelope.views.detailcourse', Course_id=deletedassignment.course.id)
 
 
@@ -344,7 +351,7 @@ def userasgroup(request, Assignment_id):
 
 # Function to upload a file file with two methods : simple upload(1) and overwriting(2)
 @login_required
-def uploadfile(request, Assignment_id):
+def uploadfile(request, Assignment_id, RequiredFile_id):
     detailedassignment = Assignment.objects.get(id=Assignment_id)
 
     # Verify if the firm deadline is past
@@ -352,7 +359,7 @@ def uploadfile(request, Assignment_id):
         return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
 
     # Verify if the user is subscribed to the course and if he his in a group attached to the assignment.
-    if not (request.user in detailedassignment.course.subscribed.all()) or request.user.group_list.get(assignment=detailedassignment):
+    if (detailedassignment.course not in request.user.course_list.all()) or not request.user.group_list.get(assignment=detailedassignment):
         return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
 
     # Test if a post request has been sent and save informations
@@ -366,9 +373,15 @@ def uploadfile(request, Assignment_id):
                 if file.filename() == request.FILES['file'].name:
                     file.delete()
 
-            # Upload and overwrite if the same file's name exists
-            addfile = File(file=request.FILES['file'], group=mygroup, uploader=request.user)
-            addfile.save()
+        # 0 sent by get if no requirement and the id of requirement in other cases
+        if RequiredFile_id == '0':
+            requirement = None
+        else:
+            requirement = RequiredFile.objects.get(id=RequiredFile_id)
+
+        # Upload and overwrite if the same file's name exists
+        addfile = File(file=request.FILES['file'], group=mygroup, uploader=request.user, requiredfile=requirement)
+        addfile.save()
 
     return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
 
@@ -380,42 +393,45 @@ def downloadfile(request, File_id):
     filename = downloadedfile.file.name.split('/')[-1]
     response = HttpResponse(downloadedfile.file, mimetype='application/octet-stream')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
-    
+
     return response
 
 
 # Page to delete a file
 @login_required
 def deletefile(request, File_id):
-    deletedfile = file.objects.get(id=File_id)
+    deletedfile = File.objects.get(id=File_id)
     deletedfile.delete()
 
     return redirect('Penelope.views.detailassignment', Assignment_id=deletedfile.group.assignment.id)
 
 
+# Use Post informations to add rew requirements and update existing ones.
 @login_required
 def addrequirement(request, Assignment_id):
     if request.method == 'POST':
         editedassignment = Assignment.objects.get(id=Assignment_id)
-        if request.POST['requiredfilesnb'] != '0':
-            for i in range(1, int(request.POST.get('requiredfilesnb')) + 1):
-                try:
-                    required = RequiredFile.objects.get(id=request.POST.get('requiredfileid' + unicode(i)))
-                    required.name=request.POST.get('requiredfilename' + unicode(i))
-                    required.description=request.POST.get('requiredfiledescription' + unicode(i))
-                    required.type=request.POST.get('requiredfiletype' + unicode(i))
-                    required.save()
-                except:
-                    required = RequiredFile(assignment=editedassignment,
-                        name=request.POST['requiredfilename' + unicode(i)],
-                        description=request.POST['requiredfiledescription' + unicode(i)],
-                        type=request.POST['requiredfiletype' + unicode(i)])
-                    required.save()
+        for i in range(1, int(request.POST.get('requiredfilesnb')) + 1):
+            try:
+                required = RequiredFile.objects.get(id=request.POST.get('requiredfileid' + unicode(i)))
+                required.name = request.POST.get('requiredfilename' + unicode(i))
+                required.description = request.POST.get('requiredfiledescription' + unicode(i))
+                required.type = request.POST.get('requiredfiletype' + unicode(i))
+                required.save()
+            except:
+                required = RequiredFile(assignment=editedassignment,
+                    name=request.POST['requiredfilename' + unicode(i)],
+                    description=request.POST['requiredfiledescription' + unicode(i)],
+                    type=request.POST['requiredfiletype' + unicode(i)])
+                required.save()
 
         return redirect('Penelope.views.editassignment', Assignment_id=Assignment_id)
 
+    # This is used by ajax request in get to load all fields of forms with required objects
     if request.method == 'GET':
         editedassignment = Assignment.objects.get(id=request.GET['assignment_id'])
+        # Send a xml formated file with required objects
         data = list(RequiredFile.objects.filter(assignment=editedassignment))
         response = serializers.serialize("xml", data)
+
         return HttpResponse(response)

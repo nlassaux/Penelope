@@ -115,7 +115,7 @@ WSGI_APPLICATION = 'Penelope.wsgi.application'
 
 TEMPLATE_DIRS = (
     # Apps must be before the Penelope to overwrite template (search in order)
-    'Penelope/templates',
+    'Penelope/Templates',
     #'/Users/Nicolas/Virtualenvs/LaBRI/lib/python2.7/site-packages/debug_toolbar/templates',
 )
 

@@ -109,10 +109,51 @@
 						{% endif %}
 						<strong>Type : </strong>{{requiredfile.type}}
 						<div class='drop_zone'>
+							{% for file in groupfile %}
+								{% if file in requiredfile.file_set.all %}
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Name</th>
+												<th>Uploader</th>
+												<th>Size</th>
+												<th>Upload date</th>
+												<th></th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody>
+												<tr>
+								        	<td>{{ file.filename }}</td>
+								        	<td>{{ file.uploader }}</td>
+								        	{% load functions %}
+								        	<td>{% number_human file.file.size %} Octets</td>
+								        	<td>{{ file.editdate }}</td>
+								        	<td><a href='/works/{{ file.id }}/download'><i class='icon-download'></i></a></td>
+								        	<td><a data-target='#DeleteFileModal{{file.id}}' data-toggle="modal"><i class="icon-remove"></i></a></td>
+												</tr>
+											<div class="modal hide" id="DeleteFileModal{{file.id}}">
+											  <div class="modal-header">
+											    <button type="button" class="close" data-dismiss="modal">×</button>
+											    <h3>Delete the file</h3>
+											  </div>
+											  <div class="modal-body">
+											    <p>Are you sure you want to delete your file ?</p>
+											  </div>
+											  <div class="modal-footer">
+											    <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+											    <a href="/works/{{file.id}}/delete" class="btn btn-danger">Delete</a>
+											  </div>
+												</div>
+										</tbody>
+									</table>
+								{% endif %}
+							{% endfor %}
 						</div>
-						<form action="/works/{{detailedassignment.id}}/upload/" method="post" enctype="multipart/form-data">{% csrf_token %}
-						<input type=file ></input>
-						<input type="submit" value="Submit" class='btn btn-primary swift' />
+						<form action="/works/{{detailedassignment.id}}/{{ requiredfile.id }}/upload/" method="post" enctype="multipart/form-data">{% csrf_token %}
+							{{form.file}}
+							<input type="submit" value="Submit" class='btn btn-primary swift' />
+						</form>
 					</div>
 				{% endfor %}
 		</div>
@@ -160,7 +201,7 @@
 				{% if mygroup and not detailedassignment.firm_deadline_past %}
 					<hr>
 					<h4>Upload</h4>
-					<form action="/works/{{detailedassignment.id}}/upload/" method="post" enctype="multipart/form-data">{% csrf_token %}
+					<form action="/works/{{detailedassignment.id}}/0/upload/" method="post" enctype="multipart/form-data">{% csrf_token %}
 						{{form.file}}
 					<input type="submit" value="Submit" class='btn btn-primary swift' />
 				{% endif %}

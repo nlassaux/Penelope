@@ -165,8 +165,9 @@ def clearallstudents(request, Course_id):
     if request.user != editedcourse.owner:
         return redirect('Penelope.views.home')
 
-    for user in User.objects.filter(editedcourse__in=course_list):
-        user.course_list.remove(editedcourse)
+    test = editedcourse.subscribed.all()
+    for user in test:
+        test = editedcourse.subscribed.remove(user)
 
     return redirect('Penelope.views.detailcourse', Course_id=Course_id)
 
@@ -362,26 +363,33 @@ def uploadfile(request, Assignment_id, RequiredFile_id):
     if (detailedassignment.course not in request.user.course_list.all()) or not request.user.group_list.get(assignment=detailedassignment):
         return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
 
+    mygroup = request.user.group_list.get(assignment=detailedassignment)
+
     # Test if a post request has been sent and save informations
     if request.method == 'POST':
-        mygroup = request.user.group_list.get(assignment=detailedassignment)
         form = UploadFileForm(request.POST, request.FILES)
 
         if form.is_valid():
             groupfile = mygroup.file_list.all()
-            for file in groupfile:
-                if file.filename() == request.FILES['file'].name:
+
+            if RequiredFile_id == '0':
+                # The file is not associated with a requirement
+                requirement = None
+                # We delete all group's files with same name before the upload
+                for file in groupfile:
+                    if file.filename() == request.FILES['file'].name:
+                        file.delete()
+
+            else:
+                # The file will be associated to a requirement
+                requirement = RequiredFile.objects.get(id=RequiredFile_id)
+                # We delete other files associated with this requirement
+                for file in groupfile.filter(requiredfile=requirement):
                     file.delete()
 
-        # 0 sent by get if no requirement and the id of requirement in other cases
-        if RequiredFile_id == '0':
-            requirement = None
-        else:
-            requirement = RequiredFile.objects.get(id=RequiredFile_id)
-
-        # Upload and overwrite if the same file's name exists
-        addfile = File(file=request.FILES['file'], group=mygroup, uploader=request.user, requiredfile=requirement)
-        addfile.save()
+            # Upload and overwrite if the same file's name exists
+            addfile = File(file=request.FILES['file'], group=mygroup, uploader=request.user, requiredfile=requirement)
+            addfile.save()
 
     return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
 

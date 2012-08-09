@@ -1,18 +1,15 @@
 from django.core.files.storage import FileSystemStorage
 from django.db.models.signals import post_save
-from django.forms.widgets import PasswordInput
 from django.contrib.auth.models import User
-from django.dispatch import receiver
 from django.core.files import *
 from django.db import models
 from django import forms
-from models import *
-from settings import *
+from settings import MEDIA_ROOT
 import datetime
 import os
 
 
-# Create the list of years from 2O11 to year progress + 2.
+# Create the list of years from 2O11 to actual year + 2.
 start_date = '2011'
 date = datetime.datetime.now()
 end_date = date.year + 2
@@ -31,12 +28,13 @@ STATUS_CHOICES = (
 )
 
 # List of assignments work management
-# (free = illimited files - Restricted = Planned uploads)
+# (free = illimited files - required files = Planned uploads)
 METHOD_CHOICES = (
     ('free', 'Free'),
     ('required files', 'Required File'),
 )
 
+# List of possibilities for RequiredFile's file type
 FILE_TYPE_CHOICES = (
     ('none', 'none'),
     ('pdf', 'pdf'),
@@ -44,12 +42,12 @@ FILE_TYPE_CHOICES = (
 )
 
 
+# Add a behavior to File management. It removes file when a file objecct is removed in db
 class OverwriteStorage(FileSystemStorage):
     def get_available_name(self, name):
-        # If the filename already exists, remove it as if it was a
-        # true file system
+        # If the filename already exists, removes it
         if self.exists(name):
-            os.remove(os.path.join(settings.MEDIA_ROOT, name))
+            os.remove(os.path.join(MEDIA_ROOT, name))
         return name
 
 
@@ -90,7 +88,7 @@ class Assignment (models.Model):
     description = models.CharField(max_length=130)
     firm_deadline = models.DateTimeField(blank=True, null=True)
     official_deadline = models.DateTimeField(blank=True, null=True)
-    admins = models.ManyToManyField(User, blank=True, null=True,limit_choices_to={'userprofile__status': 'teacher'})
+    admins = models.ManyToManyField(User, blank=True, null=True, limit_choices_to={'userprofile__status': 'teacher'})
     editdate = models.DateTimeField(auto_now=True)
     visible = models.BooleanField(blank=True)
     method = models.CharField(max_length=14, choices=METHOD_CHOICES, default='free')
@@ -101,16 +99,16 @@ class Assignment (models.Model):
 
     # A variable True if official deadline date is in past
     def official_deadline_past(self):
-        if self.official_deadline:
-            if datetime.datetime.now() >= self.official_deadline:
-                return True
+        # Verify official deadline exists and has been passed.
+        if (self.official_deadline) and (datetime.datetime.now() >= self.official_deadline):
+            return True
         return False
 
     # A variable True if firm deadline date is in past
     def firm_deadline_past(self):
-        if self.firm_deadline:
-            if  datetime.datetime.now() >= self.firm_deadline:
-                return True
+        # Verify firm deadline exists and has been passed.
+        if (self.firm_deadline) and (datetime.datetime.now() >= self.firm_deadline):
+            return True
         return False
 
 

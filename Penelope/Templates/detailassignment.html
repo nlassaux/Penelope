@@ -16,7 +16,7 @@
 
 	<div class="page-header">
   	<div class='row'>
-			<h1 class='span9'>{{detailedassignment.name}} <small>{{detailedassignment.description}}</small></h1>
+			<h1 class='span8'>{{detailedassignment.name}} <small>{{detailedassignment.description}}</small></h1>
 
 	    <div class='infos pull-right'>
 		    <strong>Last edit</strong> {{detailedassignment.editdate}}
@@ -30,8 +30,8 @@
 
 	{% if user == detailedassignment.course.owner %}
 		<div class="row">
-			<div class='span9 panel'>
-				{% if detailedassignment.method == 'required files' %}
+			{% if detailedassignment.method == 'required files' %}
+				<div class='span8 panel'>
 					<table class="table table-striped">
 						<thead>
 							<tr>
@@ -50,17 +50,19 @@
 							{% endfor %}
 						</tbody>
 					</table>
-				{% endif %}
-			</div>
+				</div>
+			{% endif %}
 			<div class='pull-right panel'>
 				<ul class="nav nav-list">
-	        <li class="nav-header">Administration</li>
-	        <li><a href="/groups/{{detailedassignment.id}}/edit/"><i class="icon-briefcase"></i> Change groups</a></li>
-	        <li><a href="/assignments/{{detailedassignment.id}}/edit/"><i class="icon-pencil"></i> Edit assignment</a></li>
-	        <li><a href="#DeleteAssignmentModal" data-toggle="modal"><i class="icon-remove-sign"></i> Delete assignment</a></li>
+			        <li class="nav-header">Administration</li>
+			        <li><a href="/groups/{{detailedassignment.id}}/edit/"><i class="icon-briefcase"></i> Change groups</a></li>
+			        <li><a href="/assignments/{{detailedassignment.id}}/edit/"><i class="icon-pencil"></i> Edit assignment</a></li>
+			        <li><a href="#DeleteAssignmentModal" data-toggle="modal"><i class="icon-remove-sign"></i> Delete assignment</a></li>
+			        <hr>
+			        <li><a href='/works/{{detailedassignment.id}}/downloadallfiles/' ><i class='icon-inbox'></i> Download all files</a></li>
 			  </ul>
 			</div>
-			<div class='span9 panel'>
+			<div class='span8 panel'>
 				{% if detailedassignment.group_set.all %}
 					<table class="table table-striped">
 						<thead>
@@ -100,7 +102,7 @@
 
 	<div class="row">
 		{% if detailedassignment.method == 'required files' %}
-		<div class='span9'>
+		<div class='span8'>
 				{% for requiredfile in detailedassignment.requiredfile_set.all %}
 					<div class='panel'>
 						<strong>Name : </strong>{{requiredfile.name}} -
@@ -158,7 +160,7 @@
 				{% endfor %}
 		</div>
 		{% else %}
-			<div class='span9 panel'>
+			<div class='span8 panel'>
 				<h4>Group's files</h4>
 				<table class="table table-striped">
 					<thead>

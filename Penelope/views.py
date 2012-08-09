@@ -2,6 +2,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
+from django.core.files.temp import NamedTemporaryFile
+from shutil import make_archive
 from django.http import HttpResponse
 from django.core import serializers
 from models import *
@@ -401,6 +403,23 @@ def downloadfile(request, File_id):
     filename = downloadedfile.file.name.split('/')[-1]
     response = HttpResponse(downloadedfile.file, mimetype='application/octet-stream')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
+
+    return response
+
+
+# Page to download all assignment's files
+@login_required
+def downloadallfiles(request, Assignment_id):
+    downloadedassignment = Assignment.objects.get(id=Assignment_id)
+    archive_name = downloadedassignment.name + '_' + unicode(downloadedassignment.id)
+    root_dir = MEDIA_ROOT + '/' + '/'.join(['Work',
+                downloadedassignment.course.name + '_' +
+                unicode(downloadedassignment.course.id),
+                downloadedassignment.name + '_' +
+                unicode(downloadedassignment.id)])
+    data = open(make_archive(COMPRESSED_ROOT + '/' + archive_name, 'zip', root_dir)).read()
+    response = HttpResponse(data, mimetype='application/octet-stream')
+    response['Content-Disposition'] = 'attachment; filename=%s' % downloadedassignment.name + '.zip'
 
     return response
 

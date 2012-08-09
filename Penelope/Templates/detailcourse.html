@@ -13,57 +13,63 @@
 
 {% block content %}
 
-    <div class="page-header">
-      <div class='row'>
-        <h1 class='span7'>{{detailedcourse.name}}
-        <small>{{detailedcourse.description}}</small></h1>
-        <div class=' infos pull-right'>
-          <strong>Teacher : </strong> {{detailedcourse.owner}}
-          <strong>Years : </strong> {{detailedcourse.years}}
-          <strong>Last edit : </strong> {{detailedcourse.editdate}}
-        </div>
-      </div>
-    </div>
-
   <div class='row'>
-    <div class='span9 panel'>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Assignments :</th>
-            <th>Deadline</th>
-            <th>Last edit</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for assignment in assignments %}
-            <tr>
-              <td><a href="/assignments/{{assignment.id}}/details/">{{assignment.name}}</a></td>
-              <td>{{assignment.official_deadline}}</td>
-              <td>{{assignment.editdate}}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-
- {% if user == detailedcourse.owner %}
-    <div class='panel pull-right'>
-      <ul class="nav nav-list">
-        <li class="nav-header">Administration</li>
-        <li><a href="/{{detailedcourse.id}}/editcourse"><i class="icon-pencil"></i> Edit course</a></li>
-        <li><a href="/{{detailedcourse.id}}/addstudents/"><i class="icon-list"></i> Change subscribed</a></li>
-        <li><a href="/assignments/{{detailedcourse.id}}/add/"><i class="icon-plus-sign"></i> New assignment</a></li>
-        <li><a href="/{{detailedcourse.id}}/changeowner/"><i class="icon-share"></i> Change the owner</a></li>
-        <li><a href="#DeleteModal" data-toggle="modal"><i class="icon-remove-sign"></i> Delete course</a></li>
-      </ul>
+    <h1 class='span5'>{{detailedcourse.name}}
+    <small>{{detailedcourse.description}}</small></h1>
+    <div class='span7'>
+      <div class='infos'>
+        <strong>Teacher : </strong> {{detailedcourse.owner}}
+        <strong>Years : </strong> {{detailedcourse.years}}
+        <strong>Last edit : </strong> {{detailedcourse.editdate}}
+      </div>
     </div>
   </div>
 
-      <h4>Subscribed users :</h4>
-      	{% for subscribed in subscribed %}
-      		<div class='user-balise'>{{ subscribed.username }}</div>
-      	{% endfor %}
+  <hr>
+
+  <div class='row'>
+    <div class='span9'>
+      <div class='panel'>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Assignments :</th>
+              <th>Deadline</th>
+              <th>Last edit</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for assignment in assignments %}
+              <tr>
+                <td><a href="/assignments/{{assignment.id}}/details/">{{assignment.name}}</a></td>
+                <td>{{assignment.official_deadline}}</td>
+                <td>{{assignment.editdate}}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+ {% if user == detailedcourse.owner %}
+    <div class='span3'>
+      <div class='panel'>
+        <ul class="nav nav-list">
+          <li class="nav-header">Administration</li>
+          <li><a href="/{{detailedcourse.id}}/editcourse"><i class="icon-pencil"></i> Edit course</a></li>
+          <li><a href="/{{detailedcourse.id}}/addstudents/"><i class="icon-list"></i> Change subscribed</a></li>
+          <li><a href="/assignments/{{detailedcourse.id}}/add/"><i class="icon-plus-sign"></i> New assignment</a></li>
+          <li><a href="/{{detailedcourse.id}}/changeowner/"><i class="icon-share"></i> Change the owner</a></li>
+          <li><a href="#DeleteModal" data-toggle="modal"><i class="icon-remove-sign"></i> Delete course</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+    <h4>Subscribed users :</h4>
+  	{% for subscribed in subscribed %}
+  		<div class='user-balise'>{{ subscribed.username }}</div>
+  	{% endfor %}
 
   {% else %}
   </div>

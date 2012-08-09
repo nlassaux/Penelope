@@ -1,36 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-   	<meta charset="utf-8">
-   	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-   	<title>Penelope | Login</title>
-   	<link href="{{STATIC_URL}}/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
-   	<link href="{{STATIC_URL}}/css/stylecss.css" rel="stylesheet" type="text/css" media="all">
-   	<link rel="stylesheet/less" href="{{STATIC_URL}}/css/style.less">
-		<script src="{{STATIC_URL}}/js/less-1.3.0.min.js"></script>
-  	<style>
-      body {
-      	padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
-  </head>
+  	<head>
+	   	<meta charset="utf-8">
+	   	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	   	<title>Penelope | Login</title>
+	   	<link href="{{STATIC_URL}}/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
+	   	<link href="{{STATIC_URL}}/css/stylecss.css" rel="stylesheet" type="text/css" media="all">
+	  	<style>
+	      	body {
+	      		padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+	      	}
+	    </style>
+  	</head>
+  	<body>
 		<div class="container">
 		  <div class="well span6 offset3 centered-text">
-
 				<div class="page-header">
 			  	<h1>Log in</h1>
 				</div>
 
-				<form action='' method="post">{% csrf_token %}
-				  <p><input name ='username' type="text" class="span4 centered-text" autofocus="autofocus" placeholder="Username" id='username'></p>
-				  <p><input name='password' type="password" class="span4 centered-text" placeholder="Password" id='username'></p>
+				<form method="post">{% csrf_token %}
+				  <p><input name ='username' title='username' type="text" class="span4 centered-text" autofocus="autofocus" placeholder="Username"></p>
+				  <p><input name='password' type="password" title='password' class="span4 centered-text" placeholder="Password"></p>
 			 	 <input class="btn btn-large btn-primary" type="submit" value="Connexion" />
 				</form>
-		  </div>
-		{% block footer %}{% endblock %}
-
+		  	</div>
+		</div>
 		<script src="{{STATIC_URL}}/bootstrap/js/jquery.js"></script>
 		<script src="{{STATIC_URL}}/bootstrap/js/bootstrap.js"></script>
-  </body>
+  	</body>
 </html>
 

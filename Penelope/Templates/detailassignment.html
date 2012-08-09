@@ -4,7 +4,7 @@
 
 {% block breadcrumb %}
 
-	<ul class="breadcrumb">
+  <ul class="breadcrumb">
     <li>>> <a href="/">Dashboard</a><span class="divider">/</span></li>
     <li><a href="/{{detailedassignment.course.id}}/details/">{{detailedassignment.course}}</a><span class="divider">/</span></li>
     <li class="active">{{detailedassignment.name}}</li>
@@ -14,245 +14,254 @@
 
 {% block content %}
 
-	<div class="page-header">
-  	<div class='row'>
-			<h1 class='span8'>{{detailedassignment.name}} <small>{{detailedassignment.description}}</small></h1>
+  <div class='row'>
+    <h1 class='span8'>{{detailedassignment.name}} <small>{{detailedassignment.description}}</small></h1>
+    <div class='infos span4'>
+      <strong>Last edit</strong> {{detailedassignment.editdate}}
+      <strong>Teachers</strong> 
+      {% for admin in detailedassignment.admins.all %}
+        {{admin.username}}
+      {% endfor %}
+    </div>
+  </div>
 
-	    <div class='infos pull-right'>
-		    <strong>Last edit</strong> {{detailedassignment.editdate}}
-		    <strong>Teachers</strong> 
-	    	{% for admin in detailedassignment.admins.all %}
-	    		{{admin.username}}
-	    	{% endfor %}
-	    </div>
-  	</div>
-	</div>
+  <hr>
 
-	{% if user == detailedassignment.course.owner %}
-		<div class="row">
-			{% if detailedassignment.method == 'required files' %}
-				<div class='span8 panel'>
-					<table class="table table-striped">
-						<thead>
-							<tr>
-								<th>Required files :</th>
-								<th>Description</th>
-								<th>Type</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for required in detailedassignment.requiredfile_set.all %}
-								<tr>
-				        	<td>{{required.name}}</td>
-				        	<td>{{required.description}}</td>
-				        	<td>{{required.type}}</td>
-								</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
-			{% endif %}
-			<div class='pull-right panel'>
-				<ul class="nav nav-list">
-			        <li class="nav-header">Administration</li>
-			        <li><a href="/groups/{{detailedassignment.id}}/edit/"><i class="icon-briefcase"></i> Change groups</a></li>
-			        <li><a href="/assignments/{{detailedassignment.id}}/edit/"><i class="icon-pencil"></i> Edit assignment</a></li>
-			        <li><a href="#DeleteAssignmentModal" data-toggle="modal"><i class="icon-remove-sign"></i> Delete assignment</a></li>
-			        <hr>
-			        <li><a href='/works/{{detailedassignment.id}}/downloadallfiles/' ><i class='icon-inbox'></i> Download all files</a></li>
-			  </ul>
-			</div>
-			<div class='span8 panel'>
-				{% if detailedassignment.group_set.all %}
-					<table class="table table-striped">
-						<thead>
-							<tr>
-								<th>Groups :</th>
-								<th>Members</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for group in detailedassignment.group_set.all %}
-								<tr>
-				        	<td><a href="/groups/{{group.id}}/details/">{{group.name_id}}</a></td>
-				        	<td>
-				        		{% for user in group.members.all %}
-				        			<div class='user-balise'>{{user.username}}</div>
-				        		{% endfor %}
-				        	</td>
-								</tr>
-							{% endfor %}
-							<tr>
-								<td>Without group</td>
-								<td>
-									{% for student in groupless %}
-										<div class='user-balise'>{{student.username}}</div>
-									{% endfor %}
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				{% else %}
-					<a href="/groups/{{detailedassignment.id}}/edit/">Create groups</a>
-				{% endif %}
-				</div>
-			</div>
+  {% if user == detailedassignment.course.owner %}
+    <div class='row'>
+      <div class='span9'>
+        <div class='row'>
+          {% if detailedassignment.method == 'required files' %}
+            <div class='span9'>
+              <div class='panel'>
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Required files :</th>
+                      <th>Description</th>
+                      <th>Type</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for required in detailedassignment.requiredfile_set.all %}
+                      <tr>
+                        <td>{{required.name}}</td>
+                        <td>{{required.description}}</td>
+                        <td>{{required.type}}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          {% endif %}
+          <div class='span9'>
+            <div class='panel'>
+              {% if detailedassignment.group_set.all %}
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Groups :</th>
+                      <th>Members</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for group in detailedassignment.group_set.all %}
+                      <tr>
+                        <td><a href="/groups/{{group.id}}/details/">{{group.name_id}}</a></td>
+                        <td>
+                          {% for user in group.members.all %}
+                            <div class='user-balise'>{{user.username}}</div>
+                          {% endfor %}
+                        </td>
+                      </tr>
+                    {% endfor %}
+                    <tr>
+                      <td>Without group</td>
+                      <td>
+                        {% for student in groupless %}
+                          <div class='user-balise'>{{student.username}}</div>
+                        {% endfor %}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              {% else %}
+                <a href="/groups/{{detailedassignment.id}}/edit/">Create groups</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+        <div class='span3'>
+          <div class='panel'>
+            <ul class="nav nav-list">
+              <li class="nav-header">Administration</li>
+              <li><a href="/groups/{{detailedassignment.id}}/edit/"><i class="icon-briefcase"></i> Change groups</a></li>
+              <li><a href="/assignments/{{detailedassignment.id}}/edit/"><i class="icon-pencil"></i> Edit assignment</a></li>
+              <li><a href="#DeleteAssignmentModal" data-toggle="modal"><i class="icon-remove-sign"></i> Delete assignment</a></li>
+              <hr>
+              <li><a href='/works/{{detailedassignment.id}}/downloadallfiles/' ><i class='icon-inbox'></i> Download all files</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div class="row">
+      <div class='span9'>
+        <div class='row'>
+          {% if detailedassignment.method == 'required files' %}
+            {% for requiredfile in detailedassignment.requiredfile_set.all %}
+              <div class='span9'>
+                <div class='panel'>
+                  <strong>Name : </strong>{{requiredfile.name}} -
+                  {% if requiredfile.description %}
+                    <strong>Description : </strong>{{requiredfile.description}} -
+                  {% endif %}
+                  <strong>Type : </strong>{{requiredfile.type}}
+                    {% for file in groupfile %}
+                      {% if file in requiredfile.file_set.all %}
+                        <table class="table table-striped">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Uploader</th>
+                              <th>Size</th>
+                              <th>Upload date</th>
+                              <th></th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>{{ file.filename }}</td>
+                              <td>{{ file.uploader }}</td>
+                              {% load functions %}
+                              <td>{% number_human file.file.size %} Octets</td>
+                              <td>{{ file.editdate }}</td>
+                              <td><a href='/works/{{ file.id }}/download'><i class='icon-download'></i></a></td>
+                              <td><a data-target='#DeleteFileModal{{file.id}}' data-toggle="modal"><i class="icon-remove"></i></a></td>
+                            </tr>
+                            <div class="modal hide" id="DeleteFileModal{{file.id}}">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">×</button>
+                                <h3>Delete the file</h3>
+                              </div>
+                              <div class="modal-body">
+                                <p>Are you sure you want to delete your file ?</p>
+                              </div>
+                              <div class="modal-footer">
+                                <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+                                <a href="/works/{{file.id}}/delete" class="btn btn-danger">Delete</a>
+                              </div>
+                            </div>
+                          </tbody>
+                        </table>
+                      {% endif %}
+                    {% endfor %}
+                  <form action="/works/{{detailedassignment.id}}/{{ requiredfile.id }}/upload/" method="post" enctype="multipart/form-data">{% csrf_token %}
+                    {{form.file}}
+                    <input type="submit" value="Submit" class='btn btn-primary swift' />
+                  </form>
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class='span9'>
+              <div class='panel'>
+                <h4>Group's files</h4>
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Uploader</th>
+                      <th>Size</th>
+                      <th>Upload date</th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for file in groupfile %}
+                      <tr>
+                        <td>{{ file.filename }}</td>
+                        <td>{{ file.uploader }}</td>
+                        {% load functions %}
+                        <td>{% number_human file.file.size %} Octets</td>
+                        <td>{{ file.editdate }}</td>
+                        <td><a href='/works/{{ file.id }}/download'><i class='icon-download'></i></a></td>
+                        <td><a data-target='#DeleteFileModal{{file.id}}' data-toggle="modal"><i class="icon-remove"></i></a></td>
+                      </tr>
+                      <div class="modal hide" id="DeleteFileModal{{file.id}}">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal">×</button>
+                          <h3>Delete the file</h3>
+                        </div>
+                        <div class="modal-body">
+                          <p>Are you sure you want to delete your file ?</p>
+                        </div>
+                        <div class="modal-footer">
+                          <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+                          <a href="/works/{{file.id}}/delete" class="btn btn-danger">Delete</a>
+                        </div>
+                      </div>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                {% if mygroup and not detailedassignment.firm_deadline_past %}
+                  <hr>
+                  <h4>Upload</h4>
+                  <form action="/works/{{detailedassignment.id}}/0/upload/" method="post" enctype="multipart/form-data">{% csrf_token %}
+                    {{form.file}}
+                    <input type="submit" value="Submit" class='btn btn-primary swift' />
+                  </form>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      <div class = 'span3'>
+        <div class= 'panel'>
+          <div class = 'nav'>
+          {% if not mygroup %}
+            You have not got any group
+          {% else %}
+            <p><strong>Group {{ mygroup.name }}</strong></p>
+            <hr>
+            {% for member in memberlist %}
+              <div class='user-balise'>{{member}}</div>
+            {% endfor %}
+          {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if detailedassignment.official_deadline_past %}
+      <div class='deadline'>Close</div>
+    {% elif detailedassignment.official_deadline %}
+      <div class='deadline'>Deadline : {{detailedassignment.official_deadline}}</div>
+    {% endif %}
+  {% endif %}
 
-	{% else %}
-
-	<div class="row">
-		{% if detailedassignment.method == 'required files' %}
-		<div class='span8'>
-				{% for requiredfile in detailedassignment.requiredfile_set.all %}
-					<div class='panel'>
-						<strong>Name : </strong>{{requiredfile.name}} -
-						{% if requiredfile.description %}
-							<strong>Description : </strong>{{requiredfile.description}} -
-						{% endif %}
-						<strong>Type : </strong>{{requiredfile.type}}
-						<div class='drop_zone'>
-							{% for file in groupfile %}
-								{% if file in requiredfile.file_set.all %}
-									<table class="table table-striped">
-										<thead>
-											<tr>
-												<th>Name</th>
-												<th>Uploader</th>
-												<th>Size</th>
-												<th>Upload date</th>
-												<th></th>
-												<th></th>
-											</tr>
-										</thead>
-										<tbody>
-												<tr>
-								        	<td>{{ file.filename }}</td>
-								        	<td>{{ file.uploader }}</td>
-								        	{% load functions %}
-								        	<td>{% number_human file.file.size %} Octets</td>
-								        	<td>{{ file.editdate }}</td>
-								        	<td><a href='/works/{{ file.id }}/download'><i class='icon-download'></i></a></td>
-								        	<td><a data-target='#DeleteFileModal{{file.id}}' data-toggle="modal"><i class="icon-remove"></i></a></td>
-												</tr>
-											<div class="modal hide" id="DeleteFileModal{{file.id}}">
-											  <div class="modal-header">
-											    <button type="button" class="close" data-dismiss="modal">×</button>
-											    <h3>Delete the file</h3>
-											  </div>
-											  <div class="modal-body">
-											    <p>Are you sure you want to delete your file ?</p>
-											  </div>
-											  <div class="modal-footer">
-											    <a href="#" class="btn" data-dismiss="modal">Cancel</a>
-											    <a href="/works/{{file.id}}/delete" class="btn btn-danger">Delete</a>
-											  </div>
-												</div>
-										</tbody>
-									</table>
-								{% endif %}
-							{% endfor %}
-						</div>
-						<form action="/works/{{detailedassignment.id}}/{{ requiredfile.id }}/upload/" method="post" enctype="multipart/form-data">{% csrf_token %}
-							{{form.file}}
-							<input type="submit" value="Submit" class='btn btn-primary swift' />
-						</form>
-					</div>
-				{% endfor %}
-		</div>
-		{% else %}
-			<div class='span8 panel'>
-				<h4>Group's files</h4>
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Uploader</th>
-							<th>Size</th>
-							<th>Upload date</th>
-							<th></th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for file in groupfile %}
-							<tr>
-			        	<td>{{ file.filename }}</td>
-			        	<td>{{ file.uploader }}</td>
-			        	{% load functions %}
-			        	<td>{% number_human file.file.size %} Octets</td>
-			        	<td>{{ file.editdate }}</td>
-			        	<td><a href='/works/{{ file.id }}/download'><i class='icon-download'></i></a></td>
-			        	<td><a data-target='#DeleteFileModal{{file.id}}' data-toggle="modal"><i class="icon-remove"></i></a></td>
-							</tr>
-						<div class="modal hide" id="DeleteFileModal{{file.id}}">
-						  <div class="modal-header">
-						    <button type="button" class="close" data-dismiss="modal">×</button>
-						    <h3>Delete the file</h3>
-						  </div>
-						  <div class="modal-body">
-						    <p>Are you sure you want to delete your file ?</p>
-						  </div>
-						  <div class="modal-footer">
-						    <a href="#" class="btn" data-dismiss="modal">Cancel</a>
-						    <a href="/works/{{file.id}}/delete" class="btn btn-danger">Delete</a>
-						  </div>
-							</div>
-						{% endfor %}
-					</tbody>
-				</table>
-				{% if mygroup and not detailedassignment.firm_deadline_past %}
-					<hr>
-					<h4>Upload</h4>
-					<form action="/works/{{detailedassignment.id}}/0/upload/" method="post" enctype="multipart/form-data">{% csrf_token %}
-						{{form.file}}
-					<input type="submit" value="Submit" class='btn btn-primary swift' />
-				{% endif %}
-			</div>
-		{% endif %}
-
-			<div class = 'pull-right panel'>
-				<div class = 'nav'>
-				{% if not mygroup %}
-					You have not got any group
-				{% else %}
-					<p><strong>Group {{ mygroup.name }}</strong></p>
-					<hr>
-					{% for member in memberlist %}
-				  	<div class='user-balise'>{{member}}</div>
-					{% endfor %}
-				{% endif %}
-				</div>
-			</div>
-		</div>
-
-
-	{% if detailedassignment.official_deadline_past %}
-		<div class='deadline'>Close</div>
-	{% elif detailedassignment.official_deadline %}
-		<div class='deadline'>Deadline : {{detailedassignment.official_deadline}}</div>
-	{% endif %}
-
-	{% endif %}
 {% endblock %}
 
 
 {% block modals %}
 
-	<div class="modal hide" id="DeleteAssignmentModal">
-	  <div class="modal-header">
-	    <button type="button" class="close" data-dismiss="modal">×</button>
-	    <h3>Delete the assignment</h3>
-	  </div>
-	  <div class="modal-body">
-	    <p>Are you sure you want to delete this assignment ? Groups, uploaded content will be deleted too..</p>
-	  </div>
-	  <div class="modal-footer">
-	    <a href="#" class="btn" data-dismiss="modal">Cancel</a>
-	    <a href="/assignments/{{detailedassignment.id}}/delete/" class="btn btn-danger">Delete</a>
-	  </div>
-	</div>
-	
-{% endblock %}
-
-{% block scripts %}
+  <div class="modal hide" id="DeleteAssignmentModal">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal">×</button>
+      <h3>Delete the assignment</h3>
+    </div>
+    <div class="modal-body">
+      <p>Are you sure you want to delete this assignment ? Groups, uploaded content will be deleted too..</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+      <a href="/assignments/{{detailedassignment.id}}/delete/" class="btn btn-danger">Delete</a>
+    </div>
+  </div>
+  
 {% endblock %}

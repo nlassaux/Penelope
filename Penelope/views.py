@@ -9,6 +9,10 @@ from settings import *
 from models import *
 import os
 
+def removeemptygroups():
+    for emptygroup in Group.objects.filter(members=None):
+        emptygroup.delete()
+
 
 # Login
 def connection(request):
@@ -150,8 +154,18 @@ def addstudents(request, Course_id):
         # Assign to form all fields of the POST request
         form = AddSubscribedForm(request.POST, instance=editedcourse)
         if form.is_valid():
+
+            test = User.objects.exclude(id__in=request.POST.getlist('subscribed'))
+            for user in test:
+                for assignment in editedcourse.assignment.all():
+                    for group in assignment.group_set.all():
+                        if group in user.group_list.all():
+                            group.members.remove(user)
+
             # Save the course
             request = form.save()
+
+            removeemptygroups()
 
             return redirect('Penelope.views.detailcourse', Course_id=Course_id)
     # Call the .html with informations to insert
@@ -166,9 +180,13 @@ def clearallstudents(request, Course_id):
     if request.user != editedcourse.owner:
         return redirect('Penelope.views.home')
 
-    test = editedcourse.subscribed.all()
-    for user in test:
-        test = editedcourse.subscribed.remove(user)
+    for assignment in editedcourse.assignment.all():
+        for group in assignment.group_set.all():
+            group.delete()
+
+    allsubscribed = editedcourse.subscribed.all()
+    for user in allsubscribed:
+        allsubscribed = editedcourse.subscribed.remove(user)
 
     return redirect('Penelope.views.detailcourse', Course_id=Course_id)
 

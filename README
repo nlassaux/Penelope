@@ -30,17 +30,15 @@ Todo (french):
 
 - Fusion rôles avec ceux de Django
 - Bouton ajout étudiant sur la page editgroup
-- Download tous les devoirs
 - Download tous les fichiers d'un groupe
 - Suppression d'un subscribed --> suppression dans les groupes de l'user
-- Finir le DnD avec AJAX
+- Finir le DnD avec AJAX et Jquery
 - Modifier l'intégration des modals-box dans les pages de consultation de fichiers
-- Vérifier les titres de page
 - Factoriser le broadcrumb
 - Ajouter la taille limite d'upload (50Mb ou au choix)
 - Les owners des cours peuvent ajouter des admins
 - Choisir les admins des assignments : ne pas mettre l'owner.
-- Ajout des requirements (name - description - type : none, pdf, tar.gz) 
+- Supprimer les archives crées pour l'upload
 
 
 Installation :

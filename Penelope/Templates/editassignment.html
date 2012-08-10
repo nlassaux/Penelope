@@ -18,42 +18,45 @@
 
 	<h1>Edit assignment</h1>
 	<hr>
-	<div class='span4'>
-		<div class = 'panel'>
-			<h2>Informations</h2>
-			<form class="centered-text" method="post">{% csrf_token %}
-				<dl class="dl-horizontal">
-					<dt><label for="id_name"><strong>Name :</strong></label></dt>
-					<dl>{{ form.name }}{{ form.name.errors }}</dl>
-					<dt><label for="id_description"><strong>Description :</strong></label></dt>
-					<dl>{{ form.description }}</dl>
-					<dt><label for="id_official_deadline"><strong>Official deadline :</strong></label></dt>
-					<dl>{{ form.official_deadline }}</dl>
-					<dt><label for="id_firm_deadline"><strong>Firm deadline :</strong></label></dt>
-					<dl>{{ form.firm_deadline }}</dl>
-					<dt><label for="id_admins"><strong>Admins :</strong></label></dt>
-					<dl>{{ form.admins }}</dl>
-					<dt><label for="id_method"><strong>Method :</strong></label></dt>
-					<dl>{{ form.method }}</dl>
-					<dt><label for="id_visible"><strong>Visible :</strong></label></dt>
-					<dl>{{ form.visible }}</dl>
-					<dt><input type="submit" value="Submit" class='btn btn-primary'/></dt>
-				</dl>
-			</form>
+	<div class='row'>
+		<div class='span6'>
+			<div class = 'panel centered-text'>
+				<h2>Informations</h2>
+				<hr>
+				<form method="post">{% csrf_token %}
+					<dl class="dl-horizontal">
+						<dt><label for="id_name"><strong>Name :</strong></label></dt>
+						<dl>{{ form.name }}{{ form.name.errors }}</dl>
+						<dt><label for="id_description"><strong>Description :</strong></label></dt>
+						<dl>{{ form.description }}</dl>
+						<dt><label for="id_official_deadline"><strong>Official deadline :</strong></label></dt>
+						<dl>{{ form.official_deadline }}</dl>
+						<dt><label for="id_firm_deadline"><strong>Firm deadline :</strong></label></dt>
+						<dl>{{ form.firm_deadline }}</dl>
+						<dt><label for="id_admins"><strong>Admins :</strong></label></dt>
+						<dl>{{ form.admins }}</dl>
+						<dt><label for="id_method"><strong>Method :</strong></label></dt>
+						<dl>{{ form.method }}</dl>
+						<dt><label for="id_visible"><strong>Visible :</strong></label></dt>
+						<dl>{{ form.visible }}</dl>
+					</dl>
+					<input type="submit" value="Submit" class='btn btn-primary'/>
+				</form>
+			</div>
 		</div>
-	</div>
 
 
-	<div class='span6'>
-		<div class='panel'>
-			<h2>Required files management</h2>
-			<form id='ajax_form' name='ajax_form' method="post" action='/works/{{editedassignment.id}}/addrequirement/' >{% csrf_token %}
-				<input type="text" id='assignment_id' value='{{editedassignment.id}}' name='assignment_id' style="display: none;"/>
-				<input type="text" id='requiredfilesnb' name='requiredfilesnb' style="display: none;" />
-				<input type="submit" id='savebtn' value="Save" class='btn'/>
-				<a id='addfilebtn' class='btn'>Add a requirement</a>
-			</form>
-			<p style='color: #46a546;' id='response'></p>
+		<div class='span6'>
+			<div class='panel'>
+				<h2>Required files management</h2>
+				<form id='ajax_form' name='ajax_form' method="post" action='/works/{{editedassignment.id}}/addrequirement/' >{% csrf_token %}
+					<input type="text" id='assignment_id' value='{{editedassignment.id}}' name='assignment_id' style="display: none;"/>
+					<input type="text" id='requiredfilesnb' name='requiredfilesnb' style="display: none;" />
+					<input type="submit" id='savebtn' value="Save" class='btn'/>
+					<a id='addfilebtn' class='btn'>Add a requirement</a>
+				</form>
+				<p style='color: #46a546;' id='response'></p>
+			</div>
 		</div>
 	</div>
 

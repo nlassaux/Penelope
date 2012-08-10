@@ -1,13 +1,12 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
-from django.core.files.temp import NamedTemporaryFile
-from shutil import make_archive
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.core import serializers
-from models import *
+from shutil import make_archive
 from settings import *
+from models import *
 import os
 
 

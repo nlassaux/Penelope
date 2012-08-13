@@ -32,12 +32,12 @@ Notes :
 * The code have been verified to perform with future versions of django (no depreciated code).
 * The Script AddUser.py can add students and teachers to the db, use  `python manage.py shell` and import the file.
 
-* * *
 
 Architecture :
 --------------
 
-### Models.py :
+### models.py :
+
 * Users (defaut in Django)
 * UserProfile (a model associate in OneToOne to a User to extend the defaut django's model)
 * Course
@@ -47,19 +47,41 @@ Architecture :
 * All forms
 
 ### urls.py :
+
 The url pattern use the request url to call a view with arguments if needed.
 
-### Views.py :
-We have one function by url. Each one have the same construction :
-1. Control of authentification with the decorator @login_required (else user sent to LOGIN_URL in settings).
-2. A query in db for the concerned element.
-3. Verification of permissions (is the owner of the concerned course, is a member of the concerned group..).
-4. Compute
-5. Return with a .html call or a redirection (to another view).
+### views.py :
+
+We have one function by url. Each one have the same construction (useless steps are not present) :
+
+1.   Control of authentification with the decorator @login_required.
+2.   A query in db for the concerned element.
+3.   Verification of permissions (is the owner of the concerned course, is a member of the concerned group..).
+4.   Compute (database connects...)
+5.   Return with a .html call or a redirection (to another view).
 
 The returned request has linked to it all declared variables because of `locals()`. They can be used in a template to be displayed. You can also send a list of variables.
 
-* * *
+
+Security :
+----------
+
+### Authentification :
+
+Penelope uses the Django auth app. It uses cookies, login/logout signals, server verification.
+
+Each called view control authentification with the decorator @login_required. A bad return sends the user to the path defined in settings.py : LOGIN_URL. 
+
+
+### Role :
+
+More verifications with user roles are performed in the beginning of views.
+
+### Forms :
+
+Django use a CRFS Token system to verify POST requests. Each called form that uses a model controls that fields 's content fits with model fields. Django provides a XSS prevent.
+
+
 
 Todo (french) :
 ---------------

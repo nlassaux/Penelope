@@ -3,13 +3,8 @@
 {% block title %}Assignment | {{detailedassignment.name}}{% endblock %}
 
 {% block breadcrumb %}
-
-  <ul class="breadcrumb">
-    <li>>> <a href="/">Dashboard</a><span class="divider">/</span></li>
-    <li><a href="/{{detailedassignment.course.id}}/details/">{{detailedassignment.course}}</a><span class="divider">/</span></li>
-    <li class="active">{{detailedassignment.name}}</li>
-  </ul>
-
+  {% load functions %}
+  {% broadcrumb BROADCRUMB_LIST %}
 {% endblock %}
 
 {% block content %}

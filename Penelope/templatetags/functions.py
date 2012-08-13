@@ -37,3 +37,18 @@ def number_human(value, separator=' ', precision=2, delimeter_count=3, decimal_s
         s = s[:-delimeter_count]
 
     return '%s%s%s' % ('-' if negative else '', separator.join(groups), f)
+
+
+@register.simple_tag
+def broadcrumb (value):
+    begining = "<ul class='breadcrumb'>"
+    dashboard = "<li>>> <a href='/'>Dashboard</a><span class='divider'>/</span></li>"
+    end = "</ul>"
+    i = 0
+    content = ''
+    for title, link in value : 
+        content += "<li><a href='" + link + "'>" + title + "</a><span class='divider'>/</span></li></li>"
+        i += 1
+
+
+    return begining + dashboard + content + end

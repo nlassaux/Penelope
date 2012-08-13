@@ -31,7 +31,6 @@ Todo (french):
 - Fusion rôles avec ceux de Django
 - Bouton ajout étudiant sur la page editgroup
 - Download tous les fichiers d'un groupe
-- Suppression d'un subscribed --> suppression dans les groupes de l'user
 - Finir le DnD avec AJAX et Jquery
 - Modifier l'intégration des modals-box dans les pages de consultation de fichiers
 - Factoriser le broadcrumb

@@ -9,12 +9,11 @@ from settings import *
 from models import *
 import os
 
+
 # Delete all groups without members.
 def removeemptygroups():
     for emptygroup in Group.objects.filter(members=None):
         emptygroup.delete()
-
-
 
 
 # Login
@@ -240,7 +239,7 @@ def detailassignment(request, Assignment_id):
     detailedassignment = Assignment.objects.get(id=Assignment_id)
 
     BROADCRUMB_LIST = [
-    (detailedassignment.course.name,'/' + unicode(detailedassignment.course.id) + '/details/'),
+    (detailedassignment.course.name, '/' + unicode(detailedassignment.course.id) + '/details/'),
     ]
 
     # Control if the user is subscribed or is the owner of the assignment's course
@@ -435,6 +434,10 @@ def downloadfile(request, File_id):
 @login_required
 def downloadallfiles(request, Assignment_id):
     downloadedassignment = Assignment.objects.get(id=Assignment_id)
+
+    if request.user != downloadedassignment.course.owner:
+        return redirect('Penelope.views.home')
+
     archive_name = downloadedassignment.name + '_' + unicode(downloadedassignment.id)
     root_dir = MEDIA_ROOT + '/' + '/'.join(['Work',
                 downloadedassignment.course.name + '_' +

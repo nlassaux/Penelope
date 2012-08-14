@@ -29,6 +29,7 @@ Installation :
 Notes :
 -------
 
+* To run server in `debug=False` mode for test, use `$ python manage.py runserver --insecure`.
 * The code have been verified to perform with future versions of django (no depreciated code).
 * The Script AddUser.py can add students and teachers to the db, use  `python manage.py shell` and import the file.
 

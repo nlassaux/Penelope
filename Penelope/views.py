@@ -448,8 +448,8 @@ def downloadallfiles(request, Assignment_id):
                 downloadedassignment.name + '_' +
                 unicode(downloadedassignment.id)])
     data = open(make_archive(COMPRESSED_ROOT + '/' + archive_name, 'zip', root_dir)).read()
-    response = HttpResponse(data, mimetype='application/octet-stream')
-    response['Content-Disposition'] = 'attachment; filename=%s' % downloadedassignment.name + '.zip'
+    response = HttpResponse(data, mimetype='application/zip')
+    response['Content-Disposition'] = 'attachment; filename="%s"' % unicode(downloadedassignment.name + '.zip')
 
     return response
 

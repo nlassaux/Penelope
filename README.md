@@ -70,7 +70,7 @@ Security :
 
 Penelope uses the Django auth app. It uses cookies, login/logout signals, server verification.
 
-Each called view control authentification with the decorator @login_required. A bad return sends the user to the path defined in settings.py : LOGIN_URL. 
+Each called view controls authentification with the decorator @login_required. A bad return sends the user to the path defined in settings.py : LOGIN_URL. 
 
 
 ### Role :

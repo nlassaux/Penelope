@@ -174,6 +174,7 @@ def addstudents(request, Course_id):
     return render(request, 'addstudents.html', locals())
 
 
+# Delete all students subscribed to a course
 @login_required
 def clearallstudents(request, Course_id):
     editedcourse = Course.objects.get(id=Course_id)  # (The ID is in URL)
@@ -182,10 +183,12 @@ def clearallstudents(request, Course_id):
     if request.user != editedcourse.owner:
         return redirect('Penelope.views.home')
 
+    # Delete all assignment's courses
     for assignment in editedcourse.assignment.all():
         for group in assignment.group_set.all():
             group.delete()
 
+    # Delete all students
     allsubscribed = editedcourse.subscribed.all()
     for user in allsubscribed:
         allsubscribed = editedcourse.subscribed.remove(user)

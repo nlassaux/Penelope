@@ -92,8 +92,6 @@ Todo (french) :
 * Download tous les fichiers d'un groupe
 * Finir le DnD avec AJAX et Jquery
 * Modifier l'intégration des modals-box dans les pages de consultation de fichiers
-* Factoriser le broadcrumb
 * Ajouter la taille limite d'upload (50Mb ou au choix)
 * Les owners des cours peuvent ajouter des admins
 * Choisir les admins des assignments : ne pas mettre l'owner.
-* Supprimer les archives crées pour l'upload

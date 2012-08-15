@@ -4,7 +4,8 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.core import serializers
-from shutil import make_archive
+from shutil import make_archive, rmtree
+from tempfile import NamedTemporaryFile, mkdtemp
 from settings import *
 from models import *
 import os
@@ -480,16 +481,31 @@ def downloadfile(request, File_id):
 def downloadallfiles(request, Assignment_id):
     downloadedassignment = Assignment.objects.get(id=Assignment_id)
 
+    # Verify if the user is the owner
     if request.user != downloadedassignment.course.owner:
         return redirect('Penelope.views.home')
 
+    # Define the name of archive as the name of assignment and the id
     archive_name = downloadedassignment.name + '_' + unicode(downloadedassignment.id)
+
+    # The path to archive
     root_dir = MEDIA_ROOT + '/' + '/'.join(['Work',
                 downloadedassignment.course.name + '_' +
                 unicode(downloadedassignment.course.id),
                 downloadedassignment.name + '_' +
                 unicode(downloadedassignment.id)])
-    data = open(make_archive(COMPRESSED_ROOT + '/' + archive_name, 'zip', root_dir)).read()
+
+    # Create a temporary folder
+    tmpdir = mkdtemp(dir=COMPRESSED_ROOT)
+    tmparchive = os.path.join(tmpdir, 'archive')
+
+    # Create in this temporary folder a compressed file
+    data = open(make_archive(tmparchive, 'zip', root_dir), 'rb').read()
+
+    # Delete the temporary folder
+    rmtree(tmpdir)
+
+    # Construct the response
     response = HttpResponse(data, mimetype='application/zip')
     response['Content-Disposition'] = 'attachment; filename="%s"' % unicode(downloadedassignment.name + '.zip')
 

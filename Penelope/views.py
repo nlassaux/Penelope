@@ -256,7 +256,7 @@ def detailassignment(request, Assignment_id):
         mygroup = request.user.group_list.filter(assignment=detailedassignment)
         memberlist = User.objects.filter(group_list__id=mygroup)
         groupfile = File.objects.filter(group=mygroup)
-        if detailedassignment.method == 'required files':
+        if detailedassignment.requirement == 'user-defined':
             for required in detailedassignment.requiredfile_set.all():
                 name = 'fileassociate' + unicode(required.id)
 
@@ -378,7 +378,6 @@ def userasgroup(request, Assignment_id):
     return redirect('Penelope.views.detailassignment', Assignment_id=Assignment_id)
 
 
-# Function to upload a file file with two methods : simple upload(1) and overwriting(2)
 @login_required
 def uploadfile(request, Assignment_id, RequiredFile_id):
     detailedassignment = Assignment.objects.get(id=Assignment_id)

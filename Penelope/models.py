@@ -29,9 +29,9 @@ STATUS_CHOICES = (
 
 # List of assignments work management
 # (free = illimited files - required files = Planned uploads)
-METHOD_CHOICES = (
-    ('free', 'Free'),
-    ('required files', 'Required File'),
+REQUIREMENT_CHOICES = (
+    ('none', 'None'),
+    ('user_defined', 'User defined'),
 )
 
 # List of possibilities for RequiredFile's file type
@@ -91,7 +91,7 @@ class Assignment (models.Model):
     admins = models.ManyToManyField(User, blank=True, null=True, limit_choices_to={'userprofile__status': 'teacher'})
     editdate = models.DateTimeField(auto_now=True)
     visible = models.BooleanField(blank=True)
-    method = models.CharField(max_length=14, choices=METHOD_CHOICES, default='free')
+    requirement = models.CharField(max_length=14, choices=REQUIREMENT_CHOICES, default='none')
 
     # In Admin panel : object = username.
     def __unicode__(self):
@@ -202,7 +202,7 @@ class EditAssignmentForm (forms.ModelForm):
     class Meta:
         model = Assignment
         fields = ('name', 'description', 'official_deadline',
-                  'firm_deadline', 'admins', 'visible', 'method')
+                  'firm_deadline', 'admins', 'visible', 'requirement')
 
 
 # Definition of the form to add Assignments
@@ -210,7 +210,7 @@ class AddAssignmentForm (forms.ModelForm):
     class Meta:
         model = Assignment
         fields = ('name', 'description', 'official_deadline', 'firm_deadline',
-            'admins', 'visible', 'method')
+            'admins', 'visible', 'requirement')
 
 
 # The definition of the form to send files

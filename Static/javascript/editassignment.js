@@ -10,7 +10,7 @@ $('#addfilebtn').click(function(){
 	addrequiredfile('','','','');
 });
 $('#requiredfilesnb').val($(".requiredfile").length);
-$('#id_method').change(change_text);
+$('#id_requirement').change(change_text);
 change_text();
 
 // An ajax request to load requiredFilesFields
@@ -25,7 +25,7 @@ $.ajax({
 
 // Apply effects when we change value of method select
 function change_text() {
-	if ($('#id_method').val() == 'free') {
+	if ($('#id_requirement').val() == 'none') {
 		$('#requirementform').hide();
 	} else {
 		$('#requirementform').show();

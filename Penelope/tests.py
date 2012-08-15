@@ -24,10 +24,8 @@ class ViewsTestCase(TestCase):
         self.assertTrue(self.client.login(username=username, password=password))
 
         response = self.client.post('/login/')
-<<<<<<< HEAD
-        self.assertEqual(response.status_code, 200)
-=======
+
         self.assertEqual(response.status_code, 302) # After login user is redirected
 
         self.assertTrue(user.is_active)
->>>>>>> 62a05863acbe798895f1ffa8c87adbcf0f261001
+

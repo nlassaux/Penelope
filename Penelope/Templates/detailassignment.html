@@ -26,7 +26,7 @@
     <div class='row'>
       <div class='span9'>
         <div class='row'>
-          {% if detailedassignment.method == 'required files' %}
+          {% if detailedassignment.requirement == 'user_defined' %}
             <div class='span9'>
               <div class='panel'>
                 <table class="table table-striped">
@@ -105,7 +105,7 @@
     <div class="row">
       <div class='span9'>
         <div class='row'>
-          {% if detailedassignment.method == 'required files' %}
+          {% if detailedassignment.requirement == 'user_defined' %}
             {% for requiredfile in detailedassignment.requiredfile_set.all %}
               <div class='span9'>
                 <div class='panel'>

@@ -12,12 +12,22 @@ class ViewsTestCase(TestCase):
         resp = self.client.get('/login/')
         self.assertEqual(resp.status_code, 200)
 
-    # Create an user and log with username - password
+    # Create an user and log with username / password
     def test_login(self):
-        User.objects.create_user('testuser', 'amail@fake.com', 'password')
+        password = 'password'
+        username = 'testuser'
+        email = 'amail@fake.com'
 
-        #use test client to perform login
-        user = self.client.login(username='testuser', password='password')
+        user = User.objects.create_user(username, email, password)
+
+        # use test client to perform login
+        self.assertTrue(self.client.login(username=username, password=password))
 
         response = self.client.post('/login/')
+<<<<<<< HEAD
         self.assertEqual(response.status_code, 200)
+=======
+        self.assertEqual(response.status_code, 302) # After login user is redirected
+
+        self.assertTrue(user.is_active)
+>>>>>>> 62a05863acbe798895f1ffa8c87adbcf0f261001

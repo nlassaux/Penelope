@@ -17,11 +17,30 @@
 		<h1>Add assignment</h1>
 		<hr>
 	<div class='row'>
-		<div class='panel'>
-			<form action="" method="post">{% csrf_token %}
-				{{ form.as_p }}
-				<input type="submit" value="Submit" class='btn btn-primary'/>
-			</form>
+		<div class='span8'>
+			<div class = 'panel centered-text'>
+				<h2>Informations</h2>
+				<hr>
+				<form method="post">{% csrf_token %}
+					<dl class="dl-horizontal">
+						<dt><label for="id_name"><strong>Name :</strong></label></dt>
+						<dl>{{ form.name }}{{ form.name.errors }}</dl>
+						<dt><label for="id_description"><strong>Description :</strong></label></dt>
+						<dl>{{ form.description }}</dl>
+						<dt><label for="id_official_deadline"><strong>Official deadline :</strong></label></dt>
+						<dl>{{ form.official_deadline }}</dl>
+						<dt><label for="id_firm_deadline"><strong>Firm deadline :</strong></label></dt>
+						<dl>{{ form.firm_deadline }}</dl>
+						<dt><label for="id_admins"><strong>Admins :</strong></label></dt>
+						<dl>{{ form.admins }}</dl>
+						<dt><label for="id_requirement"><strong>Method :</strong></label></dt>
+						<dl>{{ form.requirement }}</dl>
+						<dt><label for="id_visible"><strong>Visible :</strong></label></dt>
+						<dl>{{ form.visible }}</dl>
+					</dl>
+					<input type="submit" value="Submit" class='btn btn-primary'/>
+				</form>
+			</div>
 		</div>
 	</div>
 

@@ -56,6 +56,11 @@ def home(request):
 # Add a new course in db
 @login_required
 def newcourse(request):
+
+    BREADCRUMB_LIST = [
+        ("Add a course", "current")
+    ]
+
     # Only a teacher can add a course
     if request.user.userprofile.status != 'teacher':
         return redirect('Penelope.views.home')
@@ -84,6 +89,10 @@ def detailcourse(request, Course_id):
     detailedcourse = Course.objects.get(id=Course_id)
     subscribed = detailedcourse.subscribed.filter()
 
+    BREADCRUMB_LIST = [
+        (detailedcourse.name, "current")
+    ]
+
     # Only subscribed students and owner(teacher) can view the course
     if detailedcourse not in request.user.course_list.all() and request.user != detailedcourse.owner:
         return redirect('Penelope.views.home')
@@ -97,6 +106,11 @@ def detailcourse(request, Course_id):
 @login_required
 def editcourse(request, Course_id):
     editedcourse = Course.objects.get(id=Course_id)  # (The ID is in URL)
+
+    BREADCRUMB_LIST = [
+        (editedcourse.name, '/' + unicode(editedcourse.id) + '/details/'),
+        ("Edit the course", "current")
+    ]
 
     # Only the owner can edit a course
     if request.user != editedcourse.owner:
@@ -121,6 +135,11 @@ def editcourse(request, Course_id):
 def changeowner(request, Course_id):
     editedcourse = Course.objects.get(id=Course_id)  # (The ID is in URL)
 
+    BREADCRUMB_LIST = [
+        (editedcourse.name, '/' + unicode(editedcourse.id) + '/details/'),
+        ("Change owner", "current")
+    ]
+
     # Only the owner can edit a course
     if request.user != editedcourse.owner:
         return redirect('Penelope.views.home')
@@ -143,6 +162,11 @@ def changeowner(request, Course_id):
 @login_required
 def addstudents(request, Course_id):
     editedcourse = Course.objects.get(id=Course_id)  # (The ID is in URL)
+
+    BREADCRUMB_LIST = [
+        (editedcourse.name, '/' + unicode(editedcourse.id) + '/details/'),
+        ("Add students", "current")
+    ]
 
     # Only the owner can edit a course.
     if request.user != editedcourse.owner:
@@ -211,9 +235,14 @@ def deletecourse(request, Course_id):
 # Page to edit an assignment
 @login_required
 def editassignment(request, Assignment_id):
-
     # Use the id in the url (GET) to select our assignment
     editedassignment = Assignment.objects.get(id=Assignment_id)
+
+    BREADCRUMB_LIST = [
+        (editedassignment.course.name, '/' + unicode(editedassignment.course.id) + '/details/'),
+        (editedassignment.name, '/assignments/' + unicode(editedassignment.id) + '/details/'),
+        ("Edit assignment", "current")
+    ]
 
     # Only the owner can edit an assignment
     if request.user != editedassignment.course.owner:
@@ -238,11 +267,11 @@ def editassignment(request, Assignment_id):
 # Page to detail an assignment
 @login_required
 def detailassignment(request, Assignment_id):
-
     detailedassignment = Assignment.objects.get(id=Assignment_id)
 
     BREADCRUMB_LIST = [
-    (detailedassignment.course.name, '/' + unicode(detailedassignment.course.id) + '/details/'),
+        (detailedassignment.course.name, '/' + unicode(detailedassignment.course.id) + '/details/'),
+        (detailedassignment.name, "current")
     ]
 
     # Control if the user is subscribed or is the owner of the assignment's course
@@ -270,8 +299,13 @@ def detailassignment(request, Assignment_id):
 # Page to add an assignment
 @login_required
 def addassignment(request, Course_id):
-
     editedcourse = Course.objects.get(id=Course_id)
+
+    BREADCRUMB_LIST = [
+        (editedcourse.name, '/' + unicode(editedcourse.id) + '/details/'),
+        ("Add an assignment","")
+    ]
+
 
     # Only the owner can edit an assignment
     if request.user.userprofile.status != 'teacher':
@@ -298,7 +332,6 @@ def addassignment(request, Course_id):
 # Page to delete an assignment
 @login_required
 def deleteassignment(request, Assignment_id):
-
     deletedassignment = Assignment.objects.get(id=Assignment_id)  # (The ID is in URL)
 
     # Only the owner can delete an assignment
@@ -313,8 +346,13 @@ def deleteassignment(request, Assignment_id):
 # Page to detail a group
 @login_required
 def detailgroup(request, Group_id):
-
     detailedgroup = Group.objects.get(id=Group_id)
+
+    BREADCRUMB_LIST = [
+        (detailedgroup.assignment.course.name, '/' + unicode(detailedgroup.assignment.course.id) + '/details/'),
+        (detailedgroup.assignment.name, '/assignments/' + unicode(detailedgroup.assignment.id) + '/details/'),
+        (detailedgroup.name,"")
+    ]
 
     if detailedgroup.assignment.course not in request.user.course_list.all() and request.user != detailedgroup.assignment.course.owner:
         return redirect('Penelope.views.home')
@@ -325,8 +363,13 @@ def detailgroup(request, Group_id):
 # Page to add a group
 @login_required
 def addgroup(request, Assignment_id):
-
     editedassignment = Assignment.objects.get(id=Assignment_id)
+
+    BREADCRUMB_LIST = [
+        (editedassignment.course.name, '/' + unicode(editedassignment.course.id) + '/details/'),
+        (editedassignment.name, '/assignments/' + unicode(editedassignment.id) + '/details/'),
+        ("Add groups", "current")
+    ]
 
     # Only the owner of the assignment can add a group
     if request.user != editedassignment.course.owner:

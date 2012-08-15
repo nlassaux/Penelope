@@ -4,10 +4,8 @@
 
 
 {% block breadcrumb %}
-  <ul class="breadcrumb">
-    <li>>> <a href="/">Dashboard</a><span class="divider">/</span></li>
-    <li class="active">{{detailedcourse.name}}</li>
-  </ul>
+  {% load functions %}
+  {% breadcrumb BREADCRUMB_LIST %}
 {% endblock %}
 
 

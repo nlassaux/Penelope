@@ -3,12 +3,8 @@
 {% block title %}Penelope | Create a course{% endblock %}
 
 {% block breadcrumb %}
-
-	<ul class="breadcrumb">
-		<li>>> <a href="/">Dashboard</a><span class="divider">/</span></li>
-		<li class="active">New course</li>
-  	</ul>
-
+  {% load functions %}
+  {% breadcrumb BREADCRUMB_LIST %}
 {% endblock %}
 
 {% block content %}

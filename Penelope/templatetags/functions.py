@@ -44,11 +44,9 @@ def breadcrumb (value):
     begining = "<ul class='breadcrumb'>"
     dashboard = "<li>>> <a href='/'>Dashboard</a><span class='divider'>/</span></li>"
     end = "</ul>"
-    i = 0
+    current = "<li class='active'>" + value.pop()[0] + "</li>"
     content = ''
     for title, link in value : 
         content += "<li><a href='" + link + "'>" + title + "</a><span class='divider'>/</span></li></li>"
-        i += 1
 
-
-    return begining + dashboard + content + end
+    return begining + dashboard + content + current + end

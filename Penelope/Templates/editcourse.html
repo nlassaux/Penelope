@@ -3,13 +3,8 @@
 {% block title %}Edit course{% endblock %}
 
 {% block breadcrumb %}
-
-	<ul class="breadcrumb">
- 	  	<li>>> <a href="/">Dashboard</a><span class="divider">/</span></li>
-  		<li><a href="/{{Course_id}}/details/">{{editedcourse.name}}</a><span class="divider">/</span></li>
-  		<li class="active">Edit</li>
-  	</ul>
-
+  {% load functions %}
+  {% breadcrumb BREADCRUMB_LIST %}
 {% endblock %}
 
 {% block content %}

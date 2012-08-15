@@ -3,13 +3,8 @@
 {% block title %}Add an assignment{% endblock %}
 
 {% block breadcrumb %}
-
-	<ul class="breadcrumb">
- 	  	<li>>> <a href="/">Dashboard</a><span class="divider">/</span></li>
-		<li><a href="/{{Course_id}}/details/">{{editedcourse.name}}</a><span class="divider">/</span></li>
-		<li class="active">Add assignment</li>
-  	</ul>
-
+	  {% load functions %}
+	  {% breadcrumb BREADCRUMB_LIST %}
 {% endblock %}
 
 {% block content %}

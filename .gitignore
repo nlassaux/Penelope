@@ -7,3 +7,5 @@ database.sqlite3
 *.pyc
 
 Penelope/templatetags/functions.pyc
+
+Penelope/templatetags/__init__.pyc

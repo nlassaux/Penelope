@@ -40,7 +40,7 @@ def number_human(value, separator=' ', precision=2, delimeter_count=3, decimal_s
 
 
 @register.simple_tag
-def broadcrumb (value):
+def breadcrumb (value):
     begining = "<ul class='breadcrumb'>"
     dashboard = "<li>>> <a href='/'>Dashboard</a><span class='divider'>/</span></li>"
     end = "</ul>"

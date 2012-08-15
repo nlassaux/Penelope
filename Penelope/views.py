@@ -241,7 +241,7 @@ def detailassignment(request, Assignment_id):
 
     detailedassignment = Assignment.objects.get(id=Assignment_id)
 
-    BROADCRUMB_LIST = [
+    BREADCRUMB_LIST = [
     (detailedassignment.course.name, '/' + unicode(detailedassignment.course.id) + '/details/'),
     ]
 

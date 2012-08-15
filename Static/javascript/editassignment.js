@@ -26,9 +26,9 @@ $.ajax({
 // Apply effects when we change value of method select
 function change_text() {
 	if ($('#id_method').val() == 'free') {
-		$('#ajax_form').hide();
+		$('#requirementform').hide();
 	} else {
-		$('#ajax_form').show();
+		$('#requirementform').show();
 	}
 };
 
@@ -54,7 +54,7 @@ function addrequiredfile(id, name, description, type) {
 	// the id and name of all fields is dynamically set with that value
 	var nextid = $(".requiredfile").length + 1;
 
-	addrequiredfileclass('#ajax_form');
+	addrequiredfileclass('#requirementform');
 	addidfield('.requiredfile:last', id, nextid);
 	addnamefield('.requiredfile:last', name, nextid);
 	adddescriptionfield('.requiredfile:last', description, nextid);

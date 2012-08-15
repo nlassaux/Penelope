@@ -20,4 +20,4 @@ class ViewsTestCase(TestCase):
         user = self.client.login(username='testuser', password='password')
 
         response = self.client.post('/login/')
-        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(response.status_code, 200)

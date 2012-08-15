@@ -49,10 +49,10 @@
 		<div class='span6'>
 			<div class='panel'>
 				<h2>Required files management</h2>
-				<form id='ajax_form' name='ajax_form' method="post" action='/works/{{editedassignment.id}}/addrequirement/' >{% csrf_token %}
+				<form id='requirementform' name='requirementform' method="post" action='/works/{{editedassignment.id}}/addrequirement/' >{% csrf_token %}
 					<input type="text" id='assignment_id' value='{{editedassignment.id}}' name='assignment_id' style="display: none;"/>
 					<input type="text" id='requiredfilesnb' name='requiredfilesnb' style="display: none;" />
-					<input type="submit" id='savebtn' value="Save" class='btn'/>
+					<input type="submit" id='savebtn' value="Submit" class='btn'/>
 					<a id='addfilebtn' class='btn'>Add a requirement</a>
 				</form>
 				<p style='color: #46a546;' id='response'></p>

@@ -21,8 +21,9 @@ urlpatterns = patterns('',
     url(r'^works/(?P<Assignment_id>\d+)/(?P<RequiredFile_id>\d+)/upload/$', 'Penelope.views.uploadfile'),
     url(r'^works/(?P<File_id>\d+)/download/$', 'Penelope.views.downloadfile'),
     url(r'^works/(?P<Assignment_id>\d+)/downloadallfiles/$', 'Penelope.views.downloadallfiles'),
-    url(r'^works/(?P<Assignment_id>\d+)/addrequirement/$', 'Penelope.views.addrequirement'),
     url(r'^works/(?P<File_id>\d+)/delete/$', 'Penelope.views.deletefile'),
+    url(r'^works/(?P<Assignment_id>\d+)/addrequirement/$', 'Penelope.views.addrequirement'),
+    url(r'^works/(?P<Assignment_id>\d+)/deleterequirement/$', 'Penelope.views.deleterequirement'),
 
     # Groups urls.
     url(r'^groups/(?P<Group_id>\d+)/details/$', 'Penelope.views.detailgroup'),

@@ -15,12 +15,14 @@ change_text();
 
 // An ajax request to load requiredFilesFields
 $.ajax({
-		type: "GET",
-		url: "/works/" + $('#assignment_id').val() + "/addrequirement/",
-		data: {assignment_id:$('#assignment_id').val()},
-		success: function(xml) {
-			loadrequiredfiles(xml);
-		}
+	type: "GET",
+	url: "/works/" + $('#assignment_id').val() + "/addrequirement/",
+	success: function(xml) {
+		loadrequiredfiles(xml);
+		$('.close').click(function(){
+			delete_required(this);
+		});
+	}
 });
 
 // Apply effects when we change value of method select
@@ -44,6 +46,17 @@ function loadrequiredfiles(xml) {
 	});
 }
 
+function delete_required(element) {
+	// An ajax request to delete a requiredfile
+	$.ajax({
+		type: "GET",
+		url: "/works/" + $('#assignment_id').val() + "/deleterequirement/",
+		data: {id:$(element).attr("nb")},
+		success: function(xml) {
+			window.location.reload();
+		}
+	});
+}
 
 // -----------------------------------------------------
 //		    	Add required file function
@@ -54,7 +67,8 @@ function addrequiredfile(id, name, description, type) {
 	// the id and name of all fields is dynamically set with that value
 	var nextid = $(".requiredfile").length + 1;
 
-	addrequiredfileclass('#requirementform');
+	addrequiredfileclass('#requirementform', nextid);
+	addclosebtn('.requiredfile:last', id);
 	addidfield('.requiredfile:last', id, nextid);
 	addnamefield('.requiredfile:last', name, nextid);
 	adddescriptionfield('.requiredfile:last', description, nextid);
@@ -62,11 +76,21 @@ function addrequiredfile(id, name, description, type) {
 
 	// set to 'requiredfilenb' field the number of required file as value to be used after POST send
 	$('#requiredfilesnb').val($(".requiredfile").length);
+
+	$('.close').click(function(){
+		delete_required(this);
+	});
 };
 
 // create new <div class='requiredfile'></div> in a parent
-function addrequiredfileclass(parent){
+function addrequiredfileclass(parent, index){
 	$(parent).append("<div class='requiredfile under_panel'></div>");
+};
+
+// 
+function addclosebtn(parent, index) {
+	var closebtn = "<a class='close' nb='" + index + "'>x</a>"
+	$(parent).append(closebtn);
 };
 
 // return an id field with a value (content), and an index(index) to add to parent

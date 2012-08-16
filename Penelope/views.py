@@ -526,27 +526,34 @@ def deletefile(request, File_id):
 def addrequirement(request, Assignment_id):
     if request.method == 'POST':
         editedassignment = Assignment.objects.get(id=Assignment_id)
+        for requiredfile in editedassignment.requiredfile_set.all():
+            requiredfile.delete()
         for i in range(1, int(request.POST.get('requiredfilesnb')) + 1):
-            try:
-                required = RequiredFile.objects.get(id=request.POST.get('requiredfileid' + unicode(i)))
-                required.name = request.POST.get('requiredfilename' + unicode(i))
-                required.description = request.POST.get('requiredfiledescription' + unicode(i))
-                required.type = request.POST.get('requiredfiletype' + unicode(i))
-                required.save()
-            except:
-                required = RequiredFile(assignment=editedassignment,
-                    name=request.POST['requiredfilename' + unicode(i)],
-                    description=request.POST['requiredfiledescription' + unicode(i)],
-                    type=request.POST['requiredfiletype' + unicode(i)])
-                required.save()
+            required = RequiredFile(assignment=editedassignment,
+                name=request.POST['requiredfilename' + unicode(i)],
+                description=request.POST['requiredfiledescription' + unicode(i)],
+                type=request.POST['requiredfiletype' + unicode(i)])
+            required.save()
 
         return redirect('Penelope.views.editassignment', Assignment_id=Assignment_id)
 
     # This is used by ajax request in get to load all fields of forms with required objects
     if request.method == 'GET':
-        editedassignment = Assignment.objects.get(id=request.GET['assignment_id'])
+        editedassignment = Assignment.objects.get(id=Assignment_id)
         # Send a xml formated file with required objects
         data = list(RequiredFile.objects.filter(assignment=editedassignment))
         response = serializers.serialize("xml", data)
 
         return HttpResponse(response)
+
+@login_required
+def deleterequirement(request, Assignment_id):
+    if request.method == 'GET':
+        try :
+            editedassignment = Assignment.objects.get(id=Assignment_id)
+            deletedrequirement = RequiredFile.objects.get(id=request.GET['id'])
+            deletedrequirement.delete()
+        except :
+            pass
+
+        return HttpResponse(True)

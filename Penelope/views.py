@@ -530,9 +530,15 @@ def deletefile(request, File_id):
 def addrequirement(request, Assignment_id):
     if request.method == 'POST':
         editedassignment = Assignment.objects.get(id=Assignment_id)
+
+        # Verify and confirms that requirements are user-definied
+        editedassignment.requirement = 'user_defined'
+        editedassignment.save()
+
         # Delete all requirements
         for requiredfile in editedassignment.requiredfile_set.all():
             requiredfile.delete()
+
         # Create requirements added in the form
         for i in range(1, int(request.POST.get('requiredfilesnb')) + 1):
             # For each sent form, create an object with the name, description 

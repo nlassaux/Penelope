@@ -160,6 +160,12 @@
                   </form>
                 </div>
               </div>
+            {% empty %}
+              <div class='span9'>
+                <div class='panel'>
+                  No requirements
+                </div>
+              </div>
             {% endfor %}
           {% else %}
             <div class='span9'>

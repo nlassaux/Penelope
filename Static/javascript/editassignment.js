@@ -52,8 +52,9 @@ function delete_required(element) {
 		type: "GET",
 		url: "/works/" + $('#assignment_id').val() + "/deleterequirement/",
 		data: {id:$(element).attr("id")},
-		success: function(xml) {
+		success: function(response) {
 			window.location.reload();
+			$('#response').html(response);
 		}
 	});
 }

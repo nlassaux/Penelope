@@ -294,6 +294,9 @@ def detailassignment(request, Assignment_id):
     else:
         # We load the list of users without groups.
         groupless = User.objects.filter(course_list__assignment=detailedassignment).exclude(group_list__assignment=detailedassignment)
+        # If no groups have sent files, emptyfiles = true
+        if not detailedassignment.group_set.exclude(file_list = None) :
+            nofiles = True
 
     return render(request, 'detailassignment.html', locals())
 

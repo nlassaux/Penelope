@@ -96,7 +96,7 @@
               <li><a href="/assignments/{{detailedassignment.id}}/edit/"><i class="icon-pencil"></i> Edit assignment</a></li>
               <li><a href="#DeleteAssignmentModal" data-toggle="modal"><i class="icon-remove-sign"></i> Delete assignment</a></li>
               <hr>
-              <li><a href='/works/{{detailedassignment.id}}/downloadallfiles/' ><i class='icon-inbox'></i> Download all files</a></li>
+              <li><a href='/works/{{detailedassignment.id}}/downloadallfiles/'><i class='icon-inbox'></i> Download all files {% if nofiles %}( empty ){% endif %} </a></li>
             </ul>
           </div>
         </div>

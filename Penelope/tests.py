@@ -1,31 +1,36 @@
 from django.test import TestCase
-from django.test.client import Client
 from django.contrib.auth.models import User
 
 
-class ViewsTestCase(TestCase):
-    def setUp(self):
-        self.client = Client()
+def login_as_student(self, username, password, status):
+    # Create a new user
+    user = User.objects.create_user(username=username, password=password)
+    user.userprofile.status = status
+    user.save()
 
-    # Verify if login has a 200 response
+    # Use test client to perform login
+    user = self.client.login(username=username, password=password)
+    response = self.client.post('/login/')
+
+
+class BeforeloginCase(TestCase):
     def test_login_response(self):
-        resp = self.client.get('/login/')
-        self.assertEqual(resp.status_code, 200)
+        # Verify if login has a 200 response
+        response = self.client.get('/login/')
+        self.assertEqual(response.status_code, 200)
 
-    # Create an user and log with username / password
-    def test_login(self):
-        password = 'password'
-        username = 'testuser'
-        email = 'amail@fake.com'
 
-        user = User.objects.create_user(username, email, password)
+class LoggedAsTeacherCase(TestCase):
+    def setUp(self):
+        login_as_student(self, 'teststudent', 'password', 'teacher')
 
-        # use test client to perform login
-        self.assertTrue(self.client.login(username=username, password=password))
+    def test_login(self):  # Verify if login has been validated by server
+        response = self.client.get('/login/')
+        self.assertRedirects(response, '/')
 
-        response = self.client.post('/login/')
+    def test_dashboard(self):
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
 
-        self.assertEqual(response.status_code, 302) # After login user is redirected
-
+    def test_newcourse(self):
         self.assertTrue(user.is_active)
-

@@ -51,7 +51,7 @@ function delete_required(element) {
 	$.ajax({
 		type: "GET",
 		url: "/works/" + $('#assignment_id').val() + "/deleterequirement/",
-		data: {id:$(element).attr("nb")},
+		data: {id:$(element).attr("id")},
 		success: function(xml) {
 			window.location.reload();
 		}
@@ -82,36 +82,36 @@ function addrequiredfile(id, name, description, type) {
 	});
 };
 
-// create new <div class='requiredfile'></div> in a parent
+// Create new <div class='requiredfile'></div> in a parent
 function addrequiredfileclass(parent, index){
 	$(parent).append("<div class='requiredfile under_panel'></div>");
 };
 
-// 
+// Add a close button with an 
 function addclosebtn(parent, index) {
-	var closebtn = "<a class='close' nb='" + index + "'>x</a>"
+	var closebtn = "<a class='close' id='" + index + "'>x</a>"
 	$(parent).append(closebtn);
 };
 
-// return an id field with a value (content), and an index(index) to add to parent
+// Add an id field with a value (content), and an index(index) to add to parent
 function addidfield(parent, content, index){
 	var idfield = "<input type='text' value='" + content + "' id='requiredfileid" + index + "' name='requiredfileid" + index + "' style='display: none;''/>";
 	$(parent).append(idfield);
 };
 
-// return a name field with a value (content), and an index(index) to add to parent
+// Add a name field with a value (content), and an index(index) to add to parent
 function addnamefield(parent, content, index){
 	var namefield = "<label>Name :</label><input type='text' value='" + content + "' name='requiredfilename" + index + "'/>";
 	$(parent).append(namefield);
 };
 
-// return a description field with a value (content), and an index(index) to add to parent
+// Add a description field with a value (content), and an index(index) to add to parent
 function adddescriptionfield(parent, content, index){
 	var descriptionfield = "<label>Description :</label><textarea class='input-xlarge' name='requiredfiledescription" + index + "' rows='3'>" + content + "</textarea>";
 	$(parent).append(descriptionfield);
 };
 
-// return a type field with a value (content), and an index(index) to add to parent
+// Add a type field with a value (content), and an index(index) to add to parent
 function addtypefield(parent, content, index){
 	var typefield = "<label>Type :</label><select name='requiredfiletype" + index + "'><option value='none'>none</option><option value='tar.gz'>tar.gz</option><option value='pdf'>pdf</option></select>";
 	$(parent).append(typefield);

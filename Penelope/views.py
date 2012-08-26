@@ -562,6 +562,6 @@ def deleterequirement(request, Assignment_id):
             deletedrequirement = RequiredFile.objects.get(id=request.GET['id'])
             deletedrequirement.delete()
         except :
-            pass
+            return HttpResponse(False)
 
         return HttpResponse(True)

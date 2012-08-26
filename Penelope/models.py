@@ -22,7 +22,6 @@ for year in range(int(start_date), int(end_date)):
 
 # List of status.
 STATUS_CHOICES = (
-    ('admin', 'Admin'),
     ('teacher', 'Teacher'),
     ('student', 'Student'),
 )

@@ -290,8 +290,9 @@ def detailassignment(request, Assignment_id):
             for required in detailedassignment.requiredfile_set.all():
                 name = 'fileassociate' + unicode(required.id)
 
-    # If the user is a teacher, we load the list of users without groups.
+    # The user is a teacher
     else:
+        # We load the list of users without groups.
         groupless = User.objects.filter(course_list__assignment=detailedassignment).exclude(group_list__assignment=detailedassignment)
 
     return render(request, 'detailassignment.html', locals())
@@ -526,9 +527,13 @@ def deletefile(request, File_id):
 def addrequirement(request, Assignment_id):
     if request.method == 'POST':
         editedassignment = Assignment.objects.get(id=Assignment_id)
+        # Delete all requirements
         for requiredfile in editedassignment.requiredfile_set.all():
             requiredfile.delete()
+        # Create requirements added in the form
         for i in range(1, int(request.POST.get('requiredfilesnb')) + 1):
+            # For each sent form, create an object with the name, description 
+            # and the type associated to the assignment
             required = RequiredFile(assignment=editedassignment,
                 name=request.POST['requiredfilename' + unicode(i)],
                 description=request.POST['requiredfiledescription' + unicode(i)],
@@ -546,11 +551,14 @@ def addrequirement(request, Assignment_id):
 
         return HttpResponse(response)
 
+
+# Delete a requirement
 @login_required
 def deleterequirement(request, Assignment_id):
     if request.method == 'GET':
         try :
             editedassignment = Assignment.objects.get(id=Assignment_id)
+            # Use the id sent in the GET request to delete the object
             deletedrequirement = RequiredFile.objects.get(id=request.GET['id'])
             deletedrequirement.delete()
         except :

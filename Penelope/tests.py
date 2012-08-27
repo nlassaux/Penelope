@@ -93,3 +93,11 @@ class LoggedAsTeacherCase(TestCase):
       raise Exception('The course has not been deleted')
     except :
       pass
+
+  # Test clearallstudents function 
+  def test_clearallstudents(self):
+    course = Course.objects.get(id='1')
+    response = self.client.get('/1/clearallstudents/')
+    coursestudents_list = course.subscribed.all()
+    if coursestudents_list :
+      raise Exception('All students are not deleted from the course, list : %s' % coursestudents_list)

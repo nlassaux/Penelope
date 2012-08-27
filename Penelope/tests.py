@@ -2,14 +2,12 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from Penelope.models import *
 
+username = 'username'
+password = 'password'
 
-#
-class BeforeloginCase(TestCase):
-  def test_login_response(self):
-    # Verify if login has a 200 response
-    response = self.client.get('/login/')
-    self.assertEqual(response.status_code, 200)
-
+coursename = 'coursename'
+coursedescription = 'coursedescription'
+courseyears = '2012 - 2013'
 
 class ConnectionCase(TestCase):
   # Create a teacher
@@ -30,13 +28,17 @@ class ConnectionCase(TestCase):
 class LoggedAsTeacherCase(TestCase):
   def setUp(self):
     # Create a teacher
-    self.user = User.objects.create_user(username='username', password='password')
-    userprofile = UserProfile.objects.get(user__username='username')
+    self.user = User.objects.create_user(username=username, password=password)
+    userprofile = UserProfile.objects.get(user__username=username)
     userprofile.status = 'teacher'
     userprofile.save()
 
     # Log as teacher
-    self.user = self.client.login(username='username', password='password')
+    self.user = self.client.login(username=username, password=password)
+
+    # Create a course (owner is previously created teacher)
+    owner = User.objects.get(id = '1')
+    self.course = Course.objects.create(name=coursename, description=coursedescription, years=courseyears, owner=owner)
 
   # Verify logged user is redirected to dashboard
   def test_login_status(self):  # Verify if login has been validated by server
@@ -55,5 +57,10 @@ class LoggedAsTeacherCase(TestCase):
 
   # Send a POST request to create a course and verify we are redirected
   def test_newcourse_create(self):
-    response = self.client.post('/newcourse/', {'name': 'username', 'description':'test', 'years' : '2012 - 2013'})
-    self.assertRedirects(response, '/1/details/')
+    response = self.client.post('/newcourse/', {'name': coursename, 'description':coursedescription, 'years':courseyears})
+    self.assertRedirects(response, '/2/details/')
+
+  # Test to view a a detailed course 
+  def test_detailedcourse(self):
+    response = self.client.get('/1/details/')
+    self.assertEqual(response.status_code, 200)

@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
+from Penelope.models import *
 
 
 class BeforeloginCase(TestCase):
@@ -11,11 +12,12 @@ class BeforeloginCase(TestCase):
 
 class LoggedAsTeacherCase(TestCase):
     def setUp(self):
-        user = User.objects.create_user(username='username', password='password')
-        user.userprofile.status = 'teacher'
-        user.save()
+        self.user = User.objects.create_user(username='username', password='password')
+        userprofile = UserProfile.objects.get(user__username='username')
+        userprofile.status = 'teacher'
+        userprofile.save()
 
-        user = self.client.login(username='username', password='password')
+        self.user = self.client.login(username='username', password='password')
         response = self.client.post('/login/')
 
 
@@ -30,3 +32,4 @@ class LoggedAsTeacherCase(TestCase):
     def test_newcourse(self):
         response = self.client.get('/newcourse/')
         self.assertEqual(response.status_code, 200)
+

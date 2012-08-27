@@ -37,13 +37,18 @@ class LoggedAsTeacherCase(TestCase):
     self.user = self.client.login(username=username, password=password)
 
     # Create a course (owner is previously created teacher)
-    owner = User.objects.get(id = '1')
+    owner = User.objects.get(id='1')
     self.course = Course.objects.create(name=coursename, description=coursedescription, years=courseyears, owner=owner)
 
   # Verify logged user is redirected to dashboard
-  def test_login_status(self):  # Verify if login has been validated by server
+  def test_login_status(self): 
     response = self.client.get('/login/')
     self.assertRedirects(response, '/')
+
+  # Disconnect and verify final redirection (two) is the login page
+  def test_disconnection(self):
+    response = self.client.get('/logout/', follow=True)
+    self.assertRedirects(response, 'http://testserver/login/?next=/')
 
   # Test if Dashboard is operational
   def test_dashboard_status(self):

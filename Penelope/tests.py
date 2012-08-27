@@ -65,7 +65,31 @@ class LoggedAsTeacherCase(TestCase):
     response = self.client.post('/newcourse/', {'name': coursename, 'description':coursedescription, 'years':courseyears})
     self.assertRedirects(response, '/2/details/')
 
-  # Test to view a a detailed course 
+  # Test to view a detailed course 
   def test_detailedcourse(self):
     response = self.client.get('/1/details/')
     self.assertEqual(response.status_code, 200)
+
+  # Test to view a course's edit page
+  def test_editcourse(self):
+    response = self.client.get('/1/editcourse/')
+    self.assertEqual(response.status_code, 200)
+
+  # Test to view a course's addstudent page
+  def test_addstudent(self):
+    response = self.client.get('/1/addstudents/')
+    self.assertEqual(response.status_code, 200)
+
+  # Test to view a course's ownerchange page
+  def test_changeowner(self):
+    response = self.client.get('/1/changeowner/')
+    self.assertEqual(response.status_code, 200)
+
+  # Test owner can delete a course
+  def test_coursedelete(self):
+    response = self.client.get('/1/deletecourse/')
+    try :
+      Course.objects.get(id='1')
+      raise Exception('The course has not been deleted')
+    except :
+      pass

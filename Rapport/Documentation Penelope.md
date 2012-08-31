@@ -37,7 +37,7 @@ Vous pouvez appeler les modules, des fonctions en les important quand vous en av
 
 **Les fichiers :**
 
-![](/Users/Nicolas/Desktop/Shéma.png)
+![](Shéma.png)
 
 * _settings.py_ (dans l'app principale) : contient les réglages de la BDD, les divers chemins vers les dossiers importants, les informations de timezone, la liste des apps..
 * _views.py_ : Fonctions qui sélectionnent les données à afficher dans une page et appellent le template adéquat. Peut effectuer des vérifications, du traitement de requêtes POST, GET…
@@ -130,7 +130,7 @@ Lorsqu'un enseignant défini un fichier requis dans son devoir, il peut précise
 
 Les fichiers correspondent au travail envoyé par les élèves. Le fichier envoyé est stocké dans le dossier Media et le modèle du fichier pointe vers lui. Ils appartiennent à un groupe et sont définis pour un seul devoir. Si c'est activé, les fichiers sont attachés à un fichier requis.
 
-![](/Users/Nicolas/Desktop/Models.png)
+![](Models.png)
 
 ## Les Vues :
 Les vues ont un rôle se rapprochant de celui de contrôleur dans le modèles MVC. Les fonctions récupèrent en arguments le contenu de la requête, les informations passées en GET, POST..

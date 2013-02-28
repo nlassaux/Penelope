@@ -19,7 +19,7 @@ def removeemptygroups():
 
 # Login
 def connection(request):
-    # Redirect to dashboard if the user is log
+    # Redirect to dashboard if the user is logged
     if request.user.is_authenticated():
         return redirect('Penelope.views.home')
 

@@ -1,12 +1,13 @@
-from django.core.files.storage import FileSystemStorage
-from django.db.models.signals import post_save
-from django.contrib.auth.models import User
-from django.core.files import *
-from django.db import models
-from django import forms
-from settings import MEDIA_ROOT
 import datetime
 import os
+
+from django import forms
+from django.contrib.auth.models import User
+from django.core.files import *
+from django.core.files.storage import FileSystemStorage
+from django.db import models
+from django.db.models.signals import post_save
+from settings import MEDIA_ROOT
 
 
 # Create the list of years from 2O11 to actual year + 2.
@@ -22,6 +23,7 @@ for year in range(int(start_date), int(end_date)):
 
 # List of status.
 STATUS_CHOICES = (
+    ('admin',   'Admin'),
     ('teacher', 'Teacher'),
     ('student', 'Student'),
 )
@@ -41,7 +43,8 @@ FILE_TYPE_CHOICES = (
 )
 
 
-# Add a behavior to File management. It removes file when a file objecct is removed in db
+# Add a behavior to File management.
+# Removes file when a file object is removed in db
 class OverwriteStorage(FileSystemStorage):
     def get_available_name(self, name):
         # If the filename already exists, removes it
@@ -53,7 +56,9 @@ class OverwriteStorage(FileSystemStorage):
 # More field for an user.
 class UserProfile(models.Model):
     user = models.OneToOneField(User, unique=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='student')
+    status = models.CharField(max_length=10,
+                              choices=STATUS_CHOICES,
+                              default='student')
 
     # In Admin panel : object = username.
     def __unicode__(self):
@@ -70,10 +75,22 @@ class UserProfile(models.Model):
 class Course(models.Model):
     name = models.CharField(max_length=40)
     description = models.CharField(max_length=100, blank=True)
-    owner = models.ForeignKey(User, related_name='course', limit_choices_to={'userprofile__status': 'teacher'})
+    owner = \
+        models.ForeignKey(User,
+                          related_name='course',
+                          limit_choices_to={'userprofile__status': 'teacher'})
+        
     editdate = models.DateTimeField(auto_now=True)
-    years = models.CharField(max_length=11, choices=YEARS_CHOICES, default='%d - %d' % (date.year, date.year + 1))
-    subscribed = models.ManyToManyField(User, related_name='course_list', blank=True, null=True, limit_choices_to={'userprofile__status': 'student'})
+    years = \
+        models.CharField(max_length=11,
+                         choices=YEARS_CHOICES,
+                         default='%d - %d' % (date.year, date.year + 1))
+        subscribed = \
+            models.ManyToManyField(User,
+                                   related_name='course_list',
+                                   blank=True,
+                                   null=True,
+                                   limit_choices_to={'userprofile__status': 'student'})
 
     # In Admin panel : object = name.
     def __unicode__(self):
@@ -87,10 +104,16 @@ class Assignment (models.Model):
     description = models.CharField(max_length=130)
     firm_deadline = models.DateTimeField(blank=True, null=True)
     official_deadline = models.DateTimeField(blank=True, null=True)
-    admins = models.ManyToManyField(User, blank=True, null=True, limit_choices_to={'userprofile__status': 'teacher'})
+    admins = \
+        models.ManyToManyField(User,
+                               blank=True,
+                               null=True,
+                               limit_choices_to={'userprofile__status': 'teacher'})
     editdate = models.DateTimeField(auto_now=True)
     visible = models.BooleanField(blank=True)
-    requirement = models.CharField(max_length=14, choices=REQUIREMENT_CHOICES, default='none')
+    requirement = models.CharField(max_length=14,
+                                   choices=REQUIREMENT_CHOICES,
+                                   default='none')
 
     # In Admin panel : object = username.
     def __unicode__(self):
@@ -99,14 +122,16 @@ class Assignment (models.Model):
     # A variable True if official deadline date is in past
     def official_deadline_past(self):
         # Verify official deadline exists and has been passed.
-        if (self.official_deadline) and (datetime.datetime.now() >= self.official_deadline):
+        if (self.official_deadline) and \
+           (datetime.datetime.now() >= self.official_deadline):
             return True
         return False
 
     # A variable True if firm deadline date is in past
     def firm_deadline_past(self):
         # Verify firm deadline exists and has been passed.
-        if (self.firm_deadline) and (datetime.datetime.now() >= self.firm_deadline):
+        if (self.firm_deadline) and \
+           (datetime.datetime.now() >= self.firm_deadline):
             return True
         return False
 
@@ -115,7 +140,10 @@ class Assignment (models.Model):
 class Group(models.Model):
     name = models.CharField(max_length=30)
     assignment = models.ForeignKey(Assignment)
-    members = models.ManyToManyField(User, related_name='group_list', null=True, blank=True)
+    members = models.ManyToManyField(User,
+                                     related_name='group_list',
+                                     null=True,
+                                     blank=True)
 
     # In Admin panel : object = name
     def __unicode__(self):
@@ -168,7 +196,9 @@ class RequiredFile (models.Model):
     assignment = models.ForeignKey(Assignment)
     name = models.CharField(max_length=40)
     description = models.CharField(max_length=100, blank=True, null=True)
-    type = models.CharField(max_length=6, choices=FILE_TYPE_CHOICES, default='none')
+    type = models.CharField(max_length=6,
+                            choices=FILE_TYPE_CHOICES,
+                            default='none')
 
     # In Admin panel : object = name
     def __unicode__(self):

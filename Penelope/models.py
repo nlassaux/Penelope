@@ -85,12 +85,12 @@ class Course(models.Model):
         models.CharField(max_length=11,
                          choices=YEARS_CHOICES,
                          default='%d - %d' % (date.year, date.year + 1))
-        subscribed = \
-            models.ManyToManyField(User,
-                                   related_name='course_list',
-                                   blank=True,
-                                   null=True,
-                                   limit_choices_to={'userprofile__status': 'student'})
+    subscribed = \
+        models.ManyToManyField(User,
+                               related_name='course_list',
+                               blank=True,
+                               null=True,
+                               limit_choices_to={'userprofile__status': 'student'})
 
     # In Admin panel : object = name.
     def __unicode__(self):
